@@ -4,823 +4,1158 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Biblioteca de Prompts — Cassia</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #FAF7F2;
-    --warm-white: #FFF9F4;
-    --blush: #E8C4B0;
-    --rose: #C97B5A;
-    --terracotta: #A85C3A;
-    --dark: #2A1F1A;
-    --mid: #5C4033;
-    --soft: #9E7B6A;
-    --accent: #D4956A;
-    --gold: #C9A96E;
-    --oab-blue: #1A3A5C;
-    --oab-light: #E8F0F8;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background-color: var(--cream);
-    color: var(--dark);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  header {
-    background: var(--dark);
-    padding: 60px 40px 50px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(201,123,90,0.18) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.12) 0%, transparent 50%);
-  }
-
-  .header-tag {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 18px;
-    position: relative;
-  }
-
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 6vw, 4.5rem);
-    font-weight: 900;
-    color: var(--warm-white);
-    line-height: 1.1;
-    position: relative;
-  }
-
-  header h1 span { color: var(--accent); font-style: italic; }
-
-  .header-sub {
-    margin-top: 16px;
-    color: var(--soft);
-    font-size: 15px;
-    letter-spacing: 0.5px;
-    position: relative;
-  }
-
-  .header-deco {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 30px;
-    position: relative;
-  }
-
-  .header-deco-line { height: 1px; width: 60px; background: var(--gold); opacity: 0.5; }
-  .header-deco-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
-
-  .search-bar {
-    max-width: 600px;
-    margin: 40px auto 20px;
-    padding: 0 24px;
-    position: relative;
-  }
-
-  .search-bar input {
-    width: 100%;
-    padding: 16px 52px 16px 22px;
-    border-radius: 60px;
-    border: 1.5px solid var(--blush);
-    background: var(--warm-white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--dark);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .search-bar input:focus {
-    border-color: var(--rose);
-    box-shadow: 0 0 0 3px rgba(201,123,90,0.12);
-  }
-
-  .search-bar input::placeholder { color: var(--soft); }
-
-  .search-icon {
-    position: absolute;
-    right: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--soft);
-    font-size: 18px;
-    pointer-events: none;
-  }
-
-  .stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 20px 24px 8px;
-    text-align: center;
-  }
-
-  .stat-item strong {
-    display: block;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: var(--terracotta);
-  }
-
-  .stat-item span {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--soft);
-  }
-
-  .tabs-wrapper {
-    overflow-x: auto;
-    padding: 24px 24px 0;
-    scrollbar-width: none;
-  }
-  .tabs-wrapper::-webkit-scrollbar { display: none; }
-
-  .tabs {
-    display: flex;
-    gap: 10px;
-    width: max-content;
-    margin: 0 auto;
-  }
-
-  .tab-btn {
-    padding: 10px 22px;
-    border-radius: 40px;
-    border: 1.5px solid var(--blush);
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--mid);
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .tab-btn:hover { border-color: var(--rose); color: var(--rose); }
-  .tab-btn.active { background: var(--dark); border-color: var(--dark); color: var(--warm-white); }
-
-  /* OAB tab special style */
-  .tab-btn.oab-tab {
-    border-color: var(--oab-blue);
-    color: var(--oab-blue);
-    font-weight: 500;
-  }
-  .tab-btn.oab-tab:hover, .tab-btn.oab-tab.active {
-    background: var(--oab-blue);
-    border-color: var(--oab-blue);
-    color: #fff;
-  }
-
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 36px 24px 80px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--blush); }
-
-  /* Special OAB section title */
-  .section-title.oab-section { color: var(--oab-blue); }
-  .section-title.oab-section::after { background: #B8D0E8; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 18px;
-    margin-bottom: 48px;
-  }
-
-  .card {
-    background: var(--warm-white);
-    border: 1.5px solid #EDE0D6;
-    border-radius: 16px;
-    padding: 22px 24px;
-    position: relative;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    opacity: 0;
-    animation: fadeUp 0.4s ease forwards;
-  }
-
-  /* OAB card style */
-  .card.oab-card {
-    background: #F5F9FD;
-    border-color: #C5D8EC;
-  }
-
-  .card.oab-card:hover {
-    border-color: var(--oab-blue);
-    box-shadow: 0 12px 32px rgba(26,58,92,0.12);
-  }
-
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(42,31,26,0.10);
-    border-color: var(--rose);
-  }
-
-  /* OAB badge on card */
-  .oab-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: var(--oab-blue);
-    color: #fff;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-
-  .card-cat {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--rose);
-    font-weight: 500;
-  }
-
-  .oab-card .card-cat { color: var(--oab-blue); }
-
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--dark);
-    line-height: 1.4;
-  }
-
-  .card-prompt {
-    font-size: 13.5px;
-    color: var(--mid);
-    line-height: 1.65;
-    flex: 1;
-  }
-
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 4px;
-  }
-
-  .card-tag {
-    font-size: 11px;
-    background: #F0E6DD;
-    color: var(--terracotta);
-    padding: 4px 12px;
-    border-radius: 20px;
-  }
-
-  .oab-card .card-tag {
-    background: var(--oab-light);
-    color: var(--oab-blue);
-  }
-
-  .copy-btn {
-    background: none;
-    border: 1.5px solid var(--blush);
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    color: var(--mid);
-    cursor: pointer;
-    transition: all 0.18s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .copy-btn:hover { background: var(--dark); border-color: var(--dark); color: #fff; }
-  .copy-btn.copied { background: #4CAF50; border-color: #4CAF50; color: #fff; }
-
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(42,31,26,0.6);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--warm-white);
-    border-radius: 20px;
-    padding: 36px;
-    max-width: 600px;
-    width: 100%;
-    position: relative;
-    animation: modalIn 0.25s ease;
-  }
-
-  .modal.oab-modal { background: #F5F9FD; border: 2px solid #C5D8EC; }
-
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.96) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .modal-cat {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--rose);
-    margin-bottom: 10px;
-  }
-
-  .modal.oab-modal .modal-cat { color: var(--oab-blue); }
-
-  .modal h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    margin-bottom: 16px;
-    color: var(--dark);
-  }
-
-  .modal-prompt-box {
-    background: var(--cream);
-    border: 1px solid var(--blush);
-    border-radius: 12px;
-    padding: 18px 20px;
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--mid);
-    white-space: pre-wrap;
-    margin-bottom: 20px;
-  }
-
-  .modal.oab-modal .modal-prompt-box { background: #EAF1F8; border-color: #B8D0E8; }
-
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-
-  .btn-close {
-    padding: 10px 24px;
-    border-radius: 10px;
-    border: 1.5px solid var(--blush);
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--mid);
-    cursor: pointer;
-  }
-
-  .btn-copy-full {
-    padding: 10px 24px;
-    border-radius: 10px;
-    border: none;
-    background: var(--dark);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .btn-copy-full:hover { background: var(--terracotta); }
-  .modal.oab-modal .btn-copy-full { background: var(--oab-blue); }
-  .modal.oab-modal .btn-copy-full:hover { background: #0F2540; }
-
-  .close-x {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    font-size: 22px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--soft);
-    line-height: 1;
-  }
-
-  /* OAB section banner */
-  .oab-banner {
-    background: linear-gradient(135deg, var(--oab-blue) 0%, #2A5A8C 100%);
-    border-radius: 16px;
-    padding: 20px 28px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    color: #fff;
-  }
-
-  .oab-banner-icon { font-size: 2rem; }
-
-  .oab-banner-text h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .oab-banner-text p { font-size: 13px; opacity: 0.85; }
-
-  .no-results {
-    display: none;
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--soft);
-  }
-
-  .no-results.show { display: block; }
-
-  footer {
-    text-align: center;
-    padding: 32px;
-    background: var(--dark);
-    color: var(--soft);
-    font-size: 13px;
-  }
-
-  footer strong { color: var(--gold); font-family: 'Playfair Display', serif; }
-
-  @media (max-width: 600px) {
-    header { padding: 40px 24px 36px; }
-    .stats-bar { gap: 24px; }
-    .modal { padding: 24px; }
-  }
+:root {
+  --ink:       #0C0A08;
+  --ink2:      #181410;
+  --ink3:      #231E18;
+  --mink:      #4A3C2E;
+  --dust:      #7A6858;
+  --sand:      #B89870;
+  --gold:      #C8914A;
+  --gold2:     #E4B86A;
+  --cream:     #F2EBE0;
+  --paper:     #F8F3EC;
+  --white:     #FFFCF8;
+  --oab:       #1A3860;
+  --oab2:      #2455A0;
+  --oab-glow:  rgba(36,85,160,0.15);
+  --sidebar-w: 252px;
+  --r:         12px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Outfit',sans-serif;font-weight:300;display:flex;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px;}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:var(--sidebar-w);min-height:100vh;
+  background:var(--ink2);
+  position:fixed;top:0;left:0;
+  display:flex;flex-direction:column;
+  z-index:60;overflow-y:auto;overflow-x:hidden;
+}
+.sb-brand{
+  padding:30px 20px 22px;
+  border-bottom:1px solid rgba(200,145,74,0.15);
+  position:relative;
+}
+.sb-brand::after{
+  content:'';position:absolute;bottom:-1px;left:20px;right:20px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.sb-kicker{
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.sb-kicker::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.7;}
+.sb-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:700;color:var(--white);line-height:1.2;
+}
+.sb-name em{color:var(--gold2);font-style:italic;}
+.sb-tagline{font-size:11px;color:var(--dust);margin-top:5px;}
+
+/* Search */
+.sb-search{padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.sb-search-inner{position:relative;}
+.sb-search-inner input{
+  width:100%;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(200,145,74,0.18);border-radius:30px;
+  padding:8px 14px 8px 34px;
+  font-family:'Outfit',sans-serif;font-size:12.5px;color:var(--cream);outline:none;
+  transition:border-color .2s,background .2s;
+}
+.sb-search-inner input::placeholder{color:var(--dust);}
+.sb-search-inner input:focus{border-color:rgba(200,145,74,.5);background:rgba(255,255,255,.08);}
+.sb-search-inner::before{
+  content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  font-size:11px;pointer-events:none;opacity:.45;
+}
+
+/* Nav */
+.sb-nav{padding:8px 0 30px;flex:1;}
+.sb-label{
+  font-size:9px;letter-spacing:3.5px;text-transform:uppercase;
+  color:rgba(122,104,88,.45);padding:14px 20px 5px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 14px 9px 18px;cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all .16s;
+}
+.nav-item:hover{background:rgba(255,255,255,.035);border-left-color:rgba(200,145,74,.25);}
+.nav-item.active{background:rgba(200,145,74,.09);border-left-color:var(--gold);}
+.nav-item.active .nv-label{color:var(--cream);font-weight:500;}
+.nav-item.active .nv-chip{background:rgba(200,145,74,.22);color:var(--gold2);}
+.nv-icon{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;
+  font-size:13px;transition:background .16s;
+}
+.nav-item.active .nv-icon{background:rgba(200,145,74,.18);}
+.nv-label{font-size:12px;color:var(--dust);flex:1;line-height:1.3;}
+.nv-chip{
+  font-size:9.5px;font-weight:500;color:var(--dust);
+  background:rgba(255,255,255,.06);padding:1px 7px;border-radius:10px;flex-shrink:0;
+}
+
+/* OAB nav */
+.nav-item.nav-oab{
+  margin:8px 10px;border-radius:9px;border:1px solid rgba(36,85,160,.28);
+  border-left:2px solid #4A7FCC;background:rgba(26,56,96,.3);padding-left:13px;
+}
+.nav-item.nav-oab:hover{background:rgba(26,56,96,.45);}
+.nav-item.nav-oab.active{background:rgba(26,56,96,.6);border-left-color:#6EA4F0;}
+.nav-item.nav-oab .nv-label{color:#7AAEE0;}
+.nav-item.nav-oab.active .nv-label{color:#C2DAFF;font-weight:500;}
+.nav-item.nav-oab .nv-chip{background:rgba(36,85,160,.25);color:#7AAEE0;}
+.nav-item.nav-oab.active .nv-chip{background:rgba(36,85,160,.45);color:#A8CFFF;}
+
+/* Stats strip at bottom of sidebar */
+.sb-stats{
+  padding:16px 18px;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.sb-stat{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px;}
+.sb-stat strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold2);}
+.sb-stat span{font-size:10px;color:var(--dust);letter-spacing:.5px;text-transform:uppercase;}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* Topbar / Hero */
+.topbar{
+  background:var(--ink);
+  padding:36px 40px 30px;
+  position:relative;overflow:hidden;
+}
+.topbar::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 85% 50%, rgba(200,145,74,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 15% 30%, rgba(26,56,96,.2) 0%, transparent 55%);
+}
+/* Decorative diagonal line */
+.topbar::after{
+  content:'';position:absolute;
+  top:0;right:160px;width:1px;height:100%;
+  background:linear-gradient(180deg,transparent,rgba(200,145,74,.25),transparent);
+}
+.tb-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.tb-left{}
+.tb-eyebrow{
+  font-size:9.5px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:10px;display:flex;align-items:center;gap:10px;
+}
+.tb-eyebrow::after{content:'';flex:0 0 28px;height:1px;background:var(--gold);opacity:.5;}
+.topbar h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;color:var(--white);line-height:1.1;
+}
+.topbar h1 em{color:var(--gold2);font-style:italic;}
+.tb-sub{font-size:13px;color:var(--dust);margin-top:8px;max-width:460px;}
+
+.tb-right{display:flex;gap:24px;flex-shrink:0;}
+.tb-stat{text-align:center;}
+.tb-stat strong{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:2.2rem;font-weight:600;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.tb-stat span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dust);}
+
+/* Category header bar */
+.cat-bar{
+  background:var(--white);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  padding:14px 40px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:30;
+  transition:background .2s;
+}
+.cat-bar.oab-bar{background:var(--oab-pale, #EAF0F9);}
+.cb-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--cream),#EDE3D6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+.cat-bar.oab-bar .cb-icon{background:linear-gradient(135deg,#D6E5F8,#BED0F0);}
+.cb-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;font-weight:600;color:var(--ink);
+}
+.cat-bar.oab-bar .cb-text h2{color:var(--oab);}
+.cb-text p{font-size:11.5px;color:var(--dust);}
+
+/* Anti-hallucination badge for OAB */
+.anti-badge{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#1A3860,#2455A0);
+  color:#C2DAFF;font-size:10.5px;font-weight:500;
+  padding:5px 12px;border-radius:20px;
+  box-shadow:0 2px 10px rgba(26,56,96,.3);
+  white-space:nowrap;
+}
+.anti-badge::before{content:'🔍';font-size:11px;}
+
+/* ── CONTENT ── */
+#content{padding:28px 40px 64px;flex:1;}
+
+/* Grid */
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;
+}
+
+/* Card */
+.card{
+  background:var(--white);
+  border:1px solid rgba(0,0,0,.07);
+  border-radius:var(--r);
+  padding:20px 22px;
+  cursor:pointer;
+  display:flex;flex-direction:column;gap:10px;
+  position:relative;overflow:hidden;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s;
+  opacity:0;animation:cardIn .4s ease forwards;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  opacity:0;transition:opacity .2s;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 16px 40px rgba(0,0,0,.10);
+  border-color:rgba(200,145,74,.3);
+}
+.card:hover::before{opacity:1;}
+
+/* OAB card */
+.card.oab-card{
+  background:linear-gradient(145deg,#F0F5FC,#EAF0F9);
+  border-color:rgba(36,85,160,.15);
+}
+.card.oab-card::before{background:linear-gradient(90deg,var(--oab),var(--oab2));}
+.card.oab-card:hover{border-color:rgba(36,85,160,.4);box-shadow:0 16px 40px rgba(26,56,96,.1);}
+
+/* OAB verified badge on card */
+.oab-verified{
+  position:absolute;top:14px;right:14px;
+  background:var(--oab);color:#C2DAFF;
+  font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;
+}
+.oab-verified::before{content:'✓';font-weight:700;}
+
+.card-cat{font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.oab-card .card-cat{color:var(--oab2);}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.35;
+}
+.card-preview{font-size:12.5px;color:var(--mink);line-height:1.65;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.card-tag{
+  font-size:10.5px;background:var(--cream);
+  color:var(--mink);padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(0,0,0,.06);
+}
+.oab-card .card-tag{background:rgba(36,85,160,.08);color:var(--oab);border-color:rgba(36,85,160,.12);}
+.copy-btn{
+  background:none;border:1px solid rgba(0,0,0,.1);border-radius:7px;
+  padding:5px 12px;font-family:'Outfit',sans-serif;font-size:11px;
+  color:var(--dust);cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:4px;
+}
+.copy-btn:hover{background:var(--ink);border-color:var(--ink);color:#fff;}
+.copy-btn.ok{background:#2E7D32;border-color:#2E7D32;color:#fff;}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+/* No results */
+.empty{display:none;text-align:center;padding:80px 20px;color:var(--dust);}
+.empty.show{display:block;}
+.empty-icon{font-size:3rem;margin-bottom:16px;}
+.empty p{font-size:15px;}
+
+/* ── MODAL ── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(12,10,8,.7);
+  z-index:200;align-items:center;justify-content:center;
+  padding:24px;backdrop-filter:blur(6px);
+}
+.overlay.open{display:flex;}
+
+.modal{
+  background:var(--white);
+  border-radius:18px;
+  padding:36px;
+  max-width:620px;width:100%;
+  position:relative;
+  animation:modalIn .22s cubic-bezier(.34,1.3,.64,1);
+  max-height:92vh;overflow-y:auto;
+  box-shadow:0 32px 80px rgba(0,0,0,.25);
+}
+
+.modal.oab-modal{
+  background:linear-gradient(160deg,#F0F6FC 0%,#EAF0F9 100%);
+  border:1.5px solid rgba(36,85,160,.18);
+}
+
+@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+/* Anti-hallucination info panel inside OAB modal */
+.ah-panel{
+  background:linear-gradient(135deg,rgba(26,56,96,.06),rgba(36,85,160,.04));
+  border:1px solid rgba(36,85,160,.15);
+  border-radius:10px;
+  padding:13px 16px;
+  margin-bottom:18px;
+  display:flex;align-items:flex-start;gap:11px;
+}
+.ah-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px;}
+.ah-text p{font-size:12px;color:var(--oab);line-height:1.6;}
+.ah-text strong{font-weight:600;display:block;margin-bottom:2px;font-size:12.5px;}
+
+.modal-cat{font-size:9.5px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.oab-modal .modal-cat{color:var(--oab2);}
+.modal h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;color:var(--ink);margin-bottom:14px;
+}
+
+.prompt-box{
+  background:var(--paper);border:1px solid rgba(0,0,0,.08);border-radius:10px;
+  padding:16px 18px;font-size:13.5px;line-height:1.75;color:var(--mink);
+  white-space:pre-wrap;margin-bottom:18px;max-height:280px;overflow-y:auto;
+}
+.oab-modal .prompt-box{background:#E8F0F9;border-color:rgba(36,85,160,.12);}
+
+/* Source tag strip */
+.source-strip{
+  display:none;
+  flex-wrap:wrap;gap:6px;margin-bottom:16px;
+}
+.source-strip.show{display:flex;}
+.source-tag{
+  font-size:10px;background:rgba(36,85,160,.08);color:var(--oab);
+  border:1px solid rgba(36,85,160,.15);padding:3px 10px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;
+}
+.source-tag a{color:inherit;text-decoration:none;}
+.source-tag a:hover{text-decoration:underline;}
+
+.modal-foot{display:flex;gap:9px;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
+.btn-close{
+  padding:9px 20px;border-radius:9px;border:1px solid rgba(0,0,0,.12);
+  background:transparent;font-family:'Outfit',sans-serif;font-size:12.5px;
+  color:var(--mink);cursor:pointer;transition:all .15s;
+}
+.btn-close:hover{background:var(--cream);}
+.btn-copy{
+  padding:9px 22px;border-radius:9px;border:none;
+  background:linear-gradient(135deg,var(--ink2),var(--ink3));
+  font-family:'Outfit',sans-serif;font-size:12.5px;
+  color:#fff;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-copy:hover{background:linear-gradient(135deg,#3A2A1A,#2D1F10);}
+.oab-modal .btn-copy{background:linear-gradient(135deg,var(--oab),var(--oab2));}
+.oab-modal .btn-copy:hover{background:linear-gradient(135deg,#0F2540,var(--oab));}
+
+/* OAB AI Answer area */
+.ai-answer-wrap{display:none;margin-top:16px;}
+.ai-answer-wrap.show{display:block;}
+.ai-answer-label{
+  font-size:9.5px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--oab2);margin-bottom:8px;display:flex;align-items:center;gap:8px;
+}
+.ai-answer-label::after{content:'';flex:1;height:1px;background:rgba(36,85,160,.15);}
+.ai-answer-box{
+  background:#E4EEF9;border:1px solid rgba(36,85,160,.15);border-radius:10px;
+  padding:16px 18px;font-size:13px;line-height:1.75;color:var(--oab);
+  white-space:pre-wrap;max-height:260px;overflow-y:auto;
+}
+.ai-loading{
+  display:flex;align-items:center;gap:10px;
+  padding:16px;color:var(--oab2);font-size:13px;
+}
+.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--oab2);animation:dot .9s ease-in-out infinite;}
+.dots span:nth-child(2){animation-delay:.15s;}
+.dots span:nth-child(3){animation-delay:.3s;}
+@keyframes dot{0%,80%,100%{transform:scale(.5);opacity:.4;}40%{transform:scale(1);opacity:1;}}
+
+.btn-ask-oab{
+  display:none;
+  padding:9px 22px;border-radius:9px;border:none;
+  background:linear-gradient(135deg,var(--oab),var(--oab2));
+  font-family:'Outfit',sans-serif;font-size:12.5px;
+  color:#fff;cursor:pointer;transition:all .15s;
+  align-items:center;gap:6px;
+}
+.btn-ask-oab.show{display:flex;}
+.btn-ask-oab:hover{opacity:.9;transform:translateY(-1px);}
+.btn-ask-oab:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+.close-x{
+  position:absolute;top:14px;right:16px;
+  font-size:22px;background:none;border:none;
+  cursor:pointer;color:var(--dust);line-height:1;
+  transition:color .15s;
+}
+.close-x:hover{color:var(--ink);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--ink2);color:var(--dust);
+  text-align:center;padding:20px;font-size:12px;
+  margin-left:var(--sidebar-w);
+  border-top:1px solid rgba(200,145,74,.1);
+}
+footer strong{color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1rem;}
+
+/* ── HAMBURGER (mobile) ── */
+.hamburger{
+  display:none;position:fixed;top:12px;left:12px;z-index:100;
+  background:var(--ink);border:none;border-radius:8px;
+  padding:9px 11px;cursor:pointer;flex-direction:column;gap:4px;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.hamburger span{display:block;width:20px;height:2px;background:var(--gold);border-radius:1px;}
+.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:59;}
+
+@media(max-width:800px){
+  #sidebar{transform:translateX(-100%);transition:transform .25s;}
+  #sidebar.open{transform:translateX(0);}
+  .sb-backdrop.open{display:block;}
+  #main,footer{margin-left:0;}
+  .hamburger{display:flex;}
+  .topbar{padding:20px 20px 18px 58px;}
+  #content{padding:20px 16px 50px;}
+  .cat-bar{padding:12px 16px;}
+  .tb-right{display:none;}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <p class="header-tag">✦ Coleção Exclusiva</p>
-  <h1>Biblioteca de <span>Prompts</span><br>da Cassia</h1>
-  <p class="header-sub">Prompts organizados para o seu dia a dia com Inteligência Artificial</p>
-  <div class="header-deco">
-    <div class="header-deco-line"></div>
-    <div class="header-deco-dot"></div>
-    <div class="header-deco-line"></div>
-  </div>
-</header>
+<button class="hamburger" id="hamburger" onclick="toggleSb()">
+  <span></span><span></span><span></span>
+</button>
+<div class="sb-backdrop" id="sbBack" onclick="toggleSb()"></div>
 
-<div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Buscar prompts…" oninput="filterAll()">
-  <span class="search-icon">🔍</span>
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-kicker">✦ Coleção Exclusiva</div>
+    <div class="sb-name">Biblioteca de<br><em>Prompts</em> da Cassia</div>
+    <div class="sb-tagline">Seu assistente de IA dia a dia</div>
+  </div>
+  <div class="sb-search">
+    <div class="sb-search-inner">
+      <input type="text" id="searchInput" placeholder="Buscar prompts…" oninput="onSearch()">
+    </div>
+  </div>
+  <div class="sb-nav" id="sbNav"></div>
+  <div class="sb-stats">
+    <div class="sb-stat"><strong id="totalCount">0</strong><span>Prompts</span></div>
+    <div class="sb-stat"><strong id="visibleCount">0</strong><span>Visíveis</span></div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div class="tb-inner">
+      <div class="tb-left">
+        <div class="tb-eyebrow">Prompts prontos</div>
+        <h1>Use a <em>IA com</em><br>confiança e estilo</h1>
+        <p class="tb-sub">Prompts organizados para o seu dia a dia — incluindo prompts com busca em fontes reais para o trabalho na OAB SP</p>
+      </div>
+      <div class="tb-right">
+        <div class="tb-stat"><strong id="tc2">0</strong><span>Total</span></div>
+        <div class="tb-stat"><strong>11</strong><span>Categorias</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-bar" id="catBar">
+    <div class="cb-icon" id="catIcon">✨</div>
+    <div class="cb-text">
+      <h2 id="catTitle">Todos os Prompts</h2>
+      <p id="catDesc">Navegue pelas categorias no menu lateral</p>
+    </div>
+  </div>
+
+  <div id="content">
+    <div class="empty" id="empty">
+      <div class="empty-icon">🌸</div>
+      <p>Nenhum prompt encontrado.<br>Tente outra busca.</p>
+    </div>
+    <div class="cards-grid" id="grid"></div>
+  </div>
 </div>
 
-<div class="stats-bar">
-  <div class="stat-item"><strong id="totalCount">0</strong><span>Prompts</span></div>
-  <div class="stat-item"><strong>11</strong><span>Categorias</span></div>
-  <div class="stat-item"><strong id="filteredCount">0</strong><span>Visíveis</span></div>
-</div>
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="close-x" onclick="closeModal()">×</button>
+    <div class="modal-cat" id="mCat"></div>
+    <h2 id="mTitle"></h2>
 
-<div class="tabs-wrapper">
-  <div class="tabs" id="tabsContainer">
-    <button class="tab-btn active" onclick="filterByCategory('all', this)">Todos</button>
-  </div>
-</div>
+    <!-- Anti-hallucination info panel (OAB only) -->
+    <div class="ah-panel" id="ahPanel" style="display:none">
+      <div class="ah-icon">🛡️</div>
+      <div class="ah-text">
+        <strong>Modo Anti-Alucinação ativo</strong>
+        <p>Este prompt aciona busca em fontes oficiais antes de responder: <strong>oabsp.org.br</strong>, <strong>oab.org.br</strong>, <strong>cfm.org.br</strong> e legislação vigente. A IA cita a fonte de cada informação. Não inventa dados.</p>
+      </div>
+    </div>
 
-<main>
-  <div id="noResults" class="no-results">
-    <p style="font-size:2rem">🌸</p>
-    <p style="margin-top:12px">Nenhum prompt encontrado.<br>Tente outra busca.</p>
-  </div>
-  <div id="promptsContainer"></div>
-</main>
+    <div class="prompt-box" id="mPrompt"></div>
 
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modalBox">
-    <button class="close-x" onclick="closeModalDirect()">×</button>
-    <p class="modal-cat" id="modalCat"></p>
-    <h2 id="modalTitle"></h2>
-    <div class="modal-prompt-box" id="modalPrompt"></div>
-    <div class="modal-actions">
-      <button class="btn-close" onclick="closeModalDirect()">Fechar</button>
-      <button class="btn-copy-full" onclick="copyModalPrompt()">📋 Copiar Prompt</button>
+    <!-- Sources strip (shown after OAB answer) -->
+    <div class="source-strip" id="sourceStrip"></div>
+
+    <!-- AI answer for OAB -->
+    <div class="ai-answer-wrap" id="aiWrap">
+      <div class="ai-answer-label">Resposta com fontes verificadas</div>
+      <div class="ai-answer-box" id="aiBox"></div>
+    </div>
+
+    <div class="modal-foot" id="modalFoot">
+      <button class="btn-close" onclick="closeModal()">Fechar</button>
+      <button class="btn-ask-oab" id="btnAsk" onclick="askOAB()">
+        🔍 Buscar & Responder com Fontes
+      </button>
+      <button class="btn-copy" id="btnCopy" onclick="copyPrompt()">📋 Copiar Prompt</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <strong>Biblioteca da Cassia</strong> &nbsp;·&nbsp; Criada com ❤ para uso com IA
+  <strong>Biblioteca da Cassia</strong> &nbsp;·&nbsp; Prompts com ❤ · OAB SP com 🛡️ Anti-Alucinação
 </footer>
 
 <script>
-const promptData = [
-  // ── MARKETING E REDES SOCIAIS ──
-  { cat: "Marketing e Redes Sociais", title: "Legenda Poderosa", prompt: "Crie uma legenda envolvente para Instagram sobre [TEMA]. Use tom [FORMAL/DESCONTRAÍDO], inclua emojis relevantes, uma chamada para ação clara e até 3 hashtags estratégicas. O objetivo é gerar engajamento e conexão com o público.", tag: "Instagram" },
-  { cat: "Marketing e Redes Sociais", title: "Calendário de Conteúdo", prompt: "Monte um calendário de conteúdo para 1 semana nas redes sociais sobre [NICHO]. Inclua: tema do dia, formato sugerido (reels, carrossel, story), horário ideal de postagem e objetivo de cada conteúdo (engajamento, venda, educação).", tag: "Estratégia" },
-  { cat: "Marketing e Redes Sociais", title: "Título Magnético", prompt: "Crie 10 títulos irresistíveis para um post/vídeo sobre [ASSUNTO]. Os títulos devem despertar curiosidade, ter entre 6 a 12 palavras e usar gatilhos mentais como urgência, novidade ou benefício direto.", tag: "Copywriting" },
-  { cat: "Marketing e Redes Sociais", title: "Carrossel Educativo", prompt: "Crie um roteiro de carrossel com 7 slides sobre [TEMA]. Slide 1: título impactante. Slides 2 a 6: um conceito prático por slide, linguagem simples. Slide 7: conclusão + chamada para salvar ou compartilhar.", tag: "Carrossel" },
-  { cat: "Marketing e Redes Sociais", title: "Script para Reels", prompt: "Escreva um script de 30 a 60 segundos para um Reels sobre [TEMA]. Estrutura: gancho nos primeiros 3 segundos, desenvolvimento rápido com 3 dicas práticas e CTA final motivador. Tom: [PROFISSIONAL/DESCONTRAÍDO].", tag: "Reels" },
-  { cat: "Marketing e Redes Sociais", title: "Bio Profissional", prompt: "Crie uma bio para o Instagram de [NOME/PROFISSÃO]. Deve ter: quem é, o que faz, para quem ajuda, diferencial único e CTA (ex: link, DM ou destaque). Máximo de 150 caracteres por linha.", tag: "Perfil" },
-  { cat: "Marketing e Redes Sociais", title: "Copy de Anúncio", prompt: "Escreva um anúncio para Facebook/Instagram promovendo [PRODUTO/SERVIÇO]. Inclua: headline de impacto, benefício principal, prova social (fictícia ou real), oferta e CTA urgente. Público-alvo: [DESCREVA].", tag: "Ads" },
-  { cat: "Marketing e Redes Sociais", title: "Resposta a Comentário Negativo", prompt: "Me ajude a responder de forma profissional e empática o seguinte comentário negativo nas redes sociais: [COMENTÁRIO]. A resposta deve ser breve, reconhecer a insatisfação, oferecer solução e preservar a imagem da marca.", tag: "Comunidade" },
-  { cat: "Marketing e Redes Sociais", title: "Ideias de Conteúdo", prompt: "Gere 15 ideias criativas de conteúdo para [NICHO/PROFISSÃO] nas redes sociais. Variar entre: conteúdo educativo, bastidores, depoimento, trend, meme do nicho e venda indireta. Liste o formato ideal para cada ideia.", tag: "Criatividade" },
-  { cat: "Marketing e Redes Sociais", title: "Story Sequencial", prompt: "Crie uma sequência de 5 stories para vender [PRODUTO/SERVIÇO]. Story 1: desperte a dor. Story 2: mostre que existe solução. Story 3: apresente o produto. Story 4: prova social. Story 5: CTA com senso de urgência.", tag: "Stories" },
+const OAB = "OAB — Trabalho CLT";
 
-  // ── NEGÓCIOS E EMPREENDEDORISMO ──
-  { cat: "Negócios e Empreendedorismo", title: "Plano de Negócios Rápido", prompt: "Crie um plano de negócios simplificado para [IDEIA DE NEGÓCIO]. Inclua: descrição do produto/serviço, público-alvo, problema que resolve, diferenciais, canais de venda, fontes de receita e principais desafios.", tag: "Planejamento" },
-  { cat: "Negócios e Empreendedorismo", title: "Análise SWOT", prompt: "Faça uma análise SWOT completa para [NEGÓCIO/PROJETO]. Liste pelo menos 4 itens em cada quadrante: Forças, Fraquezas, Oportunidades e Ameaças. Ao final, sugira 3 ações estratégicas baseadas na análise.", tag: "Estratégia" },
-  { cat: "Negócios e Empreendedorismo", title: "Proposta de Valor", prompt: "Me ajude a criar uma proposta de valor clara e poderosa para [NEGÓCIO/PRODUTO]. A proposta deve responder: o que oferece, para quem, qual problema resolve, qual o benefício principal e por que é diferente da concorrência.", tag: "Posicionamento" },
-  { cat: "Negócios e Empreendedorismo", title: "Email de Vendas", prompt: "Escreva um email de vendas persuasivo para [PRODUTO/SERVIÇO]. Estrutura: assunto irresistível, abertura personalizada, identificação da dor do cliente, apresentação da solução, prova social, oferta e CTA claro. Tom: [PROFISSIONAL/PRÓXIMO].", tag: "Email" },
-  { cat: "Negócios e Empreendedorismo", title: "Roteiro de Apresentação", prompt: "Crie um roteiro de apresentação de 5 minutos para [NEGÓCIO/PRODUTO]. Inclua: problema do mercado, solução proposta, como funciona, diferenciais, tração/resultados e próximos passos. Tom convincente e objetivo.", tag: "Pitch" },
-  { cat: "Negócios e Empreendedorismo", title: "Precificação", prompt: "Me ajude a definir o preço ideal para [PRODUTO/SERVIÇO]. Considere: custos envolvidos, valor percebido pelo cliente, preço da concorrência, margem desejada e posicionamento da marca. Apresente 3 opções de precificação.", tag: "Finanças" },
-  { cat: "Negócios e Empreendedorismo", title: "Script de Vendas", prompt: "Crie um script de vendas para abordagem [PRESENCIAL/POR WHATSAPP/LIGAÇÃO] para [PRODUTO/SERVIÇO]. Inclua: abertura, perguntas de diagnóstico, apresentação da solução, tratamento de objeções mais comuns e fechamento.", tag: "Vendas" },
-  { cat: "Negócios e Empreendedorismo", title: "Política de Reembolso", prompt: "Crie uma política de reembolso clara e profissional para [TIPO DE NEGÓCIO]. Inclua: prazo para solicitação, condições aceitas, processo passo a passo e tom respeitoso que transmita segurança ao cliente.", tag: "Jurídico" },
-  { cat: "Negócios e Empreendedorismo", title: "Pesquisa de Mercado", prompt: "Crie 10 perguntas para uma pesquisa de mercado sobre [PRODUTO/SERVIÇO]. As perguntas devem identificar: perfil do cliente, dores principais, hábitos de compra, quanto pagaria e o que valoriza na solução ideal.", tag: "Pesquisa" },
-  { cat: "Negócios e Empreendedorismo", title: "Parceria Estratégica", prompt: "Escreva uma mensagem profissional propondo parceria entre [MEU NEGÓCIO] e [NEGÓCIO ALVO]. Destaque: sinergia entre os dois públicos, o que cada lado ganha, formatos possíveis de parceria e próximo passo para conversa.", tag: "Parcerias" },
+const CATS = {
+  "all":                          {icon:"✨", desc:"Todos os prompts disponíveis"},
+  "Marketing e Redes Sociais":    {icon:"📱", desc:"Instagram, Reels, Stories, Ads e mais"},
+  "Negócios e Empreendedorismo":  {icon:"💼", desc:"Planos, vendas, propostas e estratégia"},
+  "Criação de Conteúdo":          {icon:"✍️",  desc:"Blog, newsletter, podcast, threads"},
+  "Produtividade Pessoal":        {icon:"⏱️",  desc:"Planejamento, foco, hábitos e metas"},
+  "Comunicação e Relacionamentos":{icon:"💬", desc:"Emails, feedback, negociação, conflitos"},
+  "Educação e Aprendizado":       {icon:"📚", desc:"Estudos, aulas, resumos e quizzes"},
+  "Saúde e Bem-estar":            {icon:"🌿", desc:"Treino, nutrição, saúde mental e hábitos"},
+  "Atendimento ao Cliente":       {icon:"🤝", desc:"WhatsApp, suporte, onboarding e pós-venda"},
+  "Estratégia e Análise":         {icon:"📊", desc:"OKRs, funil, KPIs, decisões e cenários"},
+  "Inteligência Artificial":      {icon:"🤖", desc:"Prompts, automação, ferramentas e agentes"},
+  "OAB — Trabalho CLT":           {icon:"⚖️", desc:"Respostas verificadas · Fontes reais · Anti-alucinação"},
+};
 
-  // ── CRIAÇÃO DE CONTEÚDO ──
-  { cat: "Criação de Conteúdo", title: "Artigo Completo", prompt: "Escreva um artigo completo sobre [TEMA] com aproximadamente 800 palavras. Estrutura: introdução instigante, 3 tópicos principais com exemplos práticos, dados ou estatísticas quando possível, e conclusão com reflexão. Tom: [PROFISSIONAL/EDUCATIVO].", tag: "Blog" },
-  { cat: "Criação de Conteúdo", title: "Newsletter Semanal", prompt: "Crie o conteúdo de uma newsletter semanal sobre [NICHO] para [PÚBLICO-ALVO]. Inclua: saudação personalizada, 1 insight principal, 1 dica prática, 1 curiosidade e uma CTA leve (responder, clicar ou salvar).", tag: "Email" },
-  { cat: "Criação de Conteúdo", title: "Roteiro de Podcast", prompt: "Crie um roteiro para um episódio de podcast de 20 minutos sobre [TEMA]. Inclua: abertura impactante, apresentação do tema, 3 blocos de conteúdo, história ou exemplo real, reflexão final e encerramento com CTA.", tag: "Podcast" },
-  { cat: "Criação de Conteúdo", title: "Descrição de Produto", prompt: "Escreva uma descrição persuasiva para [PRODUTO]. Foque em benefícios (não só características), use linguagem sensorial, inclua para quem é ideal, como usar e o resultado esperado. Finalize com frase de compra.", tag: "E-commerce" },
-  { cat: "Criação de Conteúdo", title: "Thread para X/Twitter", prompt: "Crie uma thread de 8 tweets sobre [TEMA]. Tweet 1: gancho poderoso. Tweets 2 a 7: um insight ou dica por tweet, linguagem direta e concisa. Tweet 8: conclusão + pergunta para engajamento. Use números e quebras de linha.", tag: "Twitter/X" },
-  { cat: "Criação de Conteúdo", title: "Storytelling Pessoal", prompt: "Me ajude a contar a história de [EXPERIÊNCIA PESSOAL/PROFISSIONAL] usando storytelling. Estrutura: cenário inicial, conflito ou desafio, virada, aprendizado e conexão com o público. Tom autêntico e inspirador.", tag: "Storytelling" },
-  { cat: "Criação de Conteúdo", title: "FAQ do Produto", prompt: "Crie 10 perguntas frequentes (FAQ) com respostas para [PRODUTO/SERVIÇO]. As perguntas devem cobrir: o que é, para quem serve, como funciona, preço, prazo, garantia, suporte e resultados esperados.", tag: "FAQ" },
-  { cat: "Criação de Conteúdo", title: "Reaproveitamento de Conteúdo", prompt: "Tenho este conteúdo: [COLE AQUI]. Me ajude a adaptá-lo em: 1 legenda para Instagram, 1 thread para X, 1 parágrafo para newsletter e 3 possíveis tópicos de carrossel. Mantenha a essência mas adapte o formato.", tag: "Repurpose" },
-  { cat: "Criação de Conteúdo", title: "Headline Magnética", prompt: "Crie 10 opções de headline para [ARTIGO/ANÚNCIO/POST] sobre [TEMA]. Use variações de gatilhos: curiosidade, urgência, benefício, número, pergunta e controvérsia. Indique qual gatilho cada headline usa.", tag: "Copywriting" },
-  { cat: "Criação de Conteúdo", title: "Conteúdo Evergreen", prompt: "Crie um conteúdo evergreen (atemporal) sobre [TEMA DO NICHO]. O conteúdo deve ser útil mesmo daqui a 2 anos, abordar uma dor recorrente do público e oferecer solução prática com exemplos concretos.", tag: "SEO" },
+const DATA = [
+  {cat:"Marketing e Redes Sociais",title:"Legenda Poderosa",prompt:"Crie uma legenda envolvente para Instagram sobre [TEMA]. Use tom [FORMAL/DESCONTRAÍDO], inclua emojis relevantes, uma chamada para ação clara e até 3 hashtags estratégicas. O objetivo é gerar engajamento e conexão com o público.",tag:"Instagram"},
+  {cat:"Marketing e Redes Sociais",title:"Calendário de Conteúdo",prompt:"Monte um calendário de conteúdo para 1 semana nas redes sociais sobre [NICHO]. Inclua: tema do dia, formato sugerido (reels, carrossel, story), horário ideal de postagem e objetivo de cada conteúdo (engajamento, venda, educação).",tag:"Estratégia"},
+  {cat:"Marketing e Redes Sociais",title:"Título Magnético",prompt:"Crie 10 títulos irresistíveis para um post/vídeo sobre [ASSUNTO]. Os títulos devem despertar curiosidade, ter entre 6 a 12 palavras e usar gatilhos mentais como urgência, novidade ou benefício direto.",tag:"Copywriting"},
+  {cat:"Marketing e Redes Sociais",title:"Carrossel Educativo",prompt:"Crie um roteiro de carrossel com 7 slides sobre [TEMA]. Slide 1: título impactante. Slides 2 a 6: um conceito prático por slide, linguagem simples. Slide 7: conclusão + chamada para salvar ou compartilhar.",tag:"Carrossel"},
+  {cat:"Marketing e Redes Sociais",title:"Script para Reels",prompt:"Escreva um script de 30 a 60 segundos para um Reels sobre [TEMA]. Estrutura: gancho nos primeiros 3 segundos, desenvolvimento rápido com 3 dicas práticas e CTA final motivador. Tom: [PROFISSIONAL/DESCONTRAÍDO].",tag:"Reels"},
+  {cat:"Marketing e Redes Sociais",title:"Bio Profissional",prompt:"Crie uma bio para o Instagram de [NOME/PROFISSÃO]. Deve ter: quem é, o que faz, para quem ajuda, diferencial único e CTA (ex: link, DM ou destaque). Máximo de 150 caracteres por linha.",tag:"Perfil"},
+  {cat:"Marketing e Redes Sociais",title:"Copy de Anúncio",prompt:"Escreva um anúncio para Facebook/Instagram promovendo [PRODUTO/SERVIÇO]. Inclua: headline de impacto, benefício principal, prova social, oferta e CTA urgente. Público-alvo: [DESCREVA].",tag:"Ads"},
+  {cat:"Marketing e Redes Sociais",title:"Resposta a Comentário Negativo",prompt:"Me ajude a responder de forma profissional e empática o seguinte comentário negativo nas redes sociais: [COMENTÁRIO]. A resposta deve ser breve, reconhecer a insatisfação, oferecer solução e preservar a imagem da marca.",tag:"Comunidade"},
+  {cat:"Marketing e Redes Sociais",title:"Ideias de Conteúdo",prompt:"Gere 15 ideias criativas de conteúdo para [NICHO/PROFISSÃO] nas redes sociais. Variar entre: conteúdo educativo, bastidores, depoimento, trend, meme do nicho e venda indireta. Liste o formato ideal para cada ideia.",tag:"Criatividade"},
+  {cat:"Marketing e Redes Sociais",title:"Story Sequencial",prompt:"Crie uma sequência de 5 stories para vender [PRODUTO/SERVIÇO]. Story 1: desperte a dor. Story 2: mostre que existe solução. Story 3: apresente o produto. Story 4: prova social. Story 5: CTA com senso de urgência.",tag:"Stories"},
+  {cat:"Negócios e Empreendedorismo",title:"Plano de Negócios Rápido",prompt:"Crie um plano de negócios simplificado para [IDEIA DE NEGÓCIO]. Inclua: descrição do produto/serviço, público-alvo, problema que resolve, diferenciais, canais de venda, fontes de receita e principais desafios.",tag:"Planejamento"},
+  {cat:"Negócios e Empreendedorismo",title:"Análise SWOT",prompt:"Faça uma análise SWOT completa para [NEGÓCIO/PROJETO]. Liste pelo menos 4 itens em cada quadrante: Forças, Fraquezas, Oportunidades e Ameaças. Ao final, sugira 3 ações estratégicas baseadas na análise.",tag:"Estratégia"},
+  {cat:"Negócios e Empreendedorismo",title:"Proposta de Valor",prompt:"Me ajude a criar uma proposta de valor clara e poderosa para [NEGÓCIO/PRODUTO]. A proposta deve responder: o que oferece, para quem, qual problema resolve, qual o benefício principal e por que é diferente da concorrência.",tag:"Posicionamento"},
+  {cat:"Negócios e Empreendedorismo",title:"Email de Vendas",prompt:"Escreva um email de vendas persuasivo para [PRODUTO/SERVIÇO]. Estrutura: assunto irresistível, abertura personalizada, identificação da dor do cliente, apresentação da solução, prova social, oferta e CTA claro.",tag:"Email"},
+  {cat:"Negócios e Empreendedorismo",title:"Roteiro de Apresentação",prompt:"Crie um roteiro de apresentação de 5 minutos para [NEGÓCIO/PRODUTO]. Inclua: problema do mercado, solução proposta, como funciona, diferenciais, tração/resultados e próximos passos.",tag:"Pitch"},
+  {cat:"Negócios e Empreendedorismo",title:"Precificação",prompt:"Me ajude a definir o preço ideal para [PRODUTO/SERVIÇO]. Considere: custos envolvidos, valor percebido pelo cliente, preço da concorrência, margem desejada e posicionamento da marca. Apresente 3 opções.",tag:"Finanças"},
+  {cat:"Negócios e Empreendedorismo",title:"Script de Vendas",prompt:"Crie um script de vendas para abordagem [PRESENCIAL/WHATSAPP/LIGAÇÃO] para [PRODUTO/SERVIÇO]. Inclua: abertura, perguntas de diagnóstico, apresentação da solução, objeções mais comuns e fechamento.",tag:"Vendas"},
+  {cat:"Negócios e Empreendedorismo",title:"Política de Reembolso",prompt:"Crie uma política de reembolso clara e profissional para [TIPO DE NEGÓCIO]. Inclua: prazo para solicitação, condições aceitas, processo passo a passo e tom respeitoso que transmita segurança ao cliente.",tag:"Jurídico"},
+  {cat:"Negócios e Empreendedorismo",title:"Pesquisa de Mercado",prompt:"Crie 10 perguntas para uma pesquisa de mercado sobre [PRODUTO/SERVIÇO]. As perguntas devem identificar: perfil do cliente, dores principais, hábitos de compra, quanto pagaria e o que valoriza na solução ideal.",tag:"Pesquisa"},
+  {cat:"Negócios e Empreendedorismo",title:"Parceria Estratégica",prompt:"Escreva uma mensagem profissional propondo parceria entre [MEU NEGÓCIO] e [NEGÓCIO ALVO]. Destaque: sinergia entre os dois públicos, o que cada lado ganha, formatos de parceria e próximo passo.",tag:"Parcerias"},
+  {cat:"Criação de Conteúdo",title:"Artigo Completo",prompt:"Escreva um artigo completo sobre [TEMA] com aproximadamente 800 palavras. Estrutura: introdução instigante, 3 tópicos principais com exemplos práticos, dados ou estatísticas quando possível, e conclusão com reflexão.",tag:"Blog"},
+  {cat:"Criação de Conteúdo",title:"Newsletter Semanal",prompt:"Crie o conteúdo de uma newsletter semanal sobre [NICHO] para [PÚBLICO-ALVO]. Inclua: saudação personalizada, 1 insight principal, 1 dica prática, 1 curiosidade e uma CTA leve.",tag:"Email"},
+  {cat:"Criação de Conteúdo",title:"Roteiro de Podcast",prompt:"Crie um roteiro para um episódio de podcast de 20 minutos sobre [TEMA]. Inclua: abertura impactante, apresentação do tema, 3 blocos de conteúdo, história ou exemplo real, reflexão final e encerramento com CTA.",tag:"Podcast"},
+  {cat:"Criação de Conteúdo",title:"Descrição de Produto",prompt:"Escreva uma descrição persuasiva para [PRODUTO]. Foque em benefícios, use linguagem sensorial, inclua para quem é ideal, como usar e o resultado esperado. Finalize com frase de compra.",tag:"E-commerce"},
+  {cat:"Criação de Conteúdo",title:"Thread para X/Twitter",prompt:"Crie uma thread de 8 tweets sobre [TEMA]. Tweet 1: gancho poderoso. Tweets 2 a 7: um insight por tweet, linguagem direta. Tweet 8: conclusão + pergunta para engajamento.",tag:"Twitter/X"},
+  {cat:"Criação de Conteúdo",title:"Storytelling Pessoal",prompt:"Me ajude a contar a história de [EXPERIÊNCIA PESSOAL/PROFISSIONAL] usando storytelling. Estrutura: cenário inicial, conflito ou desafio, virada, aprendizado e conexão com o público. Tom autêntico e inspirador.",tag:"Storytelling"},
+  {cat:"Criação de Conteúdo",title:"FAQ do Produto",prompt:"Crie 10 perguntas frequentes (FAQ) com respostas para [PRODUTO/SERVIÇO]. Cubra: o que é, para quem serve, como funciona, preço, prazo, garantia, suporte e resultados esperados.",tag:"FAQ"},
+  {cat:"Criação de Conteúdo",title:"Reaproveitamento de Conteúdo",prompt:"Tenho este conteúdo: [COLE AQUI]. Adapte em: 1 legenda para Instagram, 1 thread para X, 1 parágrafo para newsletter e 3 possíveis tópicos de carrossel. Mantenha a essência mas adapte o formato.",tag:"Repurpose"},
+  {cat:"Criação de Conteúdo",title:"Headline Magnética",prompt:"Crie 10 opções de headline para [ARTIGO/ANÚNCIO/POST] sobre [TEMA]. Use gatilhos: curiosidade, urgência, benefício, número, pergunta e controvérsia. Indique qual gatilho cada headline usa.",tag:"Copywriting"},
+  {cat:"Criação de Conteúdo",title:"Conteúdo Evergreen",prompt:"Crie um conteúdo evergreen sobre [TEMA DO NICHO]. Útil mesmo daqui a 2 anos, abordando uma dor recorrente do público e oferecendo solução prática com exemplos concretos.",tag:"SEO"},
+  {cat:"Produtividade Pessoal",title:"Planejamento Semanal",prompt:"Me ajude a planejar minha semana. Prioridades: [LISTA]. Disponível: [HORAS POR DIA]. Monte planejamento diário balanceado com blocos de trabalho, pausas estratégicas e espaço para imprevistos.",tag:"Tempo"},
+  {cat:"Produtividade Pessoal",title:"Lista de Tarefas Priorizada",prompt:"Tenho estas tarefas: [LISTA]. Priorize usando a Matriz Eisenhower. Categorize cada tarefa, sugira ordem de execução e quais poderiam ser delegadas ou eliminadas.",tag:"Gestão"},
+  {cat:"Produtividade Pessoal",title:"Rotina Matinal",prompt:"Crie uma rotina matinal produtiva de [X MINUTOS] para uma pessoa que trabalha com [PROFISSÃO]. Inclua: movimento, foco mental, revisão do dia e hábito positivo. Explique o porquê de cada etapa.",tag:"Hábitos"},
+  {cat:"Produtividade Pessoal",title:"Superar Procrastinação",prompt:"Estou procrastinando em [TAREFA]. Plano prático e imediato para começar agora: dividir em micro-ações, eliminar distrações, técnica de foco sugerida e como me recompensar ao terminar.",tag:"Foco"},
+  {cat:"Produtividade Pessoal",title:"Revisão Mensal",prompt:"Me guie em uma revisão do mês de [MÊS]: o que funcionou, o que não funcionou, principais conquistas, desafios, aprendizados e 3 intenções para o próximo mês.",tag:"Reflexão"},
+  {cat:"Produtividade Pessoal",title:"Delegar Tarefas",prompt:"Preciso delegar [TAREFA] para [COLEGA/ASSISTENTE]. Briefing claro com: objetivo, resultado esperado, prazo, recursos disponíveis, critérios de qualidade e como receber o resultado.",tag:"Delegação"},
+  {cat:"Produtividade Pessoal",title:"Metas SMART",prompt:"Transforme minha meta vaga '[META]' em meta SMART: Específica, Mensurável, Atingível, Relevante e Temporal. Liste os 5 primeiros passos concretos para começar esta semana.",tag:"Metas"},
+  {cat:"Produtividade Pessoal",title:"Gestão de Energia",prompt:"Minha energia cai especialmente [HORÁRIO/SITUAÇÃO]. Estratégia personalizada de gestão de energia: alimentação, movimento, foco e recuperação.",tag:"Energia"},
+  {cat:"Produtividade Pessoal",title:"Organizar Caixa de Email",prompt:"Caixa de email desorganizada com [X] mensagens. Sistema em 5 passos para organizar hoje + protocolo para manter. Sugestão de pastas e regras de triagem.",tag:"Organização"},
+  {cat:"Produtividade Pessoal",title:"Deep Work",prompt:"Quero implementar sessões de Deep Work. Disponível: [HORÁRIOS]. Protocolo personalizado com: duração ideal, rituais de entrada/saída, ambiente e como medir resultado.",tag:"Foco"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Apresentação",prompt:"Mensagem de apresentação profissional para [CONTEXTO: rede social, email frio, evento]. Inclua: quem sou, o que faço, como agrego valor e convite gentil para conversa.",tag:"Networking"},
+  {cat:"Comunicação e Relacionamentos",title:"Email Difícil",prompt:"Email difícil para [SITUAÇÃO: cliente insatisfeito, cobrar pagamento, negar pedido, feedback negativo]. Comunicar de forma clara, respeitosa e profissional, preservando o relacionamento.",tag:"Email"},
+  {cat:"Comunicação e Relacionamentos",title:"Feedback Construtivo",prompt:"Feedback construtivo para [SITUAÇÃO] usando modelo SBI (Situação, Comportamento, Impacto). Específico, não julgativo, focado em comportamento e com sugestão de melhoria.",tag:"Liderança"},
+  {cat:"Comunicação e Relacionamentos",title:"Negociação",prompt:"Negociar [SITUAÇÃO] com [CONTRAPARTE]. Prepare: posição ideal, mínimo aceitável, argumentos principais, objeções possíveis e como responder a cada uma.",tag:"Negociação"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Agradecimento",prompt:"Mensagem de agradecimento genuína e personalizada para [PESSOA/EMPRESA] pelo [MOTIVO]. Calorosa, específica e deixando porta aberta para futuras interações.",tag:"Relacionamento"},
+  {cat:"Comunicação e Relacionamentos",title:"Resolver Conflito",prompt:"Em conflito com [PESSOA] sobre [SITUAÇÃO]. Como abordar de forma não-violenta: expressar perspectiva, ouvir ativamente e buscar solução conjunta.",tag:"Conflito"},
+  {cat:"Comunicação e Relacionamentos",title:"Discurso de Impacto",prompt:"Discurso de [X MINUTOS] sobre [TEMA] para [CONTEXTO]. Estrutura: abertura poderosa, 3 pontos principais e encerramento que inspire ação.",tag:"Oratória"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Condolência",prompt:"Mensagem de condolência para [PESSOA] que passou por [SITUAÇÃO]. Genuína, acolhedora e respeitosa, sem ser invasiva ou usar clichês vazios.",tag:"Empatia"},
+  {cat:"Comunicação e Relacionamentos",title:"Follow-up Profissional",prompt:"Follow-up para [CONTEXTO: após reunião, proposta enviada, entrevista]. Breve, relembra o contexto, reforça valor e tem próximo passo claro.",tag:"Follow-up"},
+  {cat:"Comunicação e Relacionamentos",title:"Comunicar Mudança",prompt:"Comunicar [MUDANÇA: preços, políticas, prazo] para clientes. Transparente: porquê muda, o que muda, quando muda e como beneficia o cliente.",tag:"Cliente"},
+  {cat:"Educação e Aprendizado",title:"Explicar Conceito Complexo",prompt:"Explique [CONCEITO] de forma simples para alguém sem conhecimento técnico. Use analogias do cotidiano, exemplos práticos e estrutura: o que é, como funciona e por que importa.",tag:"Didática"},
+  {cat:"Educação e Aprendizado",title:"Plano de Estudos",prompt:"Plano de estudos para aprender [HABILIDADE/ASSUNTO] em [X SEMANAS]. Disponho de [X HORAS/SEMANA]. Recursos, ordem de aprendizado e como medir progresso.",tag:"Estudos"},
+  {cat:"Educação e Aprendizado",title:"Quiz de Revisão",prompt:"10 questões de múltipla escolha (4 alternativas) para revisar [ASSUNTO]. 3 fáceis, 4 médias, 3 difíceis. Gabarito comentado ao final.",tag:"Quiz"},
+  {cat:"Educação e Aprendizado",title:"Mapa Mental",prompt:"Estrutura de mapa mental sobre [TEMA]. Conceito central, 5 ramos principais e 3 sub-ramos para cada. Facilite a memorização e visualização das conexões.",tag:"Memorização"},
+  {cat:"Educação e Aprendizado",title:"Resumo de Livro",prompt:"Resumo estruturado do livro '[TÍTULO]'. Premissa principal, 5 conceitos mais importantes, 3 exemplos práticos, críticas e 3 aplicações práticas na vida real.",tag:"Leitura"},
+  {cat:"Educação e Aprendizado",title:"Aula Prática",prompt:"Aula prática sobre [TEMA] para [PÚBLICO] com [X MINUTOS]. Objetivo de aprendizagem, warm-up, conteúdo principal com atividade prática, discussão e encerramento com reflexão.",tag:"Ensino"},
+  {cat:"Educação e Aprendizado",title:"Flashcards",prompt:"15 flashcards (frente e verso) para memorizar os conceitos-chave de [ASSUNTO]. Pergunta clara na frente, resposta concisa no verso. Do básico ao avançado.",tag:"Flashcards"},
+  {cat:"Educação e Aprendizado",title:"Análise de Caso",prompt:"Análise do caso: [SITUAÇÃO]. Identifique: problema central, causas raiz, partes envolvidas, opções de solução com prós/contras e recomendação com justificativa.",tag:"Análise"},
+  {cat:"Educação e Aprendizado",title:"Debate de Ideias",prompt:"Dois lados do debate sobre [TEMA]. 5 melhores argumentos a favor e 5 contra. Ao final, síntese equilibrada.",tag:"Pensamento Crítico"},
+  {cat:"Educação e Aprendizado",title:"TCC / Monografia",prompt:"Estrutura de [TCC/MONOGRAFIA] sobre [TEMA]. Título provisório, problema de pesquisa, hipótese, capítulos com descrição, metodologia e referências teóricas sugeridas.",tag:"Acadêmico"},
+  {cat:"Saúde e Bem-estar",title:"Plano de Treino",prompt:"Plano de treino para [OBJETIVO] para pessoa [NÍVEL] com acesso a [ACADEMIA/CASA]. Disponibilidade: [X DIAS/SEMANA]. Aquecimento e série completa.",tag:"Treino"},
+  {cat:"Saúde e Bem-estar",title:"Cardápio Saudável",prompt:"Cardápio semanal saudável para [OBJETIVO]. Restrições: [ALERGIAS]. Café da manhã, almoço, lanche e jantar. Praticidade e sabor.",tag:"Nutrição"},
+  {cat:"Saúde e Bem-estar",title:"Gerenciar Ansiedade",prompt:"Sinto [SINTOMA DE ANSIEDADE]. 5 técnicas práticas e imediatas + 3 hábitos preventivos + quando buscar ajuda profissional.",tag:"Saúde Mental"},
+  {cat:"Saúde e Bem-estar",title:"Desintoxicação Digital",prompt:"Plano de [X DIAS] para reduzir uso de [REDES/CELULAR]. Regras claras, atividades alternativas, como lidar com FOMO e como retomar de forma saudável.",tag:"Digital Detox"},
+  {cat:"Saúde e Bem-estar",title:"Sono de Qualidade",prompt:"Protocolo de higiene do sono: rotina noturna de 60 minutos, ambiente ideal, hábitos a eliminar, técnicas de relaxamento e dicas de alimentação noturna.",tag:"Sono"},
+  {cat:"Saúde e Bem-estar",title:"Mindfulness",prompt:"Exercício de mindfulness de [5/10/15] minutos para [OBJETIVO]. Instruções passo a passo que um iniciante consiga seguir.",tag:"Meditação"},
+  {cat:"Saúde e Bem-estar",title:"Jornada de Autoconhecimento",prompt:"10 perguntas profundas para autoconhecimento sobre [TEMA]. Reflexão genuína, identificando padrões e valores.",tag:"Autoconhecimento"},
+  {cat:"Saúde e Bem-estar",title:"Comunicação Não-Violenta",prompt:"Expressar insatisfação com [SITUAÇÃO] usando CNV. Estrutura: Observação, Sentimento, Necessidade e Pedido claro. Tom assertivo e respeitoso.",tag:"CNV"},
+  {cat:"Saúde e Bem-estar",title:"Ritual de Gratidão",prompt:"Ritual diário de gratidão de [X MINUTOS]. Perguntas norteadoras, reflexão, como registrar e por que esse hábito transforma a perspectiva.",tag:"Gratidão"},
+  {cat:"Saúde e Bem-estar",title:"Burnout Recovery",prompt:"Plano de recuperação de burnout para [X SEMANAS]: o que pausar, o que retomar gradualmente, hábitos restaurativos, como comunicar limites e quando pedir ajuda.",tag:"Burnout"},
+  {cat:"Atendimento ao Cliente",title:"Script de WhatsApp",prompt:"Script de atendimento pelo WhatsApp para [TIPO DE NEGÓCIO]. Boas-vindas, perguntas de qualificação, apresentação da solução, como lidar com 'vou pensar' e encerramento cordial.",tag:"WhatsApp"},
+  {cat:"Atendimento ao Cliente",title:"Resposta a Reclamação",prompt:"Resposta profissional e empática para a reclamação: [DESCREVA]. Reconhecer o problema, solução concreta e prazo.",tag:"Suporte"},
+  {cat:"Atendimento ao Cliente",title:"Mensagem de Pós-Venda",prompt:"Sequência de 3 mensagens de pós-venda para [PRODUTO/SERVIÇO]. Imediata: confirmação. Dia 3: dica de uso. Dia 7: feedback + upsell.",tag:"Pós-venda"},
+  {cat:"Atendimento ao Cliente",title:"FAQ Automatizado",prompt:"Respostas prontas para as 10 perguntas mais frequentes de [TIPO DE NEGÓCIO]. Claras, objetivas e com tom [FORMAL/DESCONTRAÍDO].",tag:"FAQ"},
+  {cat:"Atendimento ao Cliente",title:"Recuperar Cliente Inativo",prompt:"Mensagem para reativar cliente inativo há [X MESES]. Personalizar, mostrar novidade/especial e ter incentivo para retornar.",tag:"Retenção"},
+  {cat:"Atendimento ao Cliente",title:"Pesquisa de Satisfação",prompt:"Pesquisa de satisfação com 7 questões para [PRODUTO/SERVIÇO]. NPS, escala, múltipla escolha e aberta. O que melhorar e o que gostou.",tag:"NPS"},
+  {cat:"Atendimento ao Cliente",title:"Política de Cancelamento",prompt:"Política de cancelamento para [SERVIÇO]. Prazo sem custo, condições de reembolso, processo de solicitação e comunicação respeitosa ao cliente.",tag:"Políticas"},
+  {cat:"Atendimento ao Cliente",title:"Upsell Gentil",prompt:"Upsell natural de [PRODUTO PREMIUM] para cliente de [PRODUTO BÁSICO]. Relevante, baseado no histórico e apresentado como benefício.",tag:"Upsell"},
+  {cat:"Atendimento ao Cliente",title:"Boas-Vindas ao Cliente",prompt:"Onboarding para novos clientes de [PRODUTO/SERVIÇO]. Email boas-vindas (dia 1), tutorial (dia 2), dica exclusiva (dia 5) e convite para suporte (dia 7).",tag:"Onboarding"},
+  {cat:"Atendimento ao Cliente",title:"Lidar com Cliente Difícil",prompt:"Cliente sendo [AGRESSIVO/EXIGENTE] por [MOTIVO]. Responder mantendo calma, limites respeitosos, solução viável e imagem profissional.",tag:"Conflito"},
+  {cat:"Estratégia e Análise",title:"Análise de Concorrentes",prompt:"Análise competitiva dos concorrentes de [MEU NEGÓCIO] no mercado de [NICHO]. Posicionamento, diferenciais, preço, pontos fracos e oportunidade a explorar.",tag:"Mercado"},
+  {cat:"Estratégia e Análise",title:"Estratégia de Lançamento",prompt:"Estratégia de lançamento para [PRODUTO/SERVIÇO]. Pré-lançamento (7 dias), lançamento e pós-lançamento (3 dias). Ações de marketing, conteúdo e antecipação.",tag:"Lançamento"},
+  {cat:"Estratégia e Análise",title:"OKRs Trimestrais",prompt:"OKRs para o trimestre de [ÁREA]. 3 objetivos inspiradores e 3 resultados-chave mensuráveis para cada. Ambiciosos mas atingíveis.",tag:"OKRs"},
+  {cat:"Estratégia e Análise",title:"Análise de Funil",prompt:"Analise meu funil para [PRODUTO]: [ETAPAS E MÉTRICAS]. Maiores vazamentos, causas, 3 hipóteses de melhoria e como testar cada uma.",tag:"Funil"},
+  {cat:"Estratégia e Análise",title:"Decisão Estratégica",prompt:"Decidir entre [OPÇÃO A] e [OPÇÃO B]. Critérios mais importantes, prós/contras, riscos, alinhamento com objetivos e recomendação com base nos dados.",tag:"Decisão"},
+  {cat:"Estratégia e Análise",title:"Indicadores de Sucesso",prompt:"KPIs mais importantes para [NEGÓCIO/PROJETO/CAMPANHA]. O que mede, como calcular, frequência de acompanhamento e meta sugerida.",tag:"KPIs"},
+  {cat:"Estratégia e Análise",title:"Planejamento Anual",prompt:"Planejamento anual para [NEGÓCIO/VIDA]. Estruturado por trimestres: foco principal, 3 metas-chave, recursos, obstáculos e como medir progresso.",tag:"Planejamento"},
+  {cat:"Estratégia e Análise",title:"Análise de Dados",prompt:"Dados: [INSIRA]. Identifique: padrões, anomalias, insights principais, o que funciona, o que melhorar e quais decisões tomar.",tag:"Dados"},
+  {cat:"Estratégia e Análise",title:"Cenários Futuros",prompt:"3 cenários futuros para [NEGÓCIO/DECISÃO]: otimista, realista e pessimista. Condições, impactos e estratégias de resposta para cada.",tag:"Cenários"},
+  {cat:"Estratégia e Análise",title:"Gestão de Riscos",prompt:"Principais riscos do [PROJETO/NEGÓCIO]. Para cada: probabilidade, impacto, medidas preventivas e plano de contingência.",tag:"Risco"},
+  {cat:"Inteligência Artificial",title:"Prompt Engenharia",prompt:"Melhore este prompt: [SEU PROMPT]. Analise: clareza, especificidade, contexto, formato de saída. Reescreva versão otimizada e explique as melhorias.",tag:"Prompt"},
+  {cat:"Inteligência Artificial",title:"IA no Negócio",prompt:"Sou [PROFISSÃO]. Guia prático de IA para: automatizar tarefas repetitivas, melhorar atendimento, criar conteúdo e tomar decisões melhores. Ferramentas específicas para cada uso.",tag:"Automação"},
+  {cat:"Inteligência Artificial",title:"Fluxo de Automação",prompt:"Fluxo de automação com IA para [PROCESSO]. Ferramentas necessárias, etapas, inputs e outputs de cada etapa e benefícios esperados.",tag:"Workflow"},
+  {cat:"Inteligência Artificial",title:"Avaliar Ferramenta de IA",prompt:"Avalie [FERRAMENTA DE IA] para [CONTEXTO]. Funcionalidades, pontos fortes, limitações, custo-benefício, curva de aprendizado e para quem é indicada.",tag:"Ferramentas"},
+  {cat:"Inteligência Artificial",title:"Criar GPT Personalizado",prompt:"Instruções para GPT personalizado para [FUNÇÃO]. Personalidade, tom de voz, o que deve e não deve fazer, como responder situações específicas.",tag:"GPT"},
+  {cat:"Inteligência Artificial",title:"IA Ética",prompt:"Usar IA para [FINALIDADE]. Aspectos éticos: privacidade, vieses, transparência, impacto nos colaboradores e como implementar de forma responsável.",tag:"Ética"},
+  {cat:"Inteligência Artificial",title:"Comparar Modelos de IA",prompt:"Compare [ChatGPT, Claude, Gemini, etc.] para [TAREFA]. Qualidade, velocidade, custo, integrações e qual recomendaria para meu caso.",tag:"Comparativo"},
+  {cat:"Inteligência Artificial",title:"Treinar Equipe em IA",prompt:"Plano de treinamento de 4 semanas para equipe de [X PESSOAS] usar IA. Temas por semana, exercícios práticos, ferramentas a dominar e como medir adoção.",tag:"Treinamento"},
+  {cat:"Inteligência Artificial",title:"Agente de IA",prompt:"Arquitetura de agente de IA para [FUNÇÃO]. Objetivo, dados necessários, ferramentas, tomada de decisão, tratamento de erros e métricas de sucesso.",tag:"Agentes"},
+  {cat:"Inteligência Artificial",title:"ROI da IA",prompt:"Calcule ROI de IA em [PROCESSO]. Custos de implementação, tempo economizado, redução de erros, satisfação do cliente e receita adicional.",tag:"ROI"},
 
-  // ── PRODUTIVIDADE PESSOAL ──
-  { cat: "Produtividade Pessoal", title: "Planejamento Semanal", prompt: "Me ajude a planejar minha semana. Minhas prioridades são: [LISTA]. Tenho disponível: [HORAS POR DIA]. Monte um planejamento diário balanceado com blocos de trabalho, pausas estratégicas e espaço para imprevistos.", tag: "Tempo" },
-  { cat: "Produtividade Pessoal", title: "Lista de Tarefas Priorizada", prompt: "Tenho estas tarefas pendentes: [LISTA]. Me ajude a priorizá-las usando a Matriz Eisenhower (urgente/importante). Categorize cada tarefa, sugira ordem de execução e quais poderiam ser delegadas ou eliminadas.", tag: "Gestão" },
-  { cat: "Produtividade Pessoal", title: "Rotina Matinal", prompt: "Crie uma rotina matinal produtiva de [X MINUTOS] para uma pessoa que trabalha com [PROFISSÃO]. Inclua: momento de movimento, foco mental, revisão do dia e hábito positivo. Explique o porquê de cada etapa.", tag: "Hábitos" },
-  { cat: "Produtividade Pessoal", title: "Superar Procrastinação", prompt: "Estou procrastinando em [TAREFA]. Me dê um plano prático e imediato para começar agora. Inclua: como dividir a tarefa em micro-ações, como eliminar distrações, técnica de foco sugerida e como me recompensar ao terminar.", tag: "Foco" },
-  { cat: "Produtividade Pessoal", title: "Revisão Mensal", prompt: "Me guie em uma revisão do mês de [MÊS]. Quero refletir sobre: o que funcionou, o que não funcionou, principais conquistas, desafios enfrentados, aprendizados e 3 intenções para o próximo mês.", tag: "Reflexão" },
-  { cat: "Produtividade Pessoal", title: "Delegar Tarefas", prompt: "Preciso delegar [TAREFA] para [COLEGA/ASSISTENTE/FREELANCER]. Escreva um briefing claro com: objetivo da tarefa, resultado esperado, prazo, recursos disponíveis, critérios de qualidade e como eu quero receber o resultado.", tag: "Delegação" },
-  { cat: "Produtividade Pessoal", title: "Metas SMART", prompt: "Me ajude a transformar minha meta vaga '[META]' em uma meta SMART: Específica, Mensurável, Atingível, Relevante e Temporal. Depois, liste os 5 primeiros passos concretos para começar esta semana.", tag: "Metas" },
-  { cat: "Produtividade Pessoal", title: "Gestão de Energia", prompt: "Sinto que minha energia cai ao longo do dia, especialmente [HORÁRIO/SITUAÇÃO]. Me ajude a criar uma estratégia personalizada de gestão de energia considerando: alimentação, movimento, foco e recuperação.", tag: "Energia" },
-  { cat: "Produtividade Pessoal", title: "Organizar Caixa de Email", prompt: "Minha caixa de email está desorganizada com [X] mensagens. Me dê um sistema em 5 passos para organizar hoje e um protocolo simples para manter organizado. Inclua sugestão de pastas e regras de triagem.", tag: "Organização" },
-  { cat: "Produtividade Pessoal", title: "Deep Work", prompt: "Quero implementar sessões de Deep Work na minha rotina. Tenho disponível: [HORÁRIOS]. Me ajude a criar um protocolo de Deep Work personalizado com: duração ideal, rituais de entrada e saída, ambiente e como medir resultado.", tag: "Foco" },
+  // ── OAB — TRABALHO CLT (Anti-alucinação) ──
+  {cat:"OAB — Trabalho CLT",title:"Responder Email de Advogado",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Antes de redigir a resposta, busque informações atualizadas nos sites:
+• https://www.oabsp.org.br
+• https://www.oab.org.br
+• https://www.planalto.gov.br (legislação)
 
-  // ── COMUNICAÇÃO E RELACIONAMENTOS ──
-  { cat: "Comunicação e Relacionamentos", title: "Mensagem de Apresentação", prompt: "Crie uma mensagem de apresentação profissional para [CONTEXTO: rede social, email frio, evento]. Inclua: quem sou, o que faço, como posso agregar valor à pessoa/empresa e um convite gentil para conversa.", tag: "Networking" },
-  { cat: "Comunicação e Relacionamentos", title: "Email Difícil", prompt: "Preciso escrever um email difícil para [SITUAÇÃO: cliente insatisfeito, cobrar pagamento, negar pedido, dar feedback negativo]. Ajude-me a comunicar de forma clara, respeitosa e profissional, preservando o relacionamento.", tag: "Email" },
-  { cat: "Comunicação e Relacionamentos", title: "Feedback Construtivo", prompt: "Me ajude a dar feedback construtivo para [SITUAÇÃO]. Use o modelo SBI (Situação, Comportamento, Impacto). O feedback deve ser específico, não julgativo, focado em comportamento e incluir sugestão de melhoria.", tag: "Liderança" },
-  { cat: "Comunicação e Relacionamentos", title: "Negociação", prompt: "Preciso negociar [SITUAÇÃO: salário, contrato, preço, prazo] com [CONTRAPARTE]. Me ajude a preparar: minha posição ideal, meu mínimo aceitável, principais argumentos, possíveis objeções e como responder a cada uma.", tag: "Negociação" },
-  { cat: "Comunicação e Relacionamentos", title: "Mensagem de Agradecimento", prompt: "Escreva uma mensagem de agradecimento genuína e personalizada para [PESSOA/EMPRESA] pelo [MOTIVO]. A mensagem deve ser calorosa, específica (mencionar detalhes reais) e deixar a porta aberta para futuras interações.", tag: "Relacionamento" },
-  { cat: "Comunicação e Relacionamentos", title: "Resolver Conflito", prompt: "Estou em conflito com [PESSOA] sobre [SITUAÇÃO]. Me ajude a pensar em como abordar essa conversa de forma não-violenta. Inclua: como expressar minha perspectiva, como ouvir ativamente e como buscar solução conjunta.", tag: "Conflito" },
-  { cat: "Comunicação e Relacionamentos", title: "Discurso de Impacto", prompt: "Preciso falar em [CONTEXTO: reunião, evento, apresentação] sobre [TEMA] por [X MINUTOS]. Me ajude a estruturar um discurso memorável com: abertura poderosa, 3 pontos principais e encerramento que inspire ação.", tag: "Oratória" },
-  { cat: "Comunicação e Relacionamentos", title: "Mensagem de Condolência", prompt: "Preciso enviar uma mensagem de condolência para [PESSOA] que passou por [SITUAÇÃO]. Escreva uma mensagem genuína, acolhedora e respeitosa, que demonstre empatia sem ser invasiva ou usar clichês vazios.", tag: "Empatia" },
-  { cat: "Comunicação e Relacionamentos", title: "Follow-up Profissional", prompt: "Escreva um follow-up profissional para [CONTEXTO: após reunião, proposta enviada, entrevista, evento]. A mensagem deve ser breve, relembrar o contexto, reforçar valor e ter um próximo passo claro.", tag: "Follow-up" },
-  { cat: "Comunicação e Relacionamentos", title: "Comunicar Mudança", prompt: "Preciso comunicar [MUDANÇA: de preços, de políticas, de prazo, de serviço] para meus clientes. Me ajude a redigir uma comunicação transparente que explique o porquê, o que muda, quando muda e como isso beneficia o cliente.", tag: "Cliente" },
+Só use informações que encontrar nessas fontes. Cite a fonte de cada afirmação.
+Se não encontrar a informação, diga: "Não localizei essa informação nas fontes oficiais. Recomendo verificar diretamente no site oabsp.org.br ou ligar para (11) 3346-6300."
 
-  // ── EDUCAÇÃO E APRENDIZADO ──
-  { cat: "Educação e Aprendizado", title: "Explicar Conceito Complexo", prompt: "Explique [CONCEITO COMPLEXO] de forma simples para alguém sem conhecimento técnico. Use analogias do cotidiano, exemplos práticos e uma estrutura de 3 partes: o que é, como funciona e por que importa.", tag: "Didática" },
-  { cat: "Educação e Aprendizado", title: "Plano de Estudos", prompt: "Crie um plano de estudos para aprender [HABILIDADE/ASSUNTO] em [X SEMANAS/MESES]. Disponho de [X HORAS/SEMANA]. Inclua: recursos recomendados (livros, cursos, vídeos), ordem de aprendizado e como medir progresso.", tag: "Estudos" },
-  { cat: "Educação e Aprendizado", title: "Quiz de Revisão", prompt: "Crie 10 questões de múltipla escolha (4 alternativas cada) para revisar o tema [ASSUNTO]. Varie os níveis: 3 fáceis, 4 médias, 3 difíceis. Inclua o gabarito comentado ao final, explicando por que cada resposta está certa.", tag: "Quiz" },
-  { cat: "Educação e Aprendizado", title: "Mapa Mental", prompt: "Crie a estrutura de um mapa mental sobre [TEMA]. Defina o conceito central, 5 ramos principais e 3 sub-ramos para cada um. Organize de forma que facilite a memorização e visualização das conexões.", tag: "Memorização" },
-  { cat: "Educação e Aprendizado", title: "Resumo de Livro", prompt: "Faça um resumo estruturado do livro '[TÍTULO]'. Inclua: premissa principal, 5 conceitos mais importantes, 3 exemplos práticos do livro, críticas ou limitações e 3 aplicações práticas na vida real.", tag: "Leitura" },
-  { cat: "Educação e Aprendizado", title: "Aula Prática", prompt: "Crie uma aula prática sobre [TEMA] para [PÚBLICO-ALVO] com duração de [X MINUTOS]. Inclua: objetivo de aprendizagem, warm-up, conteúdo principal com atividade prática, discussão em grupo e encerramento com reflexão.", tag: "Ensino" },
-  { cat: "Educação e Aprendizado", title: "Flashcards", prompt: "Crie 15 flashcards (frente e verso) para memorizar os conceitos-chave de [ASSUNTO]. A frente deve ter uma pergunta clara e o verso a resposta concisa. Ordene do básico ao avançado.", tag: "Flashcards" },
-  { cat: "Educação e Aprendizado", title: "Análise de Caso", prompt: "Analise o seguinte caso: [DESCREVA A SITUAÇÃO]. Identifique: problema central, causas raiz, partes envolvidas, opções de solução com prós e contras de cada uma, e recomende a melhor abordagem com justificativa.", tag: "Análise" },
-  { cat: "Educação e Aprendizado", title: "Debate de Ideias", prompt: "Me ajude a explorar os dois lados do debate sobre [TEMA CONTROVERSO]. Apresente os 5 melhores argumentos a favor e 5 contra, com base em evidências. Ao final, ofereça uma síntese equilibrada.", tag: "Pensamento Crítico" },
-  { cat: "Educação e Aprendizado", title: "TCC / Monografia", prompt: "Me ajude a estruturar um [TCC/ARTIGO/MONOGRAFIA] sobre [TEMA]. Proponha: título provisório, problema de pesquisa, hipótese, estrutura de capítulos com descrição de cada um, metodologia adequada e referências teóricas sugeridas.", tag: "Acadêmico" },
+---
 
-  // ── SAÚDE E BEM-ESTAR ──
-  { cat: "Saúde e Bem-estar", title: "Plano de Treino", prompt: "Crie um plano de treino para [OBJETIVO: emagrecer, ganhar massa, condicionamento] para uma pessoa [NÍVEL: iniciante/intermediário/avançado] com acesso a [ACADEMIA/CASA]. Disponibilidade: [X DIAS/SEMANA]. Inclua aquecimento e série completa.", tag: "Treino" },
-  { cat: "Saúde e Bem-estar", title: "Cardápio Saudável", prompt: "Monte um cardápio semanal saudável e prático para [OBJETIVO: emagrecimento/manutenção/ganho de massa]. Restrições: [ALERGIAS/INTOLERÂNCIAS]. Inclua café da manhã, almoço, lanche e jantar. Priorize praticidade e sabor.", tag: "Nutrição" },
-  { cat: "Saúde e Bem-estar", title: "Gerenciar Ansiedade", prompt: "Estou sentindo [SINTOMA DE ANSIEDADE]. Me dê 5 técnicas práticas e imediatas para reduzir a ansiedade agora. Depois, sugira 3 hábitos para prevenir crises futuras e quando seria importante buscar ajuda profissional.", tag: "Saúde Mental" },
-  { cat: "Saúde e Bem-estar", title: "Desintoxicação Digital", prompt: "Quero fazer uma desintoxicação digital. Me ajude a criar um plano de [X DIAS] para reduzir o uso de [REDES SOCIAIS/CELULAR/TELAS]. Inclua: regras claras, atividades alternativas, como lidar com FOMO e como retomar de forma saudável.", tag: "Digital Detox" },
-  { cat: "Saúde e Bem-estar", title: "Sono de Qualidade", prompt: "Tenho dificuldade para [DORMIR/ACORDAR DESCANSADO]. Crie um protocolo personalizado de higiene do sono com: rotina noturna de 60 minutos, ambiente ideal, hábitos a eliminar, técnicas de relaxamento e dicas de alimentação noturna.", tag: "Sono" },
-  { cat: "Saúde e Bem-estar", title: "Mindfulness", prompt: "Crie um exercício de mindfulness de [5/10/15] minutos para [OBJETIVO: reduzir estresse, aumentar foco, começar o dia]. Inclua instruções passo a passo que um iniciante consiga seguir facilmente.", tag: "Meditação" },
-  { cat: "Saúde e Bem-estar", title: "Jornada de Autoconhecimento", prompt: "Crie uma lista de 10 perguntas profundas para autoconhecimento sobre [TEMA: propósito de vida, relacionamentos, carreira, crenças]. As perguntas devem provocar reflexão genuína e ajudar a identificar padrões e valores.", tag: "Autoconhecimento" },
-  { cat: "Saúde e Bem-estar", title: "Comunicação Não-Violenta", prompt: "Quero expressar minha insatisfação com [SITUAÇÃO] usando Comunicação Não-Violenta (CNV). Me ajude a estruturar minha fala com: Observação (fato), Sentimento, Necessidade e Pedido claro. Tom: assertivo e respeitoso.", tag: "CNV" },
-  { cat: "Saúde e Bem-estar", title: "Ritual de Gratidão", prompt: "Crie um ritual diário de gratidão de [X MINUTOS] que seja genuíno e não repetitivo. Inclua: perguntas norteadoras, momento de reflexão, como registrar e por que esse hábito transforma a perspectiva ao longo do tempo.", tag: "Gratidão" },
-  { cat: "Saúde e Bem-estar", title: "Burnout Recovery", prompt: "Estou em recuperação de um burnout. Me ajude a criar um plano de recuperação gentil para [X SEMANAS] que inclua: o que pausar, o que retomar gradualmente, hábitos restaurativos, como comunicar limites e quando pedir ajuda.", tag: "Burnout" },
+Recebi o seguinte email de um advogado:
+[COLE O EMAIL AQUI]
 
-  // ── ATENDIMENTO AO CLIENTE ──
-  { cat: "Atendimento ao Cliente", title: "Script de WhatsApp", prompt: "Crie um script de atendimento pelo WhatsApp para [TIPO DE NEGÓCIO]. Inclua: mensagem de boas-vindas, perguntas de qualificação, apresentação da solução, como lidar com 'vou pensar' e encerramento cordial com próximo passo.", tag: "WhatsApp" },
-  { cat: "Atendimento ao Cliente", title: "Resposta a Reclamação", prompt: "Crie uma resposta profissional e empática para a seguinte reclamação: [DESCREVA]. A resposta deve: reconhecer o problema, pedir desculpa sem admitir culpa desnecessariamente, apresentar solução concreta e prazo.", tag: "Suporte" },
-  { cat: "Atendimento ao Cliente", title: "Mensagem de Pós-Venda", prompt: "Crie uma sequência de 3 mensagens de pós-venda para [PRODUTO/SERVIÇO]. Mensagem 1 (imediata): confirmação e boas-vindas. Mensagem 2 (3 dias): dica de uso. Mensagem 3 (7 dias): pedido de feedback + oferta de upsell.", tag: "Pós-venda" },
-  { cat: "Atendimento ao Cliente", title: "FAQ Automatizado", prompt: "Crie respostas prontas para as 10 perguntas mais frequentes de clientes de [TIPO DE NEGÓCIO]. As respostas devem ser claras, objetivas e com tom [FORMAL/DESCONTRAÍDO]. Inclua emojis quando adequado.", tag: "FAQ" },
-  { cat: "Atendimento ao Cliente", title: "Recuperar Cliente Inativo", prompt: "Crie uma mensagem para reativar um cliente que não compra há [X MESES]. A mensagem deve: personalizar a abordagem, mostrar que sentimos falta, apresentar algo novo ou especial, e ter um incentivo para retornar.", tag: "Retenção" },
-  { cat: "Atendimento ao Cliente", title: "Pesquisa de Satisfação", prompt: "Crie uma pesquisa de satisfação com 7 questões para [PRODUTO/SERVIÇO]. Varie os formatos: NPS, escala 1-5, múltipla escolha e aberta. Inclua uma questão sobre o que melhorar e uma sobre o que mais gostou.", tag: "NPS" },
-  { cat: "Atendimento ao Cliente", title: "Política de Cancelamento", prompt: "Crie uma política de cancelamento clara e justa para [SERVIÇO]. Inclua: prazo para cancelamento sem custo, condições para reembolso parcial/total, processo de solicitação e como comunicar ao cliente de forma respeitosa.", tag: "Políticas" },
-  { cat: "Atendimento ao Cliente", title: "Upsell Gentil", prompt: "Crie uma abordagem de upsell natural para oferecer [PRODUTO/SERVIÇO PREMIUM] a um cliente que comprou [PRODUTO BÁSICO]. A sugestão deve ser relevante, baseada no histórico do cliente e apresentada como benefício, não como venda.", tag: "Upsell" },
-  { cat: "Atendimento ao Cliente", title: "Boas-Vindas ao Cliente", prompt: "Crie uma sequência de onboarding para novos clientes de [PRODUTO/SERVIÇO]. Inclua: email de boas-vindas (dia 1), tutorial rápido (dia 2), dica exclusiva (dia 5) e convite para comunidade ou suporte (dia 7).", tag: "Onboarding" },
-  { cat: "Atendimento ao Cliente", title: "Lidar com Cliente Difícil", prompt: "Um cliente está sendo [AGRESSIVO/IRRACIONAL/EXIGENTE demais] por [MOTIVO]. Me ajude a responder de forma que: mantenha a calma, estabeleça limites respeitosamente, ofereça uma solução viável e preserve minha imagem profissional.", tag: "Conflito" },
+Redija uma resposta profissional, clara e cordial que:
+✓ Confirme o recebimento
+✓ Responda cada ponto levantado com base em fontes oficiais
+✓ Indique prazo quando necessário
+✓ Cite de onde veio cada informação
+✓ Mantenha tom institucional adequado`,tag:"Email",oab:true},
 
-  // ── ESTRATÉGIA E ANÁLISE ──
-  { cat: "Estratégia e Análise", title: "Análise de Concorrentes", prompt: "Faça uma análise competitiva dos concorrentes de [MEU NEGÓCIO/PRODUTO] no mercado de [NICHO]. Para cada concorrente principal, analise: posicionamento, diferenciais, preço, pontos fracos e oportunidade que posso explorar.", tag: "Mercado" },
-  { cat: "Estratégia e Análise", title: "Estratégia de Lançamento", prompt: "Crie uma estratégia de lançamento para [PRODUTO/SERVIÇO]. Inclua: fase de pré-lançamento (7 dias), dia de lançamento e pós-lançamento (3 dias). Especifique ações de marketing, conteúdo, comunicação e como criar antecipação.", tag: "Lançamento" },
-  { cat: "Estratégia e Análise", title: "OKRs Trimestrais", prompt: "Me ajude a criar OKRs (Objetivos e Resultados-Chave) para o trimestre de [ÁREA: marketing, vendas, operações]. Defina 3 objetivos inspiradores e 3 resultados-chave mensuráveis para cada um. Os KRs devem ser ambiciosos mas atingíveis.", tag: "OKRs" },
-  { cat: "Estratégia e Análise", title: "Análise de Funil", prompt: "Analise meu funil de vendas para [PRODUTO/SERVIÇO]: [DESCREVA AS ETAPAS E MÉTRICAS]. Identifique: onde estão os maiores vazamentos, possíveis causas, 3 hipóteses de melhoria e como testar cada uma.", tag: "Funil" },
-  { cat: "Estratégia e Análise", title: "Decisão Estratégica", prompt: "Preciso decidir entre [OPÇÃO A] e [OPÇÃO B]. Me ajude a tomar a melhor decisão analisando: critérios mais importantes, vantagens e desvantagens de cada opção, riscos, alinhamento com meus objetivos e qual escolheria com base nos dados.", tag: "Decisão" },
-  { cat: "Estratégia e Análise", title: "Indicadores de Sucesso", prompt: "Defina os KPIs mais importantes para acompanhar o sucesso de [NEGÓCIO/PROJETO/CAMPANHA]. Para cada indicador, especifique: o que mede, como calcular, frequência de acompanhamento e meta sugerida.", tag: "KPIs" },
-  { cat: "Estratégia e Análise", title: "Planejamento Anual", prompt: "Me ajude a criar um planejamento anual para [NEGÓCIO/VIDA PESSOAL]. Estruture por trimestres com: foco principal do período, 3 metas-chave, recursos necessários, possíveis obstáculos e como vou medir o progresso.", tag: "Planejamento" },
-  { cat: "Estratégia e Análise", title: "Análise de Dados", prompt: "Analisando estes dados: [INSIRA OS DADOS]. Me ajude a identificar: padrões relevantes, anomalias, principais insights, o que está funcionando, o que precisa melhorar e quais decisões posso tomar com base nessa análise.", tag: "Dados" },
-  { cat: "Estratégia e Análise", title: "Cenários Futuros", prompt: "Preciso me preparar para diferentes cenários futuros para [NEGÓCIO/DECISÃO]. Crie 3 cenários: otimista, realista e pessimista. Para cada um, descreva condições, impactos prováveis e estratégias de resposta.", tag: "Cenários" },
-  { cat: "Estratégia e Análise", title: "Gestão de Riscos", prompt: "Identifique os principais riscos do [PROJETO/NEGÓCIO/DECISÃO]. Para cada risco: classifique probabilidade e impacto (alto/médio/baixo), sugira medidas preventivas e plano de contingência caso o risco se materialize.", tag: "Risco" },
+  {cat:"OAB — Trabalho CLT",title:"Responder WhatsApp de Advogado",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Antes de responder, verifique as informações em:
+• https://www.oabsp.org.br
+• https://www.oab.org.br
 
-  // ── INTELIGÊNCIA ARTIFICIAL ──
-  { cat: "Inteligência Artificial", title: "Prompt Engenharia", prompt: "Me ajude a melhorar este prompt: [SEU PROMPT]. Analise: clareza do objetivo, especificidade das instruções, contexto fornecido, formato de saída esperado. Reescreva uma versão otimizada e explique as melhorias feitas.", tag: "Prompt" },
-  { cat: "Inteligência Artificial", title: "IA no Negócio", prompt: "Sou [PROFISSÃO/TIPO DE NEGÓCIO]. Me dê um guia prático de como usar Inteligência Artificial para: automatizar tarefas repetitivas, melhorar atendimento, criar conteúdo e tomar decisões melhores. Inclua ferramentas específicas para cada uso.", tag: "Automação" },
-  { cat: "Inteligência Artificial", title: "Fluxo de Automação", prompt: "Crie um fluxo de automação com IA para [PROCESSO: atendimento, criação de conteúdo, análise de dados, gestão de tarefas]. Detalhe: ferramentas necessárias, etapas do fluxo, inputs e outputs de cada etapa e benefícios esperados.", tag: "Workflow" },
-  { cat: "Inteligência Artificial", title: "Avaliar Ferramenta de IA", prompt: "Avalie a ferramenta de IA [NOME DA FERRAMENTA] para uso em [CONTEXTO]. Analise: principais funcionalidades, pontos fortes, limitações, custo-benefício, curva de aprendizado e para quem é mais indicada.", tag: "Ferramentas" },
-  { cat: "Inteligência Artificial", title: "Criar GPT Personalizado", prompt: "Me ajude a criar as instruções para um GPT personalizado para [FUNÇÃO: assistente de vendas, coach, criador de conteúdo]. Defina: personalidade, tom de voz, o que deve e não deve fazer, como responder a situações específicas.", tag: "GPT" },
-  { cat: "Inteligência Artificial", title: "IA Ética", prompt: "Estou considerando usar IA para [FINALIDADE]. Me ajude a pensar nos aspectos éticos: privacidade de dados, possíveis vieses, transparência com usuários, impacto nos colaboradores e como implementar de forma responsável.", tag: "Ética" },
-  { cat: "Inteligência Artificial", title: "Comparar Modelos de IA", prompt: "Compare os principais modelos de IA ([ChatGPT, Claude, Gemini, etc.]) para uso em [TAREFA ESPECÍFICA]. Analise: qualidade das respostas, velocidade, custo, integrações disponíveis e qual recomendaria para meu caso.", tag: "Comparativo" },
-  { cat: "Inteligência Artificial", title: "Treinar Equipe em IA", prompt: "Crie um plano de treinamento de 4 semanas para ensinar minha equipe de [X PESSOAS] a usar IA no trabalho. Inclua: temas por semana, exercícios práticos, ferramentas a dominar e como medir a adoção.", tag: "Treinamento" },
-  { cat: "Inteligência Artificial", title: "Agente de IA", prompt: "Desenhe a arquitetura de um agente de IA para [FUNÇÃO ESPECÍFICA]. Defina: objetivo do agente, dados que precisa, ferramentas que usa, processo de tomada de decisão, como lida com erros e métricas de sucesso.", tag: "Agentes" },
-  { cat: "Inteligência Artificial", title: "ROI da IA", prompt: "Me ajude a calcular o ROI de implementar IA em [PROCESSO/ÁREA]. Considere: custos de implementação, tempo economizado, redução de erros, impacto na satisfação do cliente e potencial de receita adicional. Monte um cenário realista.", tag: "ROI" },
+Não invente prazos, valores ou procedimentos. Se não tiver certeza, oriente a pessoa a confirmar no portal oficial.
 
-  // ── OAB / TRABALHO CLT ── (NOVA CATEGORIA)
-  { cat: "OAB — Trabalho CLT", title: "Responder Email de Advogado", prompt: "Recebi o seguinte email de um advogado: [COLE O EMAIL AQUI]. Me ajude a redigir uma resposta profissional, clara e cordial. A resposta deve: confirmar o recebimento, responder cada ponto levantado de forma objetiva, indicar prazo quando necessário e manter tom institucional adequado para comunicação com advogado.", tag: "Email" },
-  { cat: "OAB — Trabalho CLT", title: "Responder WhatsApp de Advogado", prompt: "Um advogado me enviou a seguinte mensagem pelo WhatsApp: [DESCREVA A MENSAGEM]. Me ajude a responder de forma profissional porém sem ser excessivamente formal, sendo direta e útil. A resposta deve ser objetiva, resolver a dúvida ou solicitação e indicar próximo passo quando necessário.", tag: "WhatsApp" },
-  { cat: "OAB — Trabalho CLT", title: "Orientar Assistido — Tom Acolhedor", prompt: "Um assistido me procurou com a seguinte dúvida ou situação: [DESCREVA]. Me ajude a redigir uma resposta clara, acessível e acolhedora, sem jargão jurídico excessivo. Explique a situação de forma simples, oriente sobre o próximo passo e deixe a pessoa sentir que está sendo bem assistida.", tag: "Assistido" },
-  { cat: "OAB — Trabalho CLT", title: "Orientar Inscrição na OAB SP", prompt: "Um advogado me perguntou sobre como fazer a inscrição na OAB SP. Me ajude a redigir uma orientação completa e clara, cobrindo: documentos necessários, onde acessar no site oabsp.org.br, etapas do processo, prazo estimado e contato para dúvidas. Tom: prestativo e profissional.", tag: "Inscrição" },
-  { cat: "OAB — Trabalho CLT", title: "Explicar Regras da OAB", prompt: "Um advogado tem dúvida sobre a seguinte regra ou norma da OAB: [DESCREVA A DÚVIDA]. Me ajude a explicar de forma clara e objetiva, citando a fonte quando possível (Estatuto da OAB, Regulamento Geral, Código de Ética). Use linguagem acessível e profissional.", tag: "Regras OAB" },
-  { cat: "OAB — Trabalho CLT", title: "Guia do Site OABSP", prompt: "Um advogado está com dificuldade para usar o site da OAB SP (oabsp.org.br). Me ajude a criar um passo a passo claro para ele realizar a seguinte tarefa: [DESCREVA A TAREFA: emitir certidão, atualizar cadastro, solicitar carteira, pagar anuidade, etc.]. Inclua onde clicar, o que preencher e o que esperar após o envio.", tag: "Site OABSP" },
-  { cat: "OAB — Trabalho CLT", title: "Responder Dúvida sobre Anuidade OAB", prompt: "Um advogado tem dúvida sobre a anuidade da OAB SP: [DESCREVA A DÚVIDA: valor, parcelamento, isenção, atraso, negativação, etc.]. Me ajude a orientá-lo de forma clara, indicando como verificar e resolver pelo site oabsp.org.br ou pelo contato adequado da seccional.", tag: "Anuidade" },
-  { cat: "OAB — Trabalho CLT", title: "Mensagem de Retorno ao Assistido", prompt: "Preciso retornar para um assistido que aguarda uma resposta sobre: [ASSUNTO]. O andamento atual é: [SITUAÇÃO ATUAL]. Me ajude a redigir uma mensagem cordial, transparente e tranquilizadora, explicando o status, o que ainda está pendente e qual o próximo passo previsto.", tag: "Assistido" },
-  { cat: "OAB — Trabalho CLT", title: "Encaminhar Solicitação Internamente", prompt: "Preciso encaminhar para outro setor ou colega a seguinte demanda recebida de um advogado ou assistido: [DESCREVA]. Me ajude a redigir um encaminhamento interno claro, com: resumo da solicitação, dados relevantes, urgência e o que precisa ser feito. Tom: profissional e objetivo.", tag: "Interno" },
-  { cat: "OAB — Trabalho CLT", title: "Negar Pedido com Educação", prompt: "Preciso negar ou informar a impossibilidade de atender o seguinte pedido de um advogado ou assistido: [DESCREVA O PEDIDO]. Me ajude a comunicar essa negativa de forma respeitosa, com explicação clara do motivo, alternativas quando possível e mantendo a boa relação institucional.", tag: "Comunicação" },
-  { cat: "OAB — Trabalho CLT", title: "Modelo de Resposta para Protocolos", prompt: "Preciso responder formalmente a um protocolo ou solicitação recebida: [DESCREVA O PROTOCOLO/SOLICITAÇÃO]. Me ajude a redigir uma resposta formal, dentro dos padrões da OAB SP, cobrindo: referência ao protocolo, resposta objetiva ao pedido, prazo ou procedimento indicado e assinatura adequada.", tag: "Protocolo" },
-  { cat: "OAB — Trabalho CLT", title: "Orientar sobre Carteira da OAB", prompt: "Um advogado está com dúvida sobre a carteira da OAB (2ª via, vencimento, foto, carteira digital). Me ajude a orientá-lo com as informações sobre como solicitar pelo site oabsp.org.br, documentos necessários, prazo de emissão e como acompanhar o pedido.", tag: "Carteira OAB" },
-  { cat: "OAB — Trabalho CLT", title: "Acolher Reclamação de Assistido", prompt: "Um assistido está insatisfeito ou frustrado com [SITUAÇÃO/DEMORA/ATENDIMENTO]. Me ajude a responder de forma empática, reconhecendo a insatisfação sem assumir culpas indevidas, explicando a situação com transparência e propondo uma solução ou próximo passo concreto.", tag: "Reclamação" },
+---
+
+Um advogado me enviou pelo WhatsApp:
+[DESCREVA A MENSAGEM AQUI]
+
+Redija uma resposta direta e profissional que:
+✓ Resolva a dúvida ou solicitação com base em fonte oficial
+✓ Indique o próximo passo
+✓ Informe de onde veio a informação (ex: "Conforme o portal oabsp.org.br...")
+✓ Seja objetiva, sem excesso de formalidade`,tag:"WhatsApp",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Orientar Assistido — Tom Acolhedor",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Use apenas informações verificadas. Não invente direitos, prazos ou procedimentos.
+Consulte: https://www.oab.org.br/servicosOAB/assistidoOAB
+Se a dúvida for jurídica específica, oriente o assistido a falar com o advogado responsável pelo seu caso.
+
+---
+
+Um assistido me procurou com a seguinte situação:
+[DESCREVA A SITUAÇÃO]
+
+Redija uma resposta clara, acolhedora e sem juridiquês que:
+✓ Explique a situação de forma simples
+✓ Informe o próximo passo concreto
+✓ Cite a fonte quando der uma informação oficial
+✓ Faça a pessoa sentir que está sendo bem assistida`,tag:"Assistido",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Orientar Inscrição na OAB SP",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+SOMENTE use informações do site oficial: https://www.oabsp.org.br/servicos/inscricoes
+Não invente documentos, valores ou prazos. Se não estiver explícito no site, diga que é necessário confirmar diretamente com a seccional.
+
+---
+
+Um advogado perguntou como fazer a inscrição na OAB SP.
+
+Redija uma orientação completa e baseada exclusivamente no site oabsp.org.br, incluindo:
+✓ Tipo de inscrição (primária, transferência, suplementar)
+✓ Documentos necessários (conforme listado no site)
+✓ Como acessar o portal e qual caminho seguir
+✓ Prazo estimado
+✓ Contato da seccional para dúvidas
+✓ Cite: "Fonte: oabsp.org.br/servicos/inscricoes"`,tag:"Inscrição",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Explicar Regras da OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Base legal obrigatória — só use o que estiver nestes documentos oficiais:
+• Lei 8.906/94 (Estatuto da OAB) — https://www.planalto.gov.br/ccivil_03/leis/l8906.htm
+• Regulamento Geral da OAB — https://www.oab.org.br/content/pdf/legislacaopdf/regulamentogeral.pdf
+• Código de Ética e Disciplina — https://www.oab.org.br/content/pdf/legislacaopdf/codigodeetica.pdf
+
+Não interprete além do que está escrito. Se houver dúvida de interpretação, indique que é necessário consultar um advogado ou a própria OAB.
+
+---
+
+Dúvida sobre a seguinte regra ou norma da OAB:
+[DESCREVA A DÚVIDA]
+
+Explique de forma clara e objetiva:
+✓ O que diz a norma (cite o artigo exato)
+✓ O que significa na prática
+✓ Fonte: [Lei/Artigo/Documento]`,tag:"Regras OAB",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Guia do Site OABSP",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Este guia deve descrever apenas o que está realmente disponível em https://www.oabsp.org.br
+Não invente telas, menus ou funcionalidades. Se não tiver certeza do caminho exato, diga: "Verificar a localização atual no menu do site, pois pode ter sofrido atualização."
+
+---
+
+Um advogado tem dificuldade para realizar no site oabsp.org.br:
+[DESCREVA A TAREFA: ex. emitir certidão, atualizar cadastro, solicitar carteira, pagar anuidade]
+
+Crie um passo a passo claro:
+✓ Onde acessar (URL direta se possível)
+✓ O que clicar em cada etapa
+✓ O que preencher
+✓ O que esperar após o envio
+✓ Contato para suporte: (11) 3346-6300 ou suporte@oabsp.org.br
+✓ Fonte: oabsp.org.br`,tag:"Site OABSP",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Dúvida sobre Anuidade OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Valores, prazos e condições de anuidade mudam a cada ano. Não cite valores fixos sem confirmar.
+Fonte oficial para verificar: https://www.oabsp.org.br/servicos/anuidade
+Resolução do Conselho Federal que define anuidades: https://www.oab.org.br
+
+---
+
+Dúvida sobre anuidade da OAB SP:
+[DESCREVA: valor, parcelamento, isenção, atraso, negativação, etc.]
+
+Oriente com base nas fontes oficiais:
+✓ Como verificar a situação no portal oabsp.org.br
+✓ Caminho para regularização
+✓ Contatos: (11) 3346-6300
+✓ Informe que valores específicos devem ser confirmados no portal, pois são atualizados anualmente
+✓ Cite a fonte de cada informação`,tag:"Anuidade",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Mensagem de Retorno ao Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Não invente andamentos processuais, prazos judiciais ou situações que não foram informadas.
+Use apenas o que foi descrito abaixo. Se precisar de informação adicional, oriente o assistido a buscar o advogado responsável pelo caso.
+
+---
+
+Preciso retornar para um assistido que aguarda sobre:
+[ASSUNTO]
+
+Andamento atual:
+[SITUAÇÃO ATUAL — descreva o que realmente aconteceu]
+
+Redija uma mensagem cordial e transparente que:
+✓ Confirme o recebimento da demanda
+✓ Explique o status sem inventar informações
+✓ Diga o que ainda está pendente
+✓ Informe qual o próximo passo previsto
+✓ Ofereça canal de contato para dúvidas`,tag:"Assistido",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Encaminhar Solicitação Internamente",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Encaminhe apenas o que foi informado. Não adicione interpretações, prazos ou procedimentos que não foram confirmados.
+Informe ao colega se alguma informação está pendente de verificação.
+
+---
+
+Preciso encaminhar para outro setor/colega a seguinte demanda:
+[DESCREVA A DEMANDA]
+
+Redija um encaminhamento interno claro com:
+✓ Resumo objetivo da solicitação
+✓ Dados relevantes fornecidos
+✓ Grau de urgência
+✓ O que precisa ser feito
+✓ O que ainda precisa ser verificado ou confirmado
+✓ Tom profissional e objetivo`,tag:"Interno",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Negar Pedido com Educação",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Ao explicar o motivo da negativa, cite apenas normas ou procedimentos que você tem certeza que existem.
+Se a negativa for baseada em uma norma específica da OAB, mencione qual é.
+Se não souber a fundamentação exata, diga: "O pedido não pode ser atendido conforme os procedimentos internos vigentes" — sem inventar artigos ou regras.
+
+---
+
+Preciso negar o seguinte pedido:
+[DESCREVA O PEDIDO]
+
+Motivo da negativa:
+[DESCREVA O MOTIVO REAL]
+
+Redija uma comunicação respeitosa que:
+✓ Informe a negativa claramente
+✓ Explique o motivo com a fundamentação correta
+✓ Ofereça alternativa quando possível
+✓ Preserve a boa relação institucional`,tag:"Comunicação",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Resposta a Protocolo Formal",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Responda apenas com base no que foi informado no protocolo abaixo.
+Não invente procedimentos, prazos ou respostas. Se não souber a resposta correta, informe: "Esta solicitação requer verificação junto ao setor responsável. Retornaremos em [PRAZO]."
+
+---
+
+Protocolo / solicitação recebida:
+[DESCREVA O PROTOCOLO OU SOLICITAÇÃO]
+
+Redija uma resposta formal que:
+✓ Faça referência ao número do protocolo
+✓ Responda objetivamente cada item solicitado
+✓ Informe prazo ou próximo passo
+✓ Use assinatura institucional adequada
+✓ Mantenha padrão formal da OAB SP`,tag:"Protocolo",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Orientar sobre Carteira da OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Use apenas informações do portal oficial: https://www.oabsp.org.br/servicos/carteiras
+Não invente prazos de emissão sem confirmar no site. Prazos podem variar e são atualizados pela seccional.
+
+---
+
+Advogado com dúvida sobre a carteira da OAB:
+[DESCREVA: 2ª via, carteira digital, foto, vencimento, etc.]
+
+Oriente com base em oabsp.org.br:
+✓ Caminho no site para solicitar
+✓ Documentos necessários (conforme portal)
+✓ Como acompanhar o pedido
+✓ Contato: (11) 3346-6300
+✓ Mencione a opção de carteira digital pelo app OAB SP
+✓ Fonte: oabsp.org.br/servicos/carteiras`,tag:"Carteira OAB",oab:true},
+
+  {cat:"OAB — Trabalho CLT",title:"Acolher Reclamação de Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Não faça promessas de prazo ou resultado que não foram confirmadas.
+Não invente soluções. Se o caso precisar ser investigado internamente antes de uma resposta definitiva, diga isso claramente com transparência e empatia.
+
+---
+
+Assistido insatisfeito com:
+[SITUAÇÃO / DEMORA / ATENDIMENTO]
+
+Redija uma resposta empática que:
+✓ Reconheça a insatisfação genuinamente
+✓ Não assuma culpas indevidas
+✓ Explique a situação com o que realmente aconteceu
+✓ Informe o próximo passo concreto e real
+✓ Ofereça canal direto de acompanhamento`,tag:"Reclamação",oab:true},
 ];
 
-// State
-let currentCategory = 'all';
-let searchTerm = '';
+// ── State ──
+let curCat = 'all';
+let curSearch = '';
+let curIdx = null;
 
-const OAB_CAT = "OAB — Trabalho CLT";
+// ── Sidebar build ──
+function buildSidebar() {
+  const nav = document.getElementById('sbNav');
+  const counts = {};
+  DATA.forEach(p => { counts[p.cat] = (counts[p.cat]||0)+1; });
 
-// Build categories
-const categories = ['Todos', ...new Set(promptData.map(p => p.cat))];
-const tabsContainer = document.getElementById('tabsContainer');
-
-categories.slice(1).forEach(cat => {
-  const btn = document.createElement('button');
-  btn.className = cat === OAB_CAT ? 'tab-btn oab-tab' : 'tab-btn';
-  btn.textContent = cat === OAB_CAT ? '⚖️ ' + cat : cat;
-  btn.onclick = function() { filterByCategory(cat, this); };
-  tabsContainer.appendChild(btn);
-});
-
-function filterByCategory(cat, el) {
-  currentCategory = cat;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  renderPrompts();
+  let html = '<div class="sb-label">Navegar</div>';
+  html += navItem('all','✨','Todos os Prompts', DATA.length, false, true);
+  html += '<div class="sb-label" style="margin-top:8px">Categorias</div>';
+  Object.keys(CATS).filter(c=>c!=='all').forEach(cat => {
+    html += navItem(cat, CATS[cat].icon, cat, counts[cat]||0, cat===OAB);
+  });
+  nav.innerHTML = html;
 }
 
-function filterAll() {
-  searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  renderPrompts();
+function navItem(cat, icon, label, count, isOab, active=false) {
+  const cls = ['nav-item', isOab?'nav-oab':'', active?'active':''].filter(Boolean).join(' ');
+  const id = 'nav_'+encodeURIComponent(cat);
+  return `<div class="${cls}" id="${id}" onclick="selectCat(${JSON.stringify(cat)},this)">
+    <div class="nv-icon">${icon}</div>
+    <div class="nv-label">${label}</div>
+    <div class="nv-chip">${count}</div>
+  </div>`;
+}
+
+function selectCat(cat, el) {
+  curCat = cat;
+  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  updateCatBar();
+  render();
+  if(window.innerWidth<=800) toggleSb(false);
+}
+
+function updateCatBar() {
+  const bar = document.getElementById('catBar');
+  const m = CATS[curCat]||CATS['all'];
+  document.getElementById('catIcon').textContent = m.icon;
+  document.getElementById('catTitle').textContent = curCat==='all'?'Todos os Prompts':curCat;
+  document.getElementById('catDesc').textContent = m.desc;
+  bar.className = 'cat-bar' + (curCat===OAB?' oab-bar':'');
+
+  // show anti-hallucination badge on OAB
+  const existing = bar.querySelector('.anti-badge');
+  if(existing) existing.remove();
+  if(curCat===OAB) {
+    const b = document.createElement('div');
+    b.className='anti-badge';
+    b.textContent='Anti-Alucinação · Fontes Reais';
+    bar.appendChild(b);
+  }
+}
+
+function onSearch() {
+  curSearch = document.getElementById('searchInput').value.toLowerCase();
+  render();
 }
 
 function getFiltered() {
-  return promptData.filter(p => {
-    const matchCat = currentCategory === 'all' || p.cat === currentCategory;
-    const matchSearch = !searchTerm ||
-      p.title.toLowerCase().includes(searchTerm) ||
-      p.prompt.toLowerCase().includes(searchTerm) ||
-      p.cat.toLowerCase().includes(searchTerm) ||
-      p.tag.toLowerCase().includes(searchTerm);
-    return matchCat && matchSearch;
+  return DATA.filter(p => {
+    const mc = curCat==='all' || p.cat===curCat;
+    const ms = !curSearch ||
+      p.title.toLowerCase().includes(curSearch) ||
+      p.prompt.toLowerCase().includes(curSearch) ||
+      p.cat.toLowerCase().includes(curSearch) ||
+      p.tag.toLowerCase().includes(curSearch);
+    return mc && ms;
   });
 }
 
-function renderPrompts() {
-  const filtered = getFiltered();
-  const container = document.getElementById('promptsContainer');
-  const noResults = document.getElementById('noResults');
+function render() {
+  const list = getFiltered();
+  const empty = document.getElementById('empty');
+  const grid = document.getElementById('grid');
+  document.getElementById('visibleCount').textContent = list.length;
 
-  document.getElementById('filteredCount').textContent = filtered.length;
+  if(!list.length) { empty.classList.add('show'); grid.innerHTML=''; return; }
+  empty.classList.remove('show');
 
-  if (filtered.length === 0) {
-    container.innerHTML = '';
-    noResults.classList.add('show');
-    return;
-  }
-
-  noResults.classList.remove('show');
-
-  const groups = {};
-  filtered.forEach(p => {
-    if (!groups[p.cat]) groups[p.cat] = [];
-    groups[p.cat].push(p);
-  });
-
-  container.innerHTML = Object.entries(groups).map(([cat, prompts]) => {
-    const isOAB = cat === OAB_CAT;
-    const banner = isOAB ? `
-      <div class="oab-banner">
-        <div class="oab-banner-icon">⚖️</div>
-        <div class="oab-banner-text">
-          <h3>Prompts do Trabalho CLT — OAB SP</h3>
-          <p>Respostas profissionais para advogados, assistidos e demandas do site oabsp.org.br</p>
-        </div>
-      </div>` : '';
-
-    return `
-      ${banner}
-      <h2 class="section-title ${isOAB ? 'oab-section' : ''}">${isOAB ? '⚖️ ' : ''}${cat}</h2>
-      <div class="grid">
-        ${prompts.map((p, i) => {
-          const idx = promptData.indexOf(p);
-          const isOABCard = p.cat === OAB_CAT;
-          return `
-          <div class="card ${isOABCard ? 'oab-card' : ''}" onclick="openModal(${idx})" style="animation-delay:${(i % 12) * 0.04}s">
-            ${isOABCard ? '<span class="oab-badge">OAB SP</span>' : ''}
-            <span class="card-cat">${p.cat}</span>
-            <p class="card-title">${p.title}</p>
-            <p class="card-prompt">${p.prompt.substring(0, 120)}…</p>
-            <div class="card-footer">
-              <span class="card-tag">${p.tag}</span>
-              <button class="copy-btn" onclick="event.stopPropagation(); copyQuick(this, ${idx})">
-                📋 Copiar
-              </button>
-            </div>
-          </div>`;
-        }).join('')}
-      </div>`;
+  grid.innerHTML = list.map((p,i) => {
+    const idx = DATA.indexOf(p);
+    const isOab = p.cat===OAB;
+    return `<div class="card${isOab?' oab-card':''}" onclick="openModal(${idx})" style="animation-delay:${(i%16)*.028}s">
+      ${isOab?'<div class="oab-verified">verificado</div>':''}
+      <div class="card-cat">${p.cat}</div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-preview">${p.prompt.replace(/\n/g,' ').substring(0,110)}…</div>
+      <div class="card-footer">
+        <span class="card-tag">${p.tag}</span>
+        <button class="copy-btn" onclick="event.stopPropagation();quickCopy(this,${idx})">📋 Copiar</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function copyQuick(btn, idx) {
-  navigator.clipboard.writeText(promptData[idx].prompt);
-  btn.textContent = '✓ Copiado!';
-  btn.classList.add('copied');
-  setTimeout(() => { btn.innerHTML = '📋 Copiar'; btn.classList.remove('copied'); }, 2000);
+function quickCopy(btn,idx) {
+  navigator.clipboard.writeText(DATA[idx].prompt);
+  btn.textContent='✓ Copiado!';btn.classList.add('ok');
+  setTimeout(()=>{btn.innerHTML='📋 Copiar';btn.classList.remove('ok');},2000);
 }
 
+// ── Modal ──
 function openModal(idx) {
-  const p = promptData[idx];
-  const isOAB = p.cat === OAB_CAT;
-  document.getElementById('modalCat').textContent = p.cat + ' · ' + p.tag;
-  document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('modalPrompt').textContent = p.prompt;
-  document.getElementById('modalOverlay').dataset.idx = idx;
-  document.getElementById('modalBox').className = isOAB ? 'modal oab-modal' : 'modal';
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  curIdx = idx;
+  const p = DATA[idx];
+  const isOab = p.cat===OAB;
+  const modal = document.getElementById('modal');
+  modal.className = isOab?'modal oab-modal':'modal';
+  document.getElementById('mCat').textContent = p.cat+' · '+p.tag;
+  document.getElementById('mTitle').textContent = p.title;
+  document.getElementById('mPrompt').textContent = p.prompt;
+  document.getElementById('ahPanel').style.display = isOab?'flex':'none';
+
+  // reset OAB AI parts
+  document.getElementById('aiWrap').classList.remove('show');
+  document.getElementById('aiBox').innerHTML='';
+  document.getElementById('sourceStrip').classList.remove('show');
+  document.getElementById('sourceStrip').innerHTML='';
+
+  // ask button
+  const btnAsk = document.getElementById('btnAsk');
+  btnAsk.className = isOab?'btn-ask-oab show':'btn-ask-oab';
+  btnAsk.disabled = false;
+  btnAsk.innerHTML='🔍 Buscar & Responder com Fontes';
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
-function closeModalDirect() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+function overlayClick(e) { if(e.target===document.getElementById('overlay')) closeModal(); }
+
+function copyPrompt() {
+  if(curIdx===null) return;
+  navigator.clipboard.writeText(DATA[curIdx].prompt);
+  const btn = document.getElementById('btnCopy');
+  btn.textContent='✓ Copiado!';
+  setTimeout(()=>btn.innerHTML='📋 Copiar Prompt',2000);
 }
 
-function copyModalPrompt() {
-  const idx = document.getElementById('modalOverlay').dataset.idx;
-  navigator.clipboard.writeText(promptData[idx].prompt);
-  const btn = document.querySelector('.btn-copy-full');
-  btn.textContent = '✓ Copiado com sucesso!';
-  setTimeout(() => { btn.textContent = '📋 Copiar Prompt'; }, 2000);
+// ── OAB Anti-hallucination AI call ──
+async function askOAB() {
+  if(curIdx===null) return;
+  const p = DATA[curIdx];
+  const btnAsk = document.getElementById('btnAsk');
+  const aiWrap = document.getElementById('aiWrap');
+  const aiBox = document.getElementById('aiBox');
+  const srcStrip = document.getElementById('sourceStrip');
+
+  btnAsk.disabled = true;
+  btnAsk.innerHTML='<span class="dots"><span></span><span></span><span></span></span> Buscando fontes…';
+  aiWrap.classList.add('show');
+  aiBox.innerHTML='<div class="ai-loading"><span class="dots"><span></span><span></span><span></span></span> Consultando fontes oficiais: oabsp.org.br, oab.org.br e legislação…</div>';
+  srcStrip.classList.remove('show');
+
+  const systemPrompt = `Você é um assistente especializado em OAB SP. Regras ABSOLUTAS:
+
+1. NUNCA invente informações. Se não tiver certeza, diga explicitamente.
+2. SEMPRE cite a fonte de cada informação que der. Formato: [Fonte: nome do site ou documento]
+3. Fontes oficiais obrigatórias: oabsp.org.br, oab.org.br, planalto.gov.br (legislação)
+4. Se não encontrar a informação nas fontes oficiais, diga: "Não localizei esta informação nas fontes oficiais. Recomendo verificar diretamente em oabsp.org.br ou ligar para (11) 3346-6300."
+5. No final da resposta, liste todas as fontes consultadas no formato: FONTES: [lista]
+6. Linguagem clara, profissional e acessível.
+7. Não faça afirmações sobre valores monetários ou prazos sem citar a fonte específica.`;
+
+  const userMsg = `Com base nas instruções do prompt abaixo, forneça uma resposta verificada e com fontes. O prompt é sobre: "${p.title}". 
+
+Contexto da categoria: ${p.cat}.
+Tag: ${p.tag}.
+
+Forneça uma resposta modelo que a Cassia pode usar como referência, sempre citando fontes.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        system: systemPrompt,
+        messages:[{role:'user',content:userMsg}]
+      })
+    });
+
+    const data = await res.json();
+
+    // Extract text from content blocks
+    let fullText = '';
+    if(data.content && Array.isArray(data.content)) {
+      data.content.forEach(block => {
+        if(block.type==='text') fullText += block.text;
+      });
+    }
+
+    if(!fullText && data.error) {
+      fullText = `⚠️ Erro ao conectar com a IA: ${data.error.message}\n\nUtilize o prompt copiado e cole no Claude, ChatGPT ou outra IA de sua preferência.`;
+    }
+
+    if(!fullText) fullText = 'Não foi possível obter uma resposta. Por favor, copie o prompt e use diretamente em uma IA.';
+
+    aiBox.textContent = fullText;
+
+    // Extract sources and show strip
+    const sourceMatches = fullText.match(/(?:Fonte[s]?:|Source:|oabsp\.org\.br|oab\.org\.br|planalto\.gov\.br)[^\n]*/gi) || [];
+    const sources = [];
+    if(fullText.toLowerCase().includes('oabsp')) sources.push({label:'oabsp.org.br',url:'https://www.oabsp.org.br'});
+    if(fullText.toLowerCase().includes('oab.org')) sources.push({label:'oab.org.br',url:'https://www.oab.org.br'});
+    if(fullText.toLowerCase().includes('planalto')) sources.push({label:'planalto.gov.br',url:'https://www.planalto.gov.br'});
+    if(fullText.toLowerCase().includes('lei 8.906') || fullText.toLowerCase().includes('estatuto')) sources.push({label:'Lei 8.906/94 – Estatuto OAB',url:'https://www.planalto.gov.br/ccivil_03/leis/l8906.htm'});
+
+    if(sources.length) {
+      srcStrip.innerHTML = '<span style="font-size:10px;color:var(--oab);font-weight:500;letter-spacing:1px;text-transform:uppercase;">Fontes consultadas:</span>' +
+        sources.map(s=>`<span class="source-tag"><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a></span>`).join('');
+      srcStrip.classList.add('show');
+    }
+
+    btnAsk.innerHTML='✓ Resposta obtida';
+    btnAsk.style.background='#2E7D32';
+  } catch(err) {
+    aiBox.textContent = '⚠️ Não foi possível conectar com a IA agora.\n\nCopie o prompt e cole diretamente no Claude em claude.ai — as instruções anti-alucinação já estão incluídas no texto.';
+    btnAsk.disabled=false;
+    btnAsk.innerHTML='🔄 Tentar novamente';
+  }
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+// ── Sidebar toggle ──
+function toggleSb(forceOpen) {
+  const sb=document.getElementById('sidebar');
+  const bk=document.getElementById('sbBack');
+  const open=sb.classList.contains('open');
+  if(forceOpen===false||open){sb.classList.remove('open');bk.classList.remove('open');}
+  else{sb.classList.add('open');bk.classList.add('open');}
+}
 
-document.getElementById('totalCount').textContent = promptData.length;
-document.getElementById('filteredCount').textContent = promptData.length;
-renderPrompts();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ── Init ──
+buildSidebar();
+const n = DATA.length;
+document.getElementById('totalCount').textContent = n;
+document.getElementById('tc2').textContent = n;
+document.getElementById('visibleCount').textContent = n;
+render();
 </script>
 </body>
 </html>
