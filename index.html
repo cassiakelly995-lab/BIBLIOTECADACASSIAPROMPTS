@@ -17,6 +17,8 @@
     --soft: #9E7B6A;
     --accent: #D4956A;
     --gold: #C9A96E;
+    --oab-blue: #1A3A5C;
+    --oab-light: #E8F0F8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +32,6 @@
     overflow-x: hidden;
   }
 
-  /* ─── HEADER ─── */
   header {
     background: var(--dark);
     padding: 60px 40px 50px;
@@ -66,10 +67,7 @@
     position: relative;
   }
 
-  header h1 span {
-    color: var(--accent);
-    font-style: italic;
-  }
+  header h1 span { color: var(--accent); font-style: italic; }
 
   .header-sub {
     margin-top: 16px;
@@ -88,21 +86,9 @@
     position: relative;
   }
 
-  .header-deco-line {
-    height: 1px;
-    width: 60px;
-    background: var(--gold);
-    opacity: 0.5;
-  }
+  .header-deco-line { height: 1px; width: 60px; background: var(--gold); opacity: 0.5; }
+  .header-deco-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
 
-  .header-deco-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
-
-  /* ─── SEARCH ─── */
   .search-bar {
     max-width: 600px;
     margin: 40px auto 20px;
@@ -140,7 +126,6 @@
     pointer-events: none;
   }
 
-  /* ─── STATS BAR ─── */
   .stats-bar {
     display: flex;
     justify-content: center;
@@ -163,7 +148,6 @@
     color: var(--soft);
   }
 
-  /* ─── CATEGORY TABS ─── */
   .tabs-wrapper {
     overflow-x: auto;
     padding: 24px 24px 0;
@@ -192,18 +176,21 @@
     white-space: nowrap;
   }
 
-  .tab-btn:hover {
-    border-color: var(--rose);
-    color: var(--rose);
+  .tab-btn:hover { border-color: var(--rose); color: var(--rose); }
+  .tab-btn.active { background: var(--dark); border-color: var(--dark); color: var(--warm-white); }
+
+  /* OAB tab special style */
+  .tab-btn.oab-tab {
+    border-color: var(--oab-blue);
+    color: var(--oab-blue);
+    font-weight: 500;
+  }
+  .tab-btn.oab-tab:hover, .tab-btn.oab-tab.active {
+    background: var(--oab-blue);
+    border-color: var(--oab-blue);
+    color: #fff;
   }
 
-  .tab-btn.active {
-    background: var(--dark);
-    border-color: var(--dark);
-    color: var(--warm-white);
-  }
-
-  /* ─── MAIN GRID ─── */
   main {
     max-width: 1200px;
     margin: 0 auto;
@@ -221,12 +208,11 @@
     gap: 12px;
   }
 
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--blush);
-  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--blush); }
+
+  /* Special OAB section title */
+  .section-title.oab-section { color: var(--oab-blue); }
+  .section-title.oab-section::after { background: #B8D0E8; }
 
   .grid {
     display: grid;
@@ -235,7 +221,6 @@
     margin-bottom: 48px;
   }
 
-  /* ─── PROMPT CARD ─── */
   .card {
     background: var(--warm-white);
     border: 1.5px solid #EDE0D6;
@@ -247,12 +232,40 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  /* OAB card style */
+  .card.oab-card {
+    background: #F5F9FD;
+    border-color: #C5D8EC;
+  }
+
+  .card.oab-card:hover {
+    border-color: var(--oab-blue);
+    box-shadow: 0 12px 32px rgba(26,58,92,0.12);
   }
 
   .card:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 32px rgba(42,31,26,0.10);
     border-color: var(--rose);
+  }
+
+  /* OAB badge on card */
+  .oab-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--oab-blue);
+    color: #fff;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 500;
   }
 
   .card-cat {
@@ -262,6 +275,8 @@
     color: var(--rose);
     font-weight: 500;
   }
+
+  .oab-card .card-cat { color: var(--oab-blue); }
 
   .card-title {
     font-family: 'Playfair Display', serif;
@@ -293,6 +308,11 @@
     border-radius: 20px;
   }
 
+  .oab-card .card-tag {
+    background: var(--oab-light);
+    color: var(--oab-blue);
+  }
+
   .copy-btn {
     background: none;
     border: 1.5px solid var(--blush);
@@ -308,19 +328,9 @@
     gap: 5px;
   }
 
-  .copy-btn:hover {
-    background: var(--dark);
-    border-color: var(--dark);
-    color: #fff;
-  }
+  .copy-btn:hover { background: var(--dark); border-color: var(--dark); color: #fff; }
+  .copy-btn.copied { background: #4CAF50; border-color: #4CAF50; color: #fff; }
 
-  .copy-btn.copied {
-    background: #4CAF50;
-    border-color: #4CAF50;
-    color: #fff;
-  }
-
-  /* ─── MODAL ─── */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -345,9 +355,16 @@
     animation: modalIn 0.25s ease;
   }
 
+  .modal.oab-modal { background: #F5F9FD; border: 2px solid #C5D8EC; }
+
   @keyframes modalIn {
     from { opacity: 0; transform: scale(0.96) translateY(10px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .modal-cat {
@@ -357,6 +374,8 @@
     color: var(--rose);
     margin-bottom: 10px;
   }
+
+  .modal.oab-modal .modal-cat { color: var(--oab-blue); }
 
   .modal h2 {
     font-family: 'Playfair Display', serif;
@@ -377,11 +396,9 @@
     margin-bottom: 20px;
   }
 
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
+  .modal.oab-modal .modal-prompt-box { background: #EAF1F8; border-color: #B8D0E8; }
+
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
   .btn-close {
     padding: 10px 24px;
@@ -407,6 +424,8 @@
   }
 
   .btn-copy-full:hover { background: var(--terracotta); }
+  .modal.oab-modal .btn-copy-full { background: var(--oab-blue); }
+  .modal.oab-modal .btn-copy-full:hover { background: #0F2540; }
 
   .close-x {
     position: absolute;
@@ -420,7 +439,29 @@
     line-height: 1;
   }
 
-  /* ─── NO RESULTS ─── */
+  /* OAB section banner */
+  .oab-banner {
+    background: linear-gradient(135deg, var(--oab-blue) 0%, #2A5A8C 100%);
+    border-radius: 16px;
+    padding: 20px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #fff;
+  }
+
+  .oab-banner-icon { font-size: 2rem; }
+
+  .oab-banner-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .oab-banner-text p { font-size: 13px; opacity: 0.85; }
+
   .no-results {
     display: none;
     text-align: center;
@@ -430,7 +471,6 @@
 
   .no-results.show { display: block; }
 
-  /* ─── FOOTER ─── */
   footer {
     text-align: center;
     padding: 32px;
@@ -439,21 +479,7 @@
     font-size: 13px;
   }
 
-  footer strong {
-    color: var(--gold);
-    font-family: 'Playfair Display', serif;
-  }
-
-  /* ─── ANIMATIONS ─── */
-  .card {
-    opacity: 0;
-    animation: fadeUp 0.4s ease forwards;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  footer strong { color: var(--gold); font-family: 'Playfair Display', serif; }
 
   @media (max-width: 600px) {
     header { padding: 40px 24px 36px; }
@@ -464,7 +490,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <p class="header-tag">✦ Coleção Exclusiva</p>
   <h1>Biblioteca de <span>Prompts</span><br>da Cassia</h1>
@@ -476,27 +501,23 @@
   </div>
 </header>
 
-<!-- SEARCH -->
 <div class="search-bar">
   <input type="text" id="searchInput" placeholder="Buscar prompts…" oninput="filterAll()">
   <span class="search-icon">🔍</span>
 </div>
 
-<!-- STATS -->
 <div class="stats-bar">
   <div class="stat-item"><strong id="totalCount">0</strong><span>Prompts</span></div>
-  <div class="stat-item"><strong>10</strong><span>Categorias</span></div>
+  <div class="stat-item"><strong>11</strong><span>Categorias</span></div>
   <div class="stat-item"><strong id="filteredCount">0</strong><span>Visíveis</span></div>
 </div>
 
-<!-- TABS -->
 <div class="tabs-wrapper">
   <div class="tabs" id="tabsContainer">
     <button class="tab-btn active" onclick="filterByCategory('all', this)">Todos</button>
   </div>
 </div>
 
-<!-- MAIN -->
 <main>
   <div id="noResults" class="no-results">
     <p style="font-size:2rem">🌸</p>
@@ -505,9 +526,8 @@
   <div id="promptsContainer"></div>
 </main>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal">
+  <div class="modal" id="modalBox">
     <button class="close-x" onclick="closeModalDirect()">×</button>
     <p class="modal-cat" id="modalCat"></p>
     <h2 id="modalTitle"></h2>
@@ -519,7 +539,6 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <strong>Biblioteca da Cassia</strong> &nbsp;·&nbsp; Criada com ❤ para uso com IA
 </footer>
@@ -645,11 +664,28 @@ const promptData = [
   { cat: "Inteligência Artificial", title: "Treinar Equipe em IA", prompt: "Crie um plano de treinamento de 4 semanas para ensinar minha equipe de [X PESSOAS] a usar IA no trabalho. Inclua: temas por semana, exercícios práticos, ferramentas a dominar e como medir a adoção.", tag: "Treinamento" },
   { cat: "Inteligência Artificial", title: "Agente de IA", prompt: "Desenhe a arquitetura de um agente de IA para [FUNÇÃO ESPECÍFICA]. Defina: objetivo do agente, dados que precisa, ferramentas que usa, processo de tomada de decisão, como lida com erros e métricas de sucesso.", tag: "Agentes" },
   { cat: "Inteligência Artificial", title: "ROI da IA", prompt: "Me ajude a calcular o ROI de implementar IA em [PROCESSO/ÁREA]. Considere: custos de implementação, tempo economizado, redução de erros, impacto na satisfação do cliente e potencial de receita adicional. Monte um cenário realista.", tag: "ROI" },
+
+  // ── OAB / TRABALHO CLT ── (NOVA CATEGORIA)
+  { cat: "OAB — Trabalho CLT", title: "Responder Email de Advogado", prompt: "Recebi o seguinte email de um advogado: [COLE O EMAIL AQUI]. Me ajude a redigir uma resposta profissional, clara e cordial. A resposta deve: confirmar o recebimento, responder cada ponto levantado de forma objetiva, indicar prazo quando necessário e manter tom institucional adequado para comunicação com advogado.", tag: "Email" },
+  { cat: "OAB — Trabalho CLT", title: "Responder WhatsApp de Advogado", prompt: "Um advogado me enviou a seguinte mensagem pelo WhatsApp: [DESCREVA A MENSAGEM]. Me ajude a responder de forma profissional porém sem ser excessivamente formal, sendo direta e útil. A resposta deve ser objetiva, resolver a dúvida ou solicitação e indicar próximo passo quando necessário.", tag: "WhatsApp" },
+  { cat: "OAB — Trabalho CLT", title: "Orientar Assistido — Tom Acolhedor", prompt: "Um assistido me procurou com a seguinte dúvida ou situação: [DESCREVA]. Me ajude a redigir uma resposta clara, acessível e acolhedora, sem jargão jurídico excessivo. Explique a situação de forma simples, oriente sobre o próximo passo e deixe a pessoa sentir que está sendo bem assistida.", tag: "Assistido" },
+  { cat: "OAB — Trabalho CLT", title: "Orientar Inscrição na OAB SP", prompt: "Um advogado me perguntou sobre como fazer a inscrição na OAB SP. Me ajude a redigir uma orientação completa e clara, cobrindo: documentos necessários, onde acessar no site oabsp.org.br, etapas do processo, prazo estimado e contato para dúvidas. Tom: prestativo e profissional.", tag: "Inscrição" },
+  { cat: "OAB — Trabalho CLT", title: "Explicar Regras da OAB", prompt: "Um advogado tem dúvida sobre a seguinte regra ou norma da OAB: [DESCREVA A DÚVIDA]. Me ajude a explicar de forma clara e objetiva, citando a fonte quando possível (Estatuto da OAB, Regulamento Geral, Código de Ética). Use linguagem acessível e profissional.", tag: "Regras OAB" },
+  { cat: "OAB — Trabalho CLT", title: "Guia do Site OABSP", prompt: "Um advogado está com dificuldade para usar o site da OAB SP (oabsp.org.br). Me ajude a criar um passo a passo claro para ele realizar a seguinte tarefa: [DESCREVA A TAREFA: emitir certidão, atualizar cadastro, solicitar carteira, pagar anuidade, etc.]. Inclua onde clicar, o que preencher e o que esperar após o envio.", tag: "Site OABSP" },
+  { cat: "OAB — Trabalho CLT", title: "Responder Dúvida sobre Anuidade OAB", prompt: "Um advogado tem dúvida sobre a anuidade da OAB SP: [DESCREVA A DÚVIDA: valor, parcelamento, isenção, atraso, negativação, etc.]. Me ajude a orientá-lo de forma clara, indicando como verificar e resolver pelo site oabsp.org.br ou pelo contato adequado da seccional.", tag: "Anuidade" },
+  { cat: "OAB — Trabalho CLT", title: "Mensagem de Retorno ao Assistido", prompt: "Preciso retornar para um assistido que aguarda uma resposta sobre: [ASSUNTO]. O andamento atual é: [SITUAÇÃO ATUAL]. Me ajude a redigir uma mensagem cordial, transparente e tranquilizadora, explicando o status, o que ainda está pendente e qual o próximo passo previsto.", tag: "Assistido" },
+  { cat: "OAB — Trabalho CLT", title: "Encaminhar Solicitação Internamente", prompt: "Preciso encaminhar para outro setor ou colega a seguinte demanda recebida de um advogado ou assistido: [DESCREVA]. Me ajude a redigir um encaminhamento interno claro, com: resumo da solicitação, dados relevantes, urgência e o que precisa ser feito. Tom: profissional e objetivo.", tag: "Interno" },
+  { cat: "OAB — Trabalho CLT", title: "Negar Pedido com Educação", prompt: "Preciso negar ou informar a impossibilidade de atender o seguinte pedido de um advogado ou assistido: [DESCREVA O PEDIDO]. Me ajude a comunicar essa negativa de forma respeitosa, com explicação clara do motivo, alternativas quando possível e mantendo a boa relação institucional.", tag: "Comunicação" },
+  { cat: "OAB — Trabalho CLT", title: "Modelo de Resposta para Protocolos", prompt: "Preciso responder formalmente a um protocolo ou solicitação recebida: [DESCREVA O PROTOCOLO/SOLICITAÇÃO]. Me ajude a redigir uma resposta formal, dentro dos padrões da OAB SP, cobrindo: referência ao protocolo, resposta objetiva ao pedido, prazo ou procedimento indicado e assinatura adequada.", tag: "Protocolo" },
+  { cat: "OAB — Trabalho CLT", title: "Orientar sobre Carteira da OAB", prompt: "Um advogado está com dúvida sobre a carteira da OAB (2ª via, vencimento, foto, carteira digital). Me ajude a orientá-lo com as informações sobre como solicitar pelo site oabsp.org.br, documentos necessários, prazo de emissão e como acompanhar o pedido.", tag: "Carteira OAB" },
+  { cat: "OAB — Trabalho CLT", title: "Acolher Reclamação de Assistido", prompt: "Um assistido está insatisfeito ou frustrado com [SITUAÇÃO/DEMORA/ATENDIMENTO]. Me ajude a responder de forma empática, reconhecendo a insatisfação sem assumir culpas indevidas, explicando a situação com transparência e propondo uma solução ou próximo passo concreto.", tag: "Reclamação" },
 ];
 
 // State
 let currentCategory = 'all';
 let searchTerm = '';
+
+const OAB_CAT = "OAB — Trabalho CLT";
 
 // Build categories
 const categories = ['Todos', ...new Set(promptData.map(p => p.cat))];
@@ -657,13 +693,12 @@ const tabsContainer = document.getElementById('tabsContainer');
 
 categories.slice(1).forEach(cat => {
   const btn = document.createElement('button');
-  btn.className = 'tab-btn';
-  btn.textContent = cat;
+  btn.className = cat === OAB_CAT ? 'tab-btn oab-tab' : 'tab-btn';
+  btn.textContent = cat === OAB_CAT ? '⚖️ ' + cat : cat;
   btn.onclick = function() { filterByCategory(cat, this); };
   tabsContainer.appendChild(btn);
 });
 
-// Filter
 function filterByCategory(cat, el) {
   currentCategory = cat;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -688,7 +723,6 @@ function getFiltered() {
   });
 }
 
-// Render
 function renderPrompts() {
   const filtered = getFiltered();
   const container = document.getElementById('promptsContainer');
@@ -704,53 +738,63 @@ function renderPrompts() {
 
   noResults.classList.remove('show');
 
-  // Group by category
   const groups = {};
   filtered.forEach(p => {
     if (!groups[p.cat]) groups[p.cat] = [];
     groups[p.cat].push(p);
   });
 
-  container.innerHTML = Object.entries(groups).map(([cat, prompts]) => `
-    <h2 class="section-title">${cat}</h2>
-    <div class="grid">
-      ${prompts.map((p, i) => {
-        const idx = promptData.indexOf(p);
-        return `
-        <div class="card" onclick="openModal(${idx})" style="animation-delay:${(i % 12) * 0.04}s">
-          <span class="card-cat">${p.cat}</span>
-          <p class="card-title">${p.title}</p>
-          <p class="card-prompt">${p.prompt.substring(0, 120)}…</p>
-          <div class="card-footer">
-            <span class="card-tag">${p.tag}</span>
-            <button class="copy-btn" onclick="event.stopPropagation(); copyQuick(this, ${idx})">
-              📋 Copiar
-            </button>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>
-  `).join('');
+  container.innerHTML = Object.entries(groups).map(([cat, prompts]) => {
+    const isOAB = cat === OAB_CAT;
+    const banner = isOAB ? `
+      <div class="oab-banner">
+        <div class="oab-banner-icon">⚖️</div>
+        <div class="oab-banner-text">
+          <h3>Prompts do Trabalho CLT — OAB SP</h3>
+          <p>Respostas profissionais para advogados, assistidos e demandas do site oabsp.org.br</p>
+        </div>
+      </div>` : '';
+
+    return `
+      ${banner}
+      <h2 class="section-title ${isOAB ? 'oab-section' : ''}">${isOAB ? '⚖️ ' : ''}${cat}</h2>
+      <div class="grid">
+        ${prompts.map((p, i) => {
+          const idx = promptData.indexOf(p);
+          const isOABCard = p.cat === OAB_CAT;
+          return `
+          <div class="card ${isOABCard ? 'oab-card' : ''}" onclick="openModal(${idx})" style="animation-delay:${(i % 12) * 0.04}s">
+            ${isOABCard ? '<span class="oab-badge">OAB SP</span>' : ''}
+            <span class="card-cat">${p.cat}</span>
+            <p class="card-title">${p.title}</p>
+            <p class="card-prompt">${p.prompt.substring(0, 120)}…</p>
+            <div class="card-footer">
+              <span class="card-tag">${p.tag}</span>
+              <button class="copy-btn" onclick="event.stopPropagation(); copyQuick(this, ${idx})">
+                📋 Copiar
+              </button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }).join('');
 }
 
-// Copy quick
 function copyQuick(btn, idx) {
   navigator.clipboard.writeText(promptData[idx].prompt);
   btn.textContent = '✓ Copiado!';
   btn.classList.add('copied');
-  setTimeout(() => {
-    btn.innerHTML = '📋 Copiar';
-    btn.classList.remove('copied');
-  }, 2000);
+  setTimeout(() => { btn.innerHTML = '📋 Copiar'; btn.classList.remove('copied'); }, 2000);
 }
 
-// Modal
 function openModal(idx) {
   const p = promptData[idx];
+  const isOAB = p.cat === OAB_CAT;
   document.getElementById('modalCat').textContent = p.cat + ' · ' + p.tag;
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('modalPrompt').textContent = p.prompt;
   document.getElementById('modalOverlay').dataset.idx = idx;
+  document.getElementById('modalBox').className = isOAB ? 'modal oab-modal' : 'modal';
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -772,11 +816,8 @@ function copyModalPrompt() {
   setTimeout(() => { btn.textContent = '📋 Copiar Prompt'; }, 2000);
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModalDirect();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
 
-// Init
 document.getElementById('totalCount').textContent = promptData.length;
 document.getElementById('filteredCount').textContent = promptData.length;
 renderPrompts();
