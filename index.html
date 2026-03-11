@@ -4,561 +4,1118 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Biblioteca de Prompts — Cassia</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:       #0C0A08;
-  --ink2:      #181410;
-  --ink3:      #231E18;
-  --mink:      #4A3C2E;
-  --dust:      #7A6858;
-  --sand:      #B89870;
-  --gold:      #C8914A;
-  --gold2:     #E4B86A;
-  --cream:     #F2EBE0;
-  --paper:     #F8F3EC;
-  --white:     #FFFCF8;
-  --oab:       #1A3860;
-  --oab2:      #2455A0;
-  --oab-glow:  rgba(36,85,160,0.15);
-  --sidebar-w: 252px;
-  --r:         12px;
+  --bg:       #FBF8F4;
+  --surface:  #FFFFFF;
+  --warm:     #F5EFE7;
+  --border:   #EBE3D8;
+  --border2:  #DDD4C5;
+  --text:     #1A1208;
+  --text2:    #5C4B38;
+  --text3:    #9C8A78;
+  --rose:     #C4745A;
+  --rose2:    #E8A090;
+  --rose-bg:  #FBF0EC;
+  --gold:     #B8873A;
+  --gold-bg:  #FDF6EC;
+  --teal:     #2D7A6E;
+  --teal-bg:  #EAF5F3;
+  --oab:      #1E4D8C;
+  --oab2:     #3A72C8;
+  --oab-bg:   #EEF4FC;
+  --oab-border: #C5D8F5;
+  --sidebar:  268px;
+  --r:        16px;
+  --r-sm:     10px;
+  --shadow:   0 2px 12px rgba(90,60,30,.07);
+  --shadow-lg:0 12px 40px rgba(90,60,30,.12);
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--paper);color:var(--ink);font-family:'Outfit',sans-serif;font-weight:300;display:flex;min-height:100vh;overflow-x:hidden;}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px;}
 
-/* ── SIDEBAR ── */
-#sidebar{
-  width:var(--sidebar-w);min-height:100vh;
-  background:var(--ink2);
-  position:fixed;top:0;left:0;
-  display:flex;flex-direction:column;
-  z-index:60;overflow-y:auto;overflow-x:hidden;
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  display: flex;
 }
-.sb-brand{
-  padding:30px 20px 22px;
-  border-bottom:1px solid rgba(200,145,74,0.15);
-  position:relative;
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════ */
+#sidebar {
+  width: var(--sidebar);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+  position: fixed;
+  top:0; left:0;
+  display: flex;
+  flex-direction: column;
+  z-index: 60;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-.sb-brand::after{
-  content:'';position:absolute;bottom:-1px;left:20px;right:20px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+
+/* Brand */
+.sb-brand {
+  padding: 28px 22px 22px;
+  border-bottom: 1px solid var(--border);
 }
-.sb-kicker{
-  font-size:9px;letter-spacing:4px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:10px;
-  display:flex;align-items:center;gap:8px;
+
+.sb-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
 }
-.sb-kicker::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.7;}
-.sb-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.5rem;font-weight:700;color:var(--white);line-height:1.2;
+
+.sb-logo-gem {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--rose), #D4856A);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  box-shadow: 0 4px 12px rgba(196,116,90,.3);
+  flex-shrink: 0;
 }
-.sb-name em{color:var(--gold2);font-style:italic;}
-.sb-tagline{font-size:11px;color:var(--dust);margin-top:5px;}
+
+.sb-logo-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.sb-logo-text span {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.sb-tagline {
+  font-size: 11.5px;
+  color: var(--text3);
+  letter-spacing: .3px;
+}
+
+/* Stat pills */
+.sb-stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sb-pill {
+  flex: 1;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  text-align: center;
+}
+
+.sb-pill strong {
+  display: block;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--rose);
+}
+
+.sb-pill span {
+  font-size: 9.5px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
 /* Search */
-.sb-search{padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,0.04);}
-.sb-search-inner{position:relative;}
-.sb-search-inner input{
-  width:100%;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(200,145,74,0.18);border-radius:30px;
-  padding:8px 14px 8px 34px;
-  font-family:'Outfit',sans-serif;font-size:12.5px;color:var(--cream);outline:none;
-  transition:border-color .2s,background .2s;
+.sb-search {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
 }
-.sb-search-inner input::placeholder{color:var(--dust);}
-.sb-search-inner input:focus{border-color:rgba(200,145,74,.5);background:rgba(255,255,255,.08);}
-.sb-search-inner::before{
-  content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);
-  font-size:11px;pointer-events:none;opacity:.45;
+
+.sb-search-wrap {
+  position: relative;
+}
+
+.sb-search-wrap input {
+  width: 100%;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 9px 14px 9px 36px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+.sb-search-wrap input::placeholder { color: var(--text3); }
+
+.sb-search-wrap input:focus {
+  border-color: var(--rose);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(196,116,90,.1);
+}
+
+.sb-search-icon {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 14px;
+  pointer-events: none;
 }
 
 /* Nav */
-.sb-nav{padding:8px 0 30px;flex:1;}
-.sb-label{
-  font-size:9px;letter-spacing:3.5px;text-transform:uppercase;
-  color:rgba(122,104,88,.45);padding:14px 20px 5px;
-}
-.nav-item{
-  display:flex;align-items:center;gap:9px;
-  padding:9px 14px 9px 18px;cursor:pointer;
-  border-left:2px solid transparent;
-  transition:all .16s;
-}
-.nav-item:hover{background:rgba(255,255,255,.035);border-left-color:rgba(200,145,74,.25);}
-.nav-item.active{background:rgba(200,145,74,.09);border-left-color:var(--gold);}
-.nav-item.active .nv-label{color:var(--cream);font-weight:500;}
-.nav-item.active .nv-chip{background:rgba(200,145,74,.22);color:var(--gold2);}
-.nv-icon{
-  width:28px;height:28px;border-radius:7px;flex-shrink:0;
-  background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;
-  font-size:13px;transition:background .16s;
-}
-.nav-item.active .nv-icon{background:rgba(200,145,74,.18);}
-.nv-label{font-size:12px;color:var(--dust);flex:1;line-height:1.3;}
-.nv-chip{
-  font-size:9.5px;font-weight:500;color:var(--dust);
-  background:rgba(255,255,255,.06);padding:1px 7px;border-radius:10px;flex-shrink:0;
+.sb-nav { padding: 10px 0 20px; flex: 1; }
+
+.sb-nav-label {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 12px 20px 5px;
+  font-weight: 500;
 }
 
-/* OAB nav */
-.nav-item.nav-oab{
-  margin:8px 10px;border-radius:9px;border:1px solid rgba(36,85,160,.28);
-  border-left:2px solid #4A7FCC;background:rgba(26,56,96,.3);padding-left:13px;
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px 9px 18px;
+  cursor: pointer;
+  border-radius: 0;
+  border-left: 2.5px solid transparent;
+  transition: all .15s;
+  position: relative;
 }
-.nav-item.nav-oab:hover{background:rgba(26,56,96,.45);}
-.nav-item.nav-oab.active{background:rgba(26,56,96,.6);border-left-color:#6EA4F0;}
-.nav-item.nav-oab .nv-label{color:#7AAEE0;}
-.nav-item.nav-oab.active .nv-label{color:#C2DAFF;font-weight:500;}
-.nav-item.nav-oab .nv-chip{background:rgba(36,85,160,.25);color:#7AAEE0;}
-.nav-item.nav-oab.active .nv-chip{background:rgba(36,85,160,.45);color:#A8CFFF;}
 
-/* Stats strip at bottom of sidebar */
-.sb-stats{
-  padding:16px 18px;
-  border-top:1px solid rgba(255,255,255,.05);
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+.nav-item:hover {
+  background: var(--warm);
+  border-left-color: var(--border2);
 }
-.sb-stat{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px;}
-.sb-stat strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold2);}
-.sb-stat span{font-size:10px;color:var(--dust);letter-spacing:.5px;text-transform:uppercase;}
 
-/* ── MAIN ── */
-#main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.nav-item.active {
+  background: var(--rose-bg);
+  border-left-color: var(--rose);
+}
 
-/* Topbar / Hero */
-.topbar{
-  background:var(--ink);
-  padding:36px 40px 30px;
-  position:relative;overflow:hidden;
-}
-.topbar::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 60% 80% at 85% 50%, rgba(200,145,74,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 60% at 15% 30%, rgba(26,56,96,.2) 0%, transparent 55%);
-}
-/* Decorative diagonal line */
-.topbar::after{
-  content:'';position:absolute;
-  top:0;right:160px;width:1px;height:100%;
-  background:linear-gradient(180deg,transparent,rgba(200,145,74,.25),transparent);
-}
-.tb-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.tb-left{}
-.tb-eyebrow{
-  font-size:9.5px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);
-  margin-bottom:10px;display:flex;align-items:center;gap:10px;
-}
-.tb-eyebrow::after{content:'';flex:0 0 28px;height:1px;background:var(--gold);opacity:.5;}
-.topbar h1{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.8rem,3.5vw,2.8rem);
-  font-weight:700;color:var(--white);line-height:1.1;
-}
-.topbar h1 em{color:var(--gold2);font-style:italic;}
-.tb-sub{font-size:13px;color:var(--dust);margin-top:8px;max-width:460px;}
+.nav-item.active .ni-label { color: var(--text); font-weight: 600; }
+.nav-item.active .ni-count { background: rgba(196,116,90,.15); color: var(--rose); }
 
-.tb-right{display:flex;gap:24px;flex-shrink:0;}
-.tb-stat{text-align:center;}
-.tb-stat strong{
-  display:block;font-family:'Cormorant Garamond',serif;
-  font-size:2.2rem;font-weight:600;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height:1;
+.ni-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all .15s;
 }
-.tb-stat span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dust);}
 
-/* Category header bar */
-.cat-bar{
-  background:var(--white);
-  border-bottom:1px solid rgba(0,0,0,.06);
-  padding:14px 40px;
-  display:flex;align-items:center;gap:14px;
-  position:sticky;top:0;z-index:30;
-  transition:background .2s;
+.nav-item.active .ni-icon {
+  background: white;
+  border-color: rgba(196,116,90,.25);
+  box-shadow: 0 2px 8px rgba(196,116,90,.15);
 }
-.cat-bar.oab-bar{background:var(--oab-pale, #EAF0F9);}
-.cb-icon{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--cream),#EDE3D6);
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,.07);
-}
-.cat-bar.oab-bar .cb-icon{background:linear-gradient(135deg,#D6E5F8,#BED0F0);}
-.cb-text h2{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem;font-weight:600;color:var(--ink);
-}
-.cat-bar.oab-bar .cb-text h2{color:var(--oab);}
-.cb-text p{font-size:11.5px;color:var(--dust);}
 
-/* Anti-hallucination badge for OAB */
-.anti-badge{
-  margin-left:auto;display:flex;align-items:center;gap:6px;
-  background:linear-gradient(135deg,#1A3860,#2455A0);
-  color:#C2DAFF;font-size:10.5px;font-weight:500;
-  padding:5px 12px;border-radius:20px;
-  box-shadow:0 2px 10px rgba(26,56,96,.3);
-  white-space:nowrap;
+.ni-label {
+  font-size: 12.5px;
+  color: var(--text2);
+  flex: 1;
+  line-height: 1.3;
 }
-.anti-badge::before{content:'🔍';font-size:11px;}
 
-/* ── CONTENT ── */
-#content{padding:28px 40px 64px;flex:1;}
+.ni-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  background: var(--warm);
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+/* OAB nav item */
+.nav-item.oab-item {
+  margin: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--oab-border);
+  border-left: 2.5px solid var(--oab2);
+  background: var(--oab-bg);
+  padding-left: 13px;
+}
+
+.nav-item.oab-item:hover {
+  background: #E5EEFA;
+  border-color: var(--oab2);
+}
+
+.nav-item.oab-item.active {
+  background: #DDE9F9;
+  border-left-color: var(--oab);
+  border-color: var(--oab2);
+}
+
+.nav-item.oab-item .ni-label { color: var(--oab); }
+.nav-item.oab-item.active .ni-label { color: var(--oab); font-weight: 600; }
+.nav-item.oab-item .ni-count { background: rgba(30,77,140,.1); color: var(--oab); border-color: var(--oab-border); }
+.nav-item.oab-item .ni-icon { background: rgba(30,77,140,.07); border-color: var(--oab-border); }
+
+/* ════════════════════════════════════
+   MAIN
+════════════════════════════════════ */
+#main {
+  margin-left: var(--sidebar);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Hero */
+.hero {
+  padding: 40px 44px 34px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(196,116,90,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: 20%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(184,135,58,.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.hero-left {}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--rose-bg);
+  border: 1px solid rgba(196,116,90,.2);
+  border-radius: 30px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rose);
+  letter-spacing: .5px;
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--rose);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text2);
+  margin-top: 10px;
+  max-width: 480px;
+  line-height: 1.65;
+}
+
+/* Metric cards in hero */
+.hero-metrics {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.metric {
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 20px;
+  text-align: center;
+  min-width: 70px;
+}
+
+.metric strong {
+  display: block;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--rose);
+  line-height: 1;
+}
+
+.metric span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  display: block;
+  margin-top: 4px;
+}
+
+/* Category bar */
+.cat-bar {
+  padding: 14px 44px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  transition: background .2s;
+}
+
+.cat-bar.is-oab { background: var(--oab-bg); border-bottom-color: var(--oab-border); }
+
+.cb-icon-wrap {
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+}
+
+.cat-bar.is-oab .cb-icon-wrap {
+  background: white;
+  border-color: var(--oab-border);
+}
+
+.cb-info h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.cat-bar.is-oab .cb-info h2 { color: var(--oab); }
+
+.cb-info p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+.oab-shield {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: white;
+  border: 1px solid var(--oab-border);
+  border-radius: 20px;
+  padding: 5px 13px 5px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--oab);
+  box-shadow: 0 2px 8px rgba(30,77,140,.1);
+  white-space: nowrap;
+}
+
+.oab-shield-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; transform: scale(1); }
+  50% { opacity:.5; transform: scale(.7); }
+}
+
+/* Content */
+#content {
+  padding: 28px 44px 64px;
+  flex: 1;
+}
 
 /* Grid */
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+  gap: 16px;
 }
 
-/* Card */
-.card{
-  background:var(--white);
-  border:1px solid rgba(0,0,0,.07);
-  border-radius:var(--r);
-  padding:20px 22px;
-  cursor:pointer;
-  display:flex;flex-direction:column;gap:10px;
-  position:relative;overflow:hidden;
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s;
-  opacity:0;animation:cardIn .4s ease forwards;
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px 22px 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s cubic-bezier(.34,1.4,.64,1), box-shadow .22s, border-color .22s;
+  opacity: 0;
+  animation: fadeUp .38s ease forwards;
 }
-.card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--gold),var(--gold2));
-  opacity:0;transition:opacity .2s;
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--rose2);
 }
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 16px 40px rgba(0,0,0,.10);
-  border-color:rgba(200,145,74,.3);
+
+/* Subtle top accent line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--rose), var(--rose2));
+  opacity: 0;
+  transition: opacity .22s;
+  border-radius: var(--r) var(--r) 0 0;
 }
-.card:hover::before{opacity:1;}
+
+.card:hover::before { opacity: 1; }
 
 /* OAB card */
-.card.oab-card{
-  background:linear-gradient(145deg,#F0F5FC,#EAF0F9);
-  border-color:rgba(36,85,160,.15);
-}
-.card.oab-card::before{background:linear-gradient(90deg,var(--oab),var(--oab2));}
-.card.oab-card:hover{border-color:rgba(36,85,160,.4);box-shadow:0 16px 40px rgba(26,56,96,.1);}
-
-/* OAB verified badge on card */
-.oab-verified{
-  position:absolute;top:14px;right:14px;
-  background:var(--oab);color:#C2DAFF;
-  font-size:9px;letter-spacing:1px;text-transform:uppercase;
-  padding:3px 9px;border-radius:20px;
-  display:flex;align-items:center;gap:4px;
-}
-.oab-verified::before{content:'✓';font-weight:700;}
-
-.card-cat{font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:500;}
-.oab-card .card-cat{color:var(--oab2);}
-.card-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.35;
-}
-.card-preview{font-size:12.5px;color:var(--mink);line-height:1.65;flex:1;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
-.card-tag{
-  font-size:10.5px;background:var(--cream);
-  color:var(--mink);padding:3px 10px;border-radius:20px;
-  border:1px solid rgba(0,0,0,.06);
-}
-.oab-card .card-tag{background:rgba(36,85,160,.08);color:var(--oab);border-color:rgba(36,85,160,.12);}
-.copy-btn{
-  background:none;border:1px solid rgba(0,0,0,.1);border-radius:7px;
-  padding:5px 12px;font-family:'Outfit',sans-serif;font-size:11px;
-  color:var(--dust);cursor:pointer;transition:all .15s;
-  display:flex;align-items:center;gap:4px;
-}
-.copy-btn:hover{background:var(--ink);border-color:var(--ink);color:#fff;}
-.copy-btn.ok{background:#2E7D32;border-color:#2E7D32;color:#fff;}
-
-@keyframes cardIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-
-/* No results */
-.empty{display:none;text-align:center;padding:80px 20px;color:var(--dust);}
-.empty.show{display:block;}
-.empty-icon{font-size:3rem;margin-bottom:16px;}
-.empty p{font-size:15px;}
-
-/* ── MODAL ── */
-.overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(12,10,8,.7);
-  z-index:200;align-items:center;justify-content:center;
-  padding:24px;backdrop-filter:blur(6px);
-}
-.overlay.open{display:flex;}
-
-.modal{
-  background:var(--white);
-  border-radius:18px;
-  padding:36px;
-  max-width:620px;width:100%;
-  position:relative;
-  animation:modalIn .22s cubic-bezier(.34,1.3,.64,1);
-  max-height:92vh;overflow-y:auto;
-  box-shadow:0 32px 80px rgba(0,0,0,.25);
+.card.oab {
+  background: linear-gradient(160deg, #F7FBFF 0%, var(--oab-bg) 100%);
+  border-color: var(--oab-border);
 }
 
-.modal.oab-modal{
-  background:linear-gradient(160deg,#F0F6FC 0%,#EAF0F9 100%);
-  border:1.5px solid rgba(36,85,160,.18);
+.card.oab:hover {
+  border-color: var(--oab2);
+  box-shadow: 0 12px 40px rgba(30,77,140,.12);
 }
 
-@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(16px);}to{opacity:1;transform:scale(1) translateY(0);}}
-
-/* Anti-hallucination info panel inside OAB modal */
-.ah-panel{
-  background:linear-gradient(135deg,rgba(26,56,96,.06),rgba(36,85,160,.04));
-  border:1px solid rgba(36,85,160,.15);
-  border-radius:10px;
-  padding:13px 16px;
-  margin-bottom:18px;
-  display:flex;align-items:flex-start;gap:11px;
-}
-.ah-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px;}
-.ah-text p{font-size:12px;color:var(--oab);line-height:1.6;}
-.ah-text strong{font-weight:600;display:block;margin-bottom:2px;font-size:12.5px;}
-
-.modal-cat{font-size:9.5px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.oab-modal .modal-cat{color:var(--oab2);}
-.modal h2{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.5rem;font-weight:600;color:var(--ink);margin-bottom:14px;
+.card.oab::before {
+  background: linear-gradient(90deg, var(--oab), var(--oab2));
 }
 
-.prompt-box{
-  background:var(--paper);border:1px solid rgba(0,0,0,.08);border-radius:10px;
-  padding:16px 18px;font-size:13.5px;line-height:1.75;color:var(--mink);
-  white-space:pre-wrap;margin-bottom:18px;max-height:280px;overflow-y:auto;
+/* Verified tag */
+.verified-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  display: flex; align-items: center; gap: 4px;
+  background: white;
+  border: 1px solid var(--oab-border);
+  border-radius: 20px;
+  padding: 3px 8px 3px 6px;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--oab);
 }
-.oab-modal .prompt-box{background:#E8F0F9;border-color:rgba(36,85,160,.12);}
 
-/* Source tag strip */
-.source-strip{
-  display:none;
-  flex-wrap:wrap;gap:6px;margin-bottom:16px;
+.verified-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
 }
-.source-strip.show{display:flex;}
-.source-tag{
-  font-size:10px;background:rgba(36,85,160,.08);color:var(--oab);
-  border:1px solid rgba(36,85,160,.15);padding:3px 10px;border-radius:20px;
-  display:flex;align-items:center;gap:4px;
-}
-.source-tag a{color:inherit;text-decoration:none;}
-.source-tag a:hover{text-decoration:underline;}
 
-.modal-foot{display:flex;gap:9px;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
-.btn-close{
-  padding:9px 20px;border-radius:9px;border:1px solid rgba(0,0,0,.12);
-  background:transparent;font-family:'Outfit',sans-serif;font-size:12.5px;
-  color:var(--mink);cursor:pointer;transition:all .15s;
+/* Card content */
+.card-cat {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rose);
+  font-weight: 600;
 }
-.btn-close:hover{background:var(--cream);}
-.btn-copy{
-  padding:9px 22px;border-radius:9px;border:none;
-  background:linear-gradient(135deg,var(--ink2),var(--ink3));
-  font-family:'Outfit',sans-serif;font-size:12.5px;
-  color:#fff;cursor:pointer;transition:all .15s;
-  display:flex;align-items:center;gap:6px;
-}
-.btn-copy:hover{background:linear-gradient(135deg,#3A2A1A,#2D1F10);}
-.oab-modal .btn-copy{background:linear-gradient(135deg,var(--oab),var(--oab2));}
-.oab-modal .btn-copy:hover{background:linear-gradient(135deg,#0F2540,var(--oab));}
 
-/* OAB AI Answer area */
-.ai-answer-wrap{display:none;margin-top:16px;}
-.ai-answer-wrap.show{display:block;}
-.ai-answer-label{
-  font-size:9.5px;letter-spacing:3px;text-transform:uppercase;
-  color:var(--oab2);margin-bottom:8px;display:flex;align-items:center;gap:8px;
-}
-.ai-answer-label::after{content:'';flex:1;height:1px;background:rgba(36,85,160,.15);}
-.ai-answer-box{
-  background:#E4EEF9;border:1px solid rgba(36,85,160,.15);border-radius:10px;
-  padding:16px 18px;font-size:13px;line-height:1.75;color:var(--oab);
-  white-space:pre-wrap;max-height:260px;overflow-y:auto;
-}
-.ai-loading{
-  display:flex;align-items:center;gap:10px;
-  padding:16px;color:var(--oab2);font-size:13px;
-}
-.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--oab2);animation:dot .9s ease-in-out infinite;}
-.dots span:nth-child(2){animation-delay:.15s;}
-.dots span:nth-child(3){animation-delay:.3s;}
-@keyframes dot{0%,80%,100%{transform:scale(.5);opacity:.4;}40%{transform:scale(1);opacity:1;}}
+.card.oab .card-cat { color: var(--oab2); }
 
-.btn-ask-oab{
-  display:none;
-  padding:9px 22px;border-radius:9px;border:none;
-  background:linear-gradient(135deg,var(--oab),var(--oab2));
-  font-family:'Outfit',sans-serif;font-size:12.5px;
-  color:#fff;cursor:pointer;transition:all .15s;
-  align-items:center;gap:6px;
+.card-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: .98rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
 }
-.btn-ask-oab.show{display:flex;}
-.btn-ask-oab:hover{opacity:.9;transform:translateY(-1px);}
-.btn-ask-oab:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
-.close-x{
-  position:absolute;top:14px;right:16px;
-  font-size:22px;background:none;border:none;
-  cursor:pointer;color:var(--dust);line-height:1;
-  transition:color .15s;
+.card-preview {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.65;
+  flex: 1;
 }
-.close-x:hover{color:var(--ink);}
 
-/* ── FOOTER ── */
-footer{
-  background:var(--ink2);color:var(--dust);
-  text-align:center;padding:20px;font-size:12px;
-  margin-left:var(--sidebar-w);
-  border-top:1px solid rgba(200,145,74,.1);
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
-footer strong{color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1rem;}
 
-/* ── HAMBURGER (mobile) ── */
-.hamburger{
-  display:none;position:fixed;top:12px;left:12px;z-index:100;
-  background:var(--ink);border:none;border-radius:8px;
-  padding:9px 11px;cursor:pointer;flex-direction:column;gap:4px;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
+.card.oab .card-foot { border-top-color: var(--oab-border); }
+
+.card-tag {
+  font-size: 11px;
+  background: var(--warm);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
 }
-.hamburger span{display:block;width:20px;height:2px;background:var(--gold);border-radius:1px;}
-.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:59;}
 
-@media(max-width:800px){
-  #sidebar{transform:translateX(-100%);transition:transform .25s;}
-  #sidebar.open{transform:translateX(0);}
-  .sb-backdrop.open{display:block;}
-  #main,footer{margin-left:0;}
-  .hamburger{display:flex;}
-  .topbar{padding:20px 20px 18px 58px;}
-  #content{padding:20px 16px 50px;}
-  .cat-bar{padding:12px 16px;}
-  .tb-right{display:none;}
+.card.oab .card-tag { background: white; border-color: var(--oab-border); color: var(--oab); }
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 5px 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.copy-btn:hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: white;
+}
+
+.copy-btn.ok {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* Empty */
+.empty {
+  display: none;
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text3);
+}
+
+.empty.on { display: block; }
+
+/* ════════════════════════════════════
+   MODAL
+════════════════════════════════════ */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,18,8,.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(8px) saturate(1.2);
+}
+
+.overlay.on { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 36px;
+  max-width: 620px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 40px 100px rgba(26,18,8,.2), 0 0 0 1px var(--border);
+  animation: popIn .25s cubic-bezier(.34,1.3,.64,1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal.modal-oab {
+  background: linear-gradient(160deg, #F8FBFF 0%, var(--oab-bg) 100%);
+  box-shadow: 0 40px 100px rgba(30,77,140,.15), 0 0 0 1px var(--oab-border);
+}
+
+@keyframes popIn {
+  from { opacity:0; transform: scale(.93) translateY(20px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+.modal-x {
+  position: absolute; top:16px; right:18px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+  line-height: 1;
+}
+
+.modal-x:hover { background: var(--text); color: white; border-color: var(--text); }
+
+/* Anti-hallucination panel */
+.ah-box {
+  display: none;
+  background: white;
+  border: 1px solid var(--oab-border);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  display: none;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ah-box.on { display: flex; }
+
+.ah-icon-wrap {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: var(--oab-bg);
+  border: 1px solid var(--oab-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ah-body strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--oab);
+  margin-bottom: 4px;
+}
+
+.ah-body p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.ah-body a { color: var(--oab2); }
+
+.modal-cat {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rose);
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.modal-oab .modal-cat { color: var(--oab2); }
+
+.modal h2 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.prompt-box {
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 16px 18px;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text2);
+  white-space: pre-wrap;
+  margin-bottom: 16px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.modal-oab .prompt-box { background: white; border-color: var(--oab-border); }
+
+/* Sources */
+.sources-row {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.sources-row.on { display: flex; }
+.src-label { font-size: 10px; font-weight: 600; color: var(--text3); align-self: center; text-transform: uppercase; letter-spacing: 1px; }
+
+.src-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  border: 1px solid var(--oab-border);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--oab2);
+  font-weight: 500;
+}
+
+.src-chip a { color: inherit; text-decoration: none; }
+.src-chip a:hover { text-decoration: underline; }
+
+/* AI Answer */
+.ai-section { display: none; }
+.ai-section.on { display: block; }
+
+.ai-section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--oab2);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--oab-border);
+}
+
+.ai-answer {
+  background: white;
+  border: 1px solid var(--oab-border);
+  border-radius: var(--r-sm);
+  padding: 16px 18px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.75;
+  white-space: pre-wrap;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--oab2);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dot-row span {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--oab2);
+  margin: 0 1px;
+  animation: blink .9s ease-in-out infinite;
+}
+
+.dot-row span:nth-child(2) { animation-delay: .15s; }
+.dot-row span:nth-child(3) { animation-delay: .30s; }
+
+@keyframes blink {
+  0%,80%,100% { opacity:.3; transform: scale(.6); }
+  40% { opacity:1; transform: scale(1); }
+}
+
+/* Modal footer */
+.modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s;
+  border: 1px solid transparent;
+}
+
+.btn-ghost {
+  background: var(--warm);
+  border-color: var(--border);
+  color: var(--text2);
+}
+
+.btn-ghost:hover { background: var(--border); color: var(--text); }
+
+.btn-primary {
+  background: var(--text);
+  color: white;
+}
+
+.btn-primary:hover { background: #3D2B18; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(26,18,8,.2); }
+
+.btn-oab {
+  background: linear-gradient(135deg, var(--oab), var(--oab2));
+  color: white;
+}
+
+.btn-oab:hover { opacity:.9; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(30,77,140,.3); }
+.btn-oab:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+.btn-ask { display: none; }
+.btn-ask.on { display: inline-flex; }
+
+/* ════════════════════════════════════
+   HAMBURGER / MOBILE
+════════════════════════════════════ */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 13px; left: 13px;
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 9px 11px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow);
+}
+
+.hamburger span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--text);
+  border-radius: 1px;
+}
+
+.sb-back {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 59;
+}
+
+/* Footer */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 18px 44px;
+  font-size: 12.5px;
+  color: var(--text3);
+  margin-left: var(--sidebar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+footer strong {
+  font-family: 'Libre Baskerville', serif;
+  color: var(--text);
+  font-size: .95rem;
+}
+
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--teal-bg);
+  border: 1px solid rgba(45,122,110,.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+@media (max-width: 820px) {
+  #sidebar { transform: translateX(-100%); transition: transform .25s ease; }
+  #sidebar.open { transform: translateX(0); }
+  .sb-back.open { display: block; }
+  #main, footer { margin-left: 0; }
+  .hamburger { display: flex; }
+  .hero { padding: 20px 20px 18px 56px; }
+  .hero-metrics { display: none; }
+  .cat-bar, #content { padding-left: 18px; padding-right: 18px; }
+  footer { margin-left: 0; padding: 14px 18px; }
 }
 </style>
 </head>
 <body>
 
-<button class="hamburger" id="hamburger" onclick="toggleSb()">
+<button class="hamburger" id="hbg" onclick="openSb()">
   <span></span><span></span><span></span>
 </button>
-<div class="sb-backdrop" id="sbBack" onclick="toggleSb()"></div>
+<div class="sb-back" id="sbBack" onclick="closeSb()"></div>
 
-<!-- SIDEBAR -->
+<!-- ═══ SIDEBAR ═══ -->
 <nav id="sidebar">
   <div class="sb-brand">
-    <div class="sb-kicker">✦ Coleção Exclusiva</div>
-    <div class="sb-name">Biblioteca de<br><em>Prompts</em> da Cassia</div>
-    <div class="sb-tagline">Seu assistente de IA dia a dia</div>
-  </div>
-  <div class="sb-search">
-    <div class="sb-search-inner">
-      <input type="text" id="searchInput" placeholder="Buscar prompts…" oninput="onSearch()">
+    <div class="sb-logo-row">
+      <div class="sb-logo-gem">✦</div>
+      <div class="sb-logo-text">Biblioteca de<br><span>Prompts</span> da Cassia</div>
+    </div>
+    <p class="sb-tagline">Seu assistente de IA organizado</p>
+    <div class="sb-stats">
+      <div class="sb-pill"><strong id="totalN">0</strong><span>Prompts</span></div>
+      <div class="sb-pill"><strong id="visibleN">0</strong><span>Visíveis</span></div>
+      <div class="sb-pill"><strong>11</strong><span>Categ.</span></div>
     </div>
   </div>
-  <div class="sb-nav" id="sbNav"></div>
-  <div class="sb-stats">
-    <div class="sb-stat"><strong id="totalCount">0</strong><span>Prompts</span></div>
-    <div class="sb-stat"><strong id="visibleCount">0</strong><span>Visíveis</span></div>
+
+  <div class="sb-search">
+    <div class="sb-search-wrap">
+      <span class="sb-search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar prompts…" oninput="doSearch()">
+    </div>
   </div>
+
+  <div class="sb-nav" id="sbNav"></div>
 </nav>
 
-<!-- MAIN -->
+<!-- ═══ MAIN ═══ -->
 <div id="main">
-  <div class="topbar">
-    <div class="tb-inner">
-      <div class="tb-left">
-        <div class="tb-eyebrow">Prompts prontos</div>
-        <h1>Use a <em>IA com</em><br>confiança e estilo</h1>
-        <p class="tb-sub">Prompts organizados para o seu dia a dia — incluindo prompts com busca em fontes reais para o trabalho na OAB SP</p>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">✦ Coleção Exclusiva</div>
+        <h1>Prompts prontos para<br>usar com <em>confiança</em></h1>
+        <p class="hero-sub">Navegue pelas categorias e copie o prompt ideal para o seu momento. Prompts OAB com 🛡️ busca em fontes reais.</p>
       </div>
-      <div class="tb-right">
-        <div class="tb-stat"><strong id="tc2">0</strong><span>Total</span></div>
-        <div class="tb-stat"><strong>11</strong><span>Categorias</span></div>
+      <div class="hero-metrics">
+        <div class="metric"><strong id="tc2">0</strong><span>Prompts</span></div>
+        <div class="metric"><strong>11</strong><span>Categ.</span></div>
       </div>
     </div>
   </div>
 
   <div class="cat-bar" id="catBar">
-    <div class="cb-icon" id="catIcon">✨</div>
-    <div class="cb-text">
-      <h2 id="catTitle">Todos os Prompts</h2>
+    <div class="cb-icon-wrap" id="catIcon">✨</div>
+    <div class="cb-info">
+      <h2 id="catName">Todos os Prompts</h2>
       <p id="catDesc">Navegue pelas categorias no menu lateral</p>
     </div>
   </div>
 
   <div id="content">
-    <div class="empty" id="empty">
-      <div class="empty-icon">🌸</div>
-      <p>Nenhum prompt encontrado.<br>Tente outra busca.</p>
+    <div class="empty" id="emptyMsg">
+      <div style="font-size:2.5rem;margin-bottom:14px">🌸</div>
+      <p style="font-size:15px;color:var(--text2)">Nenhum prompt encontrado.<br>Tente outra busca.</p>
     </div>
-    <div class="cards-grid" id="grid"></div>
+    <div class="grid" id="grid"></div>
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="overlay" id="overlay" onclick="overlayClick(event)">
+<!-- ═══ MODAL ═══ -->
+<div class="overlay" id="overlay" onclick="bgClose(event)">
   <div class="modal" id="modal">
-    <button class="close-x" onclick="closeModal()">×</button>
-    <div class="modal-cat" id="mCat"></div>
-    <h2 id="mTitle"></h2>
+    <button class="modal-x" onclick="closeModal()">×</button>
 
-    <!-- Anti-hallucination info panel (OAB only) -->
-    <div class="ah-panel" id="ahPanel" style="display:none">
-      <div class="ah-icon">🛡️</div>
-      <div class="ah-text">
+    <div class="ah-box" id="ahBox">
+      <div class="ah-icon-wrap">🛡️</div>
+      <div class="ah-body">
         <strong>Modo Anti-Alucinação ativo</strong>
-        <p>Este prompt aciona busca em fontes oficiais antes de responder: <strong>oabsp.org.br</strong>, <strong>oab.org.br</strong>, <strong>cfm.org.br</strong> e legislação vigente. A IA cita a fonte de cada informação. Não inventa dados.</p>
+        <p>A IA buscará apenas em fontes oficiais:
+          <a href="https://www.oabsp.org.br" target="_blank">oabsp.org.br</a>,
+          <a href="https://www.oab.org.br" target="_blank">oab.org.br</a> e
+          <a href="https://www.planalto.gov.br" target="_blank">legislação federal</a>.
+          Cada informação virá com a fonte citada.
+        </p>
       </div>
     </div>
 
+    <div class="modal-cat" id="mCat"></div>
+    <h2 id="mTitle"></h2>
     <div class="prompt-box" id="mPrompt"></div>
 
-    <!-- Sources strip (shown after OAB answer) -->
-    <div class="source-strip" id="sourceStrip"></div>
+    <div class="sources-row" id="srcRow"></div>
 
-    <!-- AI answer for OAB -->
-    <div class="ai-answer-wrap" id="aiWrap">
-      <div class="ai-answer-label">Resposta com fontes verificadas</div>
-      <div class="ai-answer-box" id="aiBox"></div>
+    <div class="ai-section" id="aiSection">
+      <div class="ai-section-label">Resposta com fontes verificadas</div>
+      <div class="ai-answer" id="aiAnswer"></div>
     </div>
 
-    <div class="modal-foot" id="modalFoot">
-      <button class="btn-close" onclick="closeModal()">Fechar</button>
-      <button class="btn-ask-oab" id="btnAsk" onclick="askOAB()">
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Fechar</button>
+      <button class="btn btn-oab btn-ask" id="btnAsk" onclick="runOAB()">
         🔍 Buscar & Responder com Fontes
       </button>
-      <button class="btn-copy" id="btnCopy" onclick="copyPrompt()">📋 Copiar Prompt</button>
+      <button class="btn btn-primary" id="btnCopy" onclick="doCopy()">📋 Copiar Prompt</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <strong>Biblioteca da Cassia</strong> &nbsp;·&nbsp; Prompts com ❤ · OAB SP com 🛡️ Anti-Alucinação
+  <div><strong>Biblioteca da Cassia</strong> &nbsp;·&nbsp; Prompts com ❤️ para o seu dia a dia</div>
+  <div class="footer-badge">🛡️ OAB SP Anti-Alucinação</div>
 </footer>
 
 <script>
 const OAB = "OAB — Trabalho CLT";
 
 const CATS = {
-  "all":                          {icon:"✨", desc:"Todos os prompts disponíveis"},
+  "all":                          {icon:"✨", desc:"Todos os prompts disponíveis na biblioteca"},
   "Marketing e Redes Sociais":    {icon:"📱", desc:"Instagram, Reels, Stories, Ads e mais"},
   "Negócios e Empreendedorismo":  {icon:"💼", desc:"Planos, vendas, propostas e estratégia"},
   "Criação de Conteúdo":          {icon:"✍️",  desc:"Blog, newsletter, podcast, threads"},
@@ -569,7 +1126,7 @@ const CATS = {
   "Atendimento ao Cliente":       {icon:"🤝", desc:"WhatsApp, suporte, onboarding e pós-venda"},
   "Estratégia e Análise":         {icon:"📊", desc:"OKRs, funil, KPIs, decisões e cenários"},
   "Inteligência Artificial":      {icon:"🤖", desc:"Prompts, automação, ferramentas e agentes"},
-  "OAB — Trabalho CLT":           {icon:"⚖️", desc:"Respostas verificadas · Fontes reais · Anti-alucinação"},
+  "OAB — Trabalho CLT":           {icon:"⚖️", desc:"Fontes reais · Anti-alucinação · oabsp.org.br"},
 };
 
 const DATA = [
@@ -578,83 +1135,83 @@ const DATA = [
   {cat:"Marketing e Redes Sociais",title:"Título Magnético",prompt:"Crie 10 títulos irresistíveis para um post/vídeo sobre [ASSUNTO]. Os títulos devem despertar curiosidade, ter entre 6 a 12 palavras e usar gatilhos mentais como urgência, novidade ou benefício direto.",tag:"Copywriting"},
   {cat:"Marketing e Redes Sociais",title:"Carrossel Educativo",prompt:"Crie um roteiro de carrossel com 7 slides sobre [TEMA]. Slide 1: título impactante. Slides 2 a 6: um conceito prático por slide, linguagem simples. Slide 7: conclusão + chamada para salvar ou compartilhar.",tag:"Carrossel"},
   {cat:"Marketing e Redes Sociais",title:"Script para Reels",prompt:"Escreva um script de 30 a 60 segundos para um Reels sobre [TEMA]. Estrutura: gancho nos primeiros 3 segundos, desenvolvimento rápido com 3 dicas práticas e CTA final motivador. Tom: [PROFISSIONAL/DESCONTRAÍDO].",tag:"Reels"},
-  {cat:"Marketing e Redes Sociais",title:"Bio Profissional",prompt:"Crie uma bio para o Instagram de [NOME/PROFISSÃO]. Deve ter: quem é, o que faz, para quem ajuda, diferencial único e CTA (ex: link, DM ou destaque). Máximo de 150 caracteres por linha.",tag:"Perfil"},
+  {cat:"Marketing e Redes Sociais",title:"Bio Profissional",prompt:"Crie uma bio para o Instagram de [NOME/PROFISSÃO]. Deve ter: quem é, o que faz, para quem ajuda, diferencial único e CTA. Máximo de 150 caracteres por linha.",tag:"Perfil"},
   {cat:"Marketing e Redes Sociais",title:"Copy de Anúncio",prompt:"Escreva um anúncio para Facebook/Instagram promovendo [PRODUTO/SERVIÇO]. Inclua: headline de impacto, benefício principal, prova social, oferta e CTA urgente. Público-alvo: [DESCREVA].",tag:"Ads"},
   {cat:"Marketing e Redes Sociais",title:"Resposta a Comentário Negativo",prompt:"Me ajude a responder de forma profissional e empática o seguinte comentário negativo nas redes sociais: [COMENTÁRIO]. A resposta deve ser breve, reconhecer a insatisfação, oferecer solução e preservar a imagem da marca.",tag:"Comunidade"},
   {cat:"Marketing e Redes Sociais",title:"Ideias de Conteúdo",prompt:"Gere 15 ideias criativas de conteúdo para [NICHO/PROFISSÃO] nas redes sociais. Variar entre: conteúdo educativo, bastidores, depoimento, trend, meme do nicho e venda indireta. Liste o formato ideal para cada ideia.",tag:"Criatividade"},
   {cat:"Marketing e Redes Sociais",title:"Story Sequencial",prompt:"Crie uma sequência de 5 stories para vender [PRODUTO/SERVIÇO]. Story 1: desperte a dor. Story 2: mostre que existe solução. Story 3: apresente o produto. Story 4: prova social. Story 5: CTA com senso de urgência.",tag:"Stories"},
   {cat:"Negócios e Empreendedorismo",title:"Plano de Negócios Rápido",prompt:"Crie um plano de negócios simplificado para [IDEIA DE NEGÓCIO]. Inclua: descrição do produto/serviço, público-alvo, problema que resolve, diferenciais, canais de venda, fontes de receita e principais desafios.",tag:"Planejamento"},
   {cat:"Negócios e Empreendedorismo",title:"Análise SWOT",prompt:"Faça uma análise SWOT completa para [NEGÓCIO/PROJETO]. Liste pelo menos 4 itens em cada quadrante: Forças, Fraquezas, Oportunidades e Ameaças. Ao final, sugira 3 ações estratégicas baseadas na análise.",tag:"Estratégia"},
-  {cat:"Negócios e Empreendedorismo",title:"Proposta de Valor",prompt:"Me ajude a criar uma proposta de valor clara e poderosa para [NEGÓCIO/PRODUTO]. A proposta deve responder: o que oferece, para quem, qual problema resolve, qual o benefício principal e por que é diferente da concorrência.",tag:"Posicionamento"},
-  {cat:"Negócios e Empreendedorismo",title:"Email de Vendas",prompt:"Escreva um email de vendas persuasivo para [PRODUTO/SERVIÇO]. Estrutura: assunto irresistível, abertura personalizada, identificação da dor do cliente, apresentação da solução, prova social, oferta e CTA claro.",tag:"Email"},
+  {cat:"Negócios e Empreendedorismo",title:"Proposta de Valor",prompt:"Me ajude a criar uma proposta de valor clara para [NEGÓCIO/PRODUTO]. A proposta deve responder: o que oferece, para quem, qual problema resolve, qual o benefício principal e por que é diferente da concorrência.",tag:"Posicionamento"},
+  {cat:"Negócios e Empreendedorismo",title:"Email de Vendas",prompt:"Escreva um email de vendas persuasivo para [PRODUTO/SERVIÇO]. Estrutura: assunto irresistível, abertura personalizada, identificação da dor, apresentação da solução, prova social, oferta e CTA claro.",tag:"Email"},
   {cat:"Negócios e Empreendedorismo",title:"Roteiro de Apresentação",prompt:"Crie um roteiro de apresentação de 5 minutos para [NEGÓCIO/PRODUTO]. Inclua: problema do mercado, solução proposta, como funciona, diferenciais, tração/resultados e próximos passos.",tag:"Pitch"},
-  {cat:"Negócios e Empreendedorismo",title:"Precificação",prompt:"Me ajude a definir o preço ideal para [PRODUTO/SERVIÇO]. Considere: custos envolvidos, valor percebido pelo cliente, preço da concorrência, margem desejada e posicionamento da marca. Apresente 3 opções.",tag:"Finanças"},
-  {cat:"Negócios e Empreendedorismo",title:"Script de Vendas",prompt:"Crie um script de vendas para abordagem [PRESENCIAL/WHATSAPP/LIGAÇÃO] para [PRODUTO/SERVIÇO]. Inclua: abertura, perguntas de diagnóstico, apresentação da solução, objeções mais comuns e fechamento.",tag:"Vendas"},
-  {cat:"Negócios e Empreendedorismo",title:"Política de Reembolso",prompt:"Crie uma política de reembolso clara e profissional para [TIPO DE NEGÓCIO]. Inclua: prazo para solicitação, condições aceitas, processo passo a passo e tom respeitoso que transmita segurança ao cliente.",tag:"Jurídico"},
-  {cat:"Negócios e Empreendedorismo",title:"Pesquisa de Mercado",prompt:"Crie 10 perguntas para uma pesquisa de mercado sobre [PRODUTO/SERVIÇO]. As perguntas devem identificar: perfil do cliente, dores principais, hábitos de compra, quanto pagaria e o que valoriza na solução ideal.",tag:"Pesquisa"},
-  {cat:"Negócios e Empreendedorismo",title:"Parceria Estratégica",prompt:"Escreva uma mensagem profissional propondo parceria entre [MEU NEGÓCIO] e [NEGÓCIO ALVO]. Destaque: sinergia entre os dois públicos, o que cada lado ganha, formatos de parceria e próximo passo.",tag:"Parcerias"},
-  {cat:"Criação de Conteúdo",title:"Artigo Completo",prompt:"Escreva um artigo completo sobre [TEMA] com aproximadamente 800 palavras. Estrutura: introdução instigante, 3 tópicos principais com exemplos práticos, dados ou estatísticas quando possível, e conclusão com reflexão.",tag:"Blog"},
+  {cat:"Negócios e Empreendedorismo",title:"Precificação",prompt:"Me ajude a definir o preço ideal para [PRODUTO/SERVIÇO]. Considere: custos, valor percebido, preço da concorrência, margem desejada e posicionamento. Apresente 3 opções de precificação.",tag:"Finanças"},
+  {cat:"Negócios e Empreendedorismo",title:"Script de Vendas",prompt:"Crie um script de vendas para abordagem [PRESENCIAL/WHATSAPP/LIGAÇÃO] para [PRODUTO/SERVIÇO]. Inclua: abertura, diagnóstico, apresentação da solução, objeções mais comuns e fechamento.",tag:"Vendas"},
+  {cat:"Negócios e Empreendedorismo",title:"Política de Reembolso",prompt:"Crie uma política de reembolso clara e profissional para [TIPO DE NEGÓCIO]. Inclua: prazo, condições aceitas, processo passo a passo e tom que transmita segurança ao cliente.",tag:"Jurídico"},
+  {cat:"Negócios e Empreendedorismo",title:"Pesquisa de Mercado",prompt:"Crie 10 perguntas para uma pesquisa de mercado sobre [PRODUTO/SERVIÇO]. As perguntas devem identificar: perfil do cliente, dores principais, hábitos de compra, disposição a pagar e o que valoriza na solução.",tag:"Pesquisa"},
+  {cat:"Negócios e Empreendedorismo",title:"Parceria Estratégica",prompt:"Escreva uma mensagem propondo parceria entre [MEU NEGÓCIO] e [NEGÓCIO ALVO]. Destaque: sinergia dos públicos, o que cada lado ganha, formatos possíveis e próximo passo para conversa.",tag:"Parcerias"},
+  {cat:"Criação de Conteúdo",title:"Artigo Completo",prompt:"Escreva um artigo completo sobre [TEMA] com aproximadamente 800 palavras. Estrutura: introdução instigante, 3 tópicos principais com exemplos práticos, dados ou estatísticas quando possível, e conclusão reflexiva.",tag:"Blog"},
   {cat:"Criação de Conteúdo",title:"Newsletter Semanal",prompt:"Crie o conteúdo de uma newsletter semanal sobre [NICHO] para [PÚBLICO-ALVO]. Inclua: saudação personalizada, 1 insight principal, 1 dica prática, 1 curiosidade e uma CTA leve.",tag:"Email"},
   {cat:"Criação de Conteúdo",title:"Roteiro de Podcast",prompt:"Crie um roteiro para um episódio de podcast de 20 minutos sobre [TEMA]. Inclua: abertura impactante, apresentação do tema, 3 blocos de conteúdo, história ou exemplo real, reflexão final e encerramento com CTA.",tag:"Podcast"},
   {cat:"Criação de Conteúdo",title:"Descrição de Produto",prompt:"Escreva uma descrição persuasiva para [PRODUTO]. Foque em benefícios, use linguagem sensorial, inclua para quem é ideal, como usar e o resultado esperado. Finalize com frase de compra.",tag:"E-commerce"},
-  {cat:"Criação de Conteúdo",title:"Thread para X/Twitter",prompt:"Crie uma thread de 8 tweets sobre [TEMA]. Tweet 1: gancho poderoso. Tweets 2 a 7: um insight por tweet, linguagem direta. Tweet 8: conclusão + pergunta para engajamento.",tag:"Twitter/X"},
-  {cat:"Criação de Conteúdo",title:"Storytelling Pessoal",prompt:"Me ajude a contar a história de [EXPERIÊNCIA PESSOAL/PROFISSIONAL] usando storytelling. Estrutura: cenário inicial, conflito ou desafio, virada, aprendizado e conexão com o público. Tom autêntico e inspirador.",tag:"Storytelling"},
-  {cat:"Criação de Conteúdo",title:"FAQ do Produto",prompt:"Crie 10 perguntas frequentes (FAQ) com respostas para [PRODUTO/SERVIÇO]. Cubra: o que é, para quem serve, como funciona, preço, prazo, garantia, suporte e resultados esperados.",tag:"FAQ"},
+  {cat:"Criação de Conteúdo",title:"Thread para X/Twitter",prompt:"Crie uma thread de 8 tweets sobre [TEMA]. Tweet 1: gancho poderoso. Tweets 2-7: um insight por tweet, linguagem direta e concisa. Tweet 8: conclusão + pergunta para engajamento.",tag:"Twitter/X"},
+  {cat:"Criação de Conteúdo",title:"Storytelling Pessoal",prompt:"Me ajude a contar a história de [EXPERIÊNCIA PESSOAL/PROFISSIONAL] usando storytelling. Estrutura: cenário inicial, conflito ou desafio, virada, aprendizado e conexão com o público.",tag:"Storytelling"},
+  {cat:"Criação de Conteúdo",title:"FAQ do Produto",prompt:"Crie 10 perguntas frequentes (FAQ) com respostas para [PRODUTO/SERVIÇO]. Cubra: o que é, para quem, como funciona, preço, prazo, garantia, suporte e resultados esperados.",tag:"FAQ"},
   {cat:"Criação de Conteúdo",title:"Reaproveitamento de Conteúdo",prompt:"Tenho este conteúdo: [COLE AQUI]. Adapte em: 1 legenda para Instagram, 1 thread para X, 1 parágrafo para newsletter e 3 possíveis tópicos de carrossel. Mantenha a essência mas adapte o formato.",tag:"Repurpose"},
   {cat:"Criação de Conteúdo",title:"Headline Magnética",prompt:"Crie 10 opções de headline para [ARTIGO/ANÚNCIO/POST] sobre [TEMA]. Use gatilhos: curiosidade, urgência, benefício, número, pergunta e controvérsia. Indique qual gatilho cada headline usa.",tag:"Copywriting"},
-  {cat:"Criação de Conteúdo",title:"Conteúdo Evergreen",prompt:"Crie um conteúdo evergreen sobre [TEMA DO NICHO]. Útil mesmo daqui a 2 anos, abordando uma dor recorrente do público e oferecendo solução prática com exemplos concretos.",tag:"SEO"},
-  {cat:"Produtividade Pessoal",title:"Planejamento Semanal",prompt:"Me ajude a planejar minha semana. Prioridades: [LISTA]. Disponível: [HORAS POR DIA]. Monte planejamento diário balanceado com blocos de trabalho, pausas estratégicas e espaço para imprevistos.",tag:"Tempo"},
+  {cat:"Criação de Conteúdo",title:"Conteúdo Evergreen",prompt:"Crie um conteúdo evergreen sobre [TEMA DO NICHO]. Deve ser útil mesmo daqui a 2 anos, abordar uma dor recorrente do público e oferecer solução prática com exemplos concretos.",tag:"SEO"},
+  {cat:"Produtividade Pessoal",title:"Planejamento Semanal",prompt:"Me ajude a planejar minha semana. Prioridades: [LISTA]. Disponível: [HORAS/DIA]. Monte um planejamento diário balanceado com blocos de trabalho, pausas estratégicas e espaço para imprevistos.",tag:"Tempo"},
   {cat:"Produtividade Pessoal",title:"Lista de Tarefas Priorizada",prompt:"Tenho estas tarefas: [LISTA]. Priorize usando a Matriz Eisenhower. Categorize cada tarefa, sugira ordem de execução e quais poderiam ser delegadas ou eliminadas.",tag:"Gestão"},
   {cat:"Produtividade Pessoal",title:"Rotina Matinal",prompt:"Crie uma rotina matinal produtiva de [X MINUTOS] para uma pessoa que trabalha com [PROFISSÃO]. Inclua: movimento, foco mental, revisão do dia e hábito positivo. Explique o porquê de cada etapa.",tag:"Hábitos"},
-  {cat:"Produtividade Pessoal",title:"Superar Procrastinação",prompt:"Estou procrastinando em [TAREFA]. Plano prático e imediato para começar agora: dividir em micro-ações, eliminar distrações, técnica de foco sugerida e como me recompensar ao terminar.",tag:"Foco"},
+  {cat:"Produtividade Pessoal",title:"Superar Procrastinação",prompt:"Estou procrastinando em [TAREFA]. Plano prático e imediato: como dividir em micro-ações, eliminar distrações, técnica de foco sugerida e como me recompensar ao terminar.",tag:"Foco"},
   {cat:"Produtividade Pessoal",title:"Revisão Mensal",prompt:"Me guie em uma revisão do mês de [MÊS]: o que funcionou, o que não funcionou, principais conquistas, desafios, aprendizados e 3 intenções para o próximo mês.",tag:"Reflexão"},
-  {cat:"Produtividade Pessoal",title:"Delegar Tarefas",prompt:"Preciso delegar [TAREFA] para [COLEGA/ASSISTENTE]. Briefing claro com: objetivo, resultado esperado, prazo, recursos disponíveis, critérios de qualidade e como receber o resultado.",tag:"Delegação"},
+  {cat:"Produtividade Pessoal",title:"Delegar Tarefas",prompt:"Preciso delegar [TAREFA] para [COLEGA/ASSISTENTE]. Briefing claro com: objetivo, resultado esperado, prazo, recursos, critérios de qualidade e como receber o resultado.",tag:"Delegação"},
   {cat:"Produtividade Pessoal",title:"Metas SMART",prompt:"Transforme minha meta vaga '[META]' em meta SMART: Específica, Mensurável, Atingível, Relevante e Temporal. Liste os 5 primeiros passos concretos para começar esta semana.",tag:"Metas"},
-  {cat:"Produtividade Pessoal",title:"Gestão de Energia",prompt:"Minha energia cai especialmente [HORÁRIO/SITUAÇÃO]. Estratégia personalizada de gestão de energia: alimentação, movimento, foco e recuperação.",tag:"Energia"},
+  {cat:"Produtividade Pessoal",title:"Gestão de Energia",prompt:"Minha energia cai especialmente em [HORÁRIO/SITUAÇÃO]. Estratégia personalizada de gestão de energia: alimentação, movimento, foco e recuperação.",tag:"Energia"},
   {cat:"Produtividade Pessoal",title:"Organizar Caixa de Email",prompt:"Caixa de email desorganizada com [X] mensagens. Sistema em 5 passos para organizar hoje + protocolo para manter. Sugestão de pastas e regras de triagem.",tag:"Organização"},
-  {cat:"Produtividade Pessoal",title:"Deep Work",prompt:"Quero implementar sessões de Deep Work. Disponível: [HORÁRIOS]. Protocolo personalizado com: duração ideal, rituais de entrada/saída, ambiente e como medir resultado.",tag:"Foco"},
-  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Apresentação",prompt:"Mensagem de apresentação profissional para [CONTEXTO: rede social, email frio, evento]. Inclua: quem sou, o que faço, como agrego valor e convite gentil para conversa.",tag:"Networking"},
+  {cat:"Produtividade Pessoal",title:"Deep Work",prompt:"Quero implementar sessões de Deep Work. Disponível: [HORÁRIOS]. Protocolo personalizado com: duração ideal, rituais de entrada/saída, ambiente ideal e como medir resultado.",tag:"Foco"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Apresentação",prompt:"Mensagem de apresentação profissional para [CONTEXTO: rede social, email frio, evento]. Quem sou, o que faço, como agrego valor e convite gentil para conversa.",tag:"Networking"},
   {cat:"Comunicação e Relacionamentos",title:"Email Difícil",prompt:"Email difícil para [SITUAÇÃO: cliente insatisfeito, cobrar pagamento, negar pedido, feedback negativo]. Comunicar de forma clara, respeitosa e profissional, preservando o relacionamento.",tag:"Email"},
   {cat:"Comunicação e Relacionamentos",title:"Feedback Construtivo",prompt:"Feedback construtivo para [SITUAÇÃO] usando modelo SBI (Situação, Comportamento, Impacto). Específico, não julgativo, focado em comportamento e com sugestão de melhoria.",tag:"Liderança"},
-  {cat:"Comunicação e Relacionamentos",title:"Negociação",prompt:"Negociar [SITUAÇÃO] com [CONTRAPARTE]. Prepare: posição ideal, mínimo aceitável, argumentos principais, objeções possíveis e como responder a cada uma.",tag:"Negociação"},
-  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Agradecimento",prompt:"Mensagem de agradecimento genuína e personalizada para [PESSOA/EMPRESA] pelo [MOTIVO]. Calorosa, específica e deixando porta aberta para futuras interações.",tag:"Relacionamento"},
+  {cat:"Comunicação e Relacionamentos",title:"Negociação",prompt:"Negociar [SITUAÇÃO] com [CONTRAPARTE]. Posição ideal, mínimo aceitável, argumentos principais, objeções possíveis e como responder a cada uma.",tag:"Negociação"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Agradecimento",prompt:"Mensagem de agradecimento genuína para [PESSOA/EMPRESA] pelo [MOTIVO]. Calorosa, específica e com porta aberta para futuras interações.",tag:"Relacionamento"},
   {cat:"Comunicação e Relacionamentos",title:"Resolver Conflito",prompt:"Em conflito com [PESSOA] sobre [SITUAÇÃO]. Como abordar de forma não-violenta: expressar perspectiva, ouvir ativamente e buscar solução conjunta.",tag:"Conflito"},
   {cat:"Comunicação e Relacionamentos",title:"Discurso de Impacto",prompt:"Discurso de [X MINUTOS] sobre [TEMA] para [CONTEXTO]. Estrutura: abertura poderosa, 3 pontos principais e encerramento que inspire ação.",tag:"Oratória"},
-  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Condolência",prompt:"Mensagem de condolência para [PESSOA] que passou por [SITUAÇÃO]. Genuína, acolhedora e respeitosa, sem ser invasiva ou usar clichês vazios.",tag:"Empatia"},
+  {cat:"Comunicação e Relacionamentos",title:"Mensagem de Condolência",prompt:"Mensagem de condolência para [PESSOA] após [SITUAÇÃO]. Genuína, acolhedora e respeitosa, sem clichês vazios.",tag:"Empatia"},
   {cat:"Comunicação e Relacionamentos",title:"Follow-up Profissional",prompt:"Follow-up para [CONTEXTO: após reunião, proposta enviada, entrevista]. Breve, relembra o contexto, reforça valor e tem próximo passo claro.",tag:"Follow-up"},
   {cat:"Comunicação e Relacionamentos",title:"Comunicar Mudança",prompt:"Comunicar [MUDANÇA: preços, políticas, prazo] para clientes. Transparente: porquê muda, o que muda, quando muda e como beneficia o cliente.",tag:"Cliente"},
   {cat:"Educação e Aprendizado",title:"Explicar Conceito Complexo",prompt:"Explique [CONCEITO] de forma simples para alguém sem conhecimento técnico. Use analogias do cotidiano, exemplos práticos e estrutura: o que é, como funciona e por que importa.",tag:"Didática"},
-  {cat:"Educação e Aprendizado",title:"Plano de Estudos",prompt:"Plano de estudos para aprender [HABILIDADE/ASSUNTO] em [X SEMANAS]. Disponho de [X HORAS/SEMANA]. Recursos, ordem de aprendizado e como medir progresso.",tag:"Estudos"},
-  {cat:"Educação e Aprendizado",title:"Quiz de Revisão",prompt:"10 questões de múltipla escolha (4 alternativas) para revisar [ASSUNTO]. 3 fáceis, 4 médias, 3 difíceis. Gabarito comentado ao final.",tag:"Quiz"},
+  {cat:"Educação e Aprendizado",title:"Plano de Estudos",prompt:"Plano de estudos para aprender [HABILIDADE/ASSUNTO] em [X SEMANAS]. Disponho de [X HORAS/SEMANA]. Recursos recomendados, ordem de aprendizado e como medir progresso.",tag:"Estudos"},
+  {cat:"Educação e Aprendizado",title:"Quiz de Revisão",prompt:"10 questões de múltipla escolha (4 alternativas) para revisar [ASSUNTO]. Varie os níveis: 3 fáceis, 4 médias, 3 difíceis. Gabarito comentado ao final.",tag:"Quiz"},
   {cat:"Educação e Aprendizado",title:"Mapa Mental",prompt:"Estrutura de mapa mental sobre [TEMA]. Conceito central, 5 ramos principais e 3 sub-ramos para cada. Facilite a memorização e visualização das conexões.",tag:"Memorização"},
-  {cat:"Educação e Aprendizado",title:"Resumo de Livro",prompt:"Resumo estruturado do livro '[TÍTULO]'. Premissa principal, 5 conceitos mais importantes, 3 exemplos práticos, críticas e 3 aplicações práticas na vida real.",tag:"Leitura"},
-  {cat:"Educação e Aprendizado",title:"Aula Prática",prompt:"Aula prática sobre [TEMA] para [PÚBLICO] com [X MINUTOS]. Objetivo de aprendizagem, warm-up, conteúdo principal com atividade prática, discussão e encerramento com reflexão.",tag:"Ensino"},
+  {cat:"Educação e Aprendizado",title:"Resumo de Livro",prompt:"Resumo estruturado do livro '[TÍTULO]'. Premissa principal, 5 conceitos importantes, 3 exemplos práticos, críticas e 3 aplicações na vida real.",tag:"Leitura"},
+  {cat:"Educação e Aprendizado",title:"Aula Prática",prompt:"Aula prática sobre [TEMA] para [PÚBLICO] com [X MINUTOS]. Objetivo de aprendizagem, warm-up, conteúdo principal com atividade prática, discussão e encerramento reflexivo.",tag:"Ensino"},
   {cat:"Educação e Aprendizado",title:"Flashcards",prompt:"15 flashcards (frente e verso) para memorizar os conceitos-chave de [ASSUNTO]. Pergunta clara na frente, resposta concisa no verso. Do básico ao avançado.",tag:"Flashcards"},
-  {cat:"Educação e Aprendizado",title:"Análise de Caso",prompt:"Análise do caso: [SITUAÇÃO]. Identifique: problema central, causas raiz, partes envolvidas, opções de solução com prós/contras e recomendação com justificativa.",tag:"Análise"},
-  {cat:"Educação e Aprendizado",title:"Debate de Ideias",prompt:"Dois lados do debate sobre [TEMA]. 5 melhores argumentos a favor e 5 contra. Ao final, síntese equilibrada.",tag:"Pensamento Crítico"},
-  {cat:"Educação e Aprendizado",title:"TCC / Monografia",prompt:"Estrutura de [TCC/MONOGRAFIA] sobre [TEMA]. Título provisório, problema de pesquisa, hipótese, capítulos com descrição, metodologia e referências teóricas sugeridas.",tag:"Acadêmico"},
+  {cat:"Educação e Aprendizado",title:"Análise de Caso",prompt:"Análise do caso: [SITUAÇÃO]. Problema central, causas raiz, partes envolvidas, opções de solução com prós/contras e recomendação justificada.",tag:"Análise"},
+  {cat:"Educação e Aprendizado",title:"Debate de Ideias",prompt:"Dois lados do debate sobre [TEMA]. 5 melhores argumentos a favor e 5 contra, com base em evidências. Ao final, síntese equilibrada.",tag:"Pensamento Crítico"},
+  {cat:"Educação e Aprendizado",title:"TCC / Monografia",prompt:"Estrutura de [TCC/MONOGRAFIA] sobre [TEMA]. Título provisório, problema de pesquisa, hipótese, capítulos com descrição, metodologia e referências sugeridas.",tag:"Acadêmico"},
   {cat:"Saúde e Bem-estar",title:"Plano de Treino",prompt:"Plano de treino para [OBJETIVO] para pessoa [NÍVEL] com acesso a [ACADEMIA/CASA]. Disponibilidade: [X DIAS/SEMANA]. Aquecimento e série completa.",tag:"Treino"},
   {cat:"Saúde e Bem-estar",title:"Cardápio Saudável",prompt:"Cardápio semanal saudável para [OBJETIVO]. Restrições: [ALERGIAS]. Café da manhã, almoço, lanche e jantar. Praticidade e sabor.",tag:"Nutrição"},
   {cat:"Saúde e Bem-estar",title:"Gerenciar Ansiedade",prompt:"Sinto [SINTOMA DE ANSIEDADE]. 5 técnicas práticas e imediatas + 3 hábitos preventivos + quando buscar ajuda profissional.",tag:"Saúde Mental"},
   {cat:"Saúde e Bem-estar",title:"Desintoxicação Digital",prompt:"Plano de [X DIAS] para reduzir uso de [REDES/CELULAR]. Regras claras, atividades alternativas, como lidar com FOMO e como retomar de forma saudável.",tag:"Digital Detox"},
   {cat:"Saúde e Bem-estar",title:"Sono de Qualidade",prompt:"Protocolo de higiene do sono: rotina noturna de 60 minutos, ambiente ideal, hábitos a eliminar, técnicas de relaxamento e dicas de alimentação noturna.",tag:"Sono"},
-  {cat:"Saúde e Bem-estar",title:"Mindfulness",prompt:"Exercício de mindfulness de [5/10/15] minutos para [OBJETIVO]. Instruções passo a passo que um iniciante consiga seguir.",tag:"Meditação"},
+  {cat:"Saúde e Bem-estar",title:"Mindfulness",prompt:"Exercício de mindfulness de [5/10/15] minutos para [OBJETIVO]. Instruções passo a passo que um iniciante consiga seguir facilmente.",tag:"Meditação"},
   {cat:"Saúde e Bem-estar",title:"Jornada de Autoconhecimento",prompt:"10 perguntas profundas para autoconhecimento sobre [TEMA]. Reflexão genuína, identificando padrões e valores.",tag:"Autoconhecimento"},
   {cat:"Saúde e Bem-estar",title:"Comunicação Não-Violenta",prompt:"Expressar insatisfação com [SITUAÇÃO] usando CNV. Estrutura: Observação, Sentimento, Necessidade e Pedido claro. Tom assertivo e respeitoso.",tag:"CNV"},
   {cat:"Saúde e Bem-estar",title:"Ritual de Gratidão",prompt:"Ritual diário de gratidão de [X MINUTOS]. Perguntas norteadoras, reflexão, como registrar e por que esse hábito transforma a perspectiva.",tag:"Gratidão"},
   {cat:"Saúde e Bem-estar",title:"Burnout Recovery",prompt:"Plano de recuperação de burnout para [X SEMANAS]: o que pausar, o que retomar gradualmente, hábitos restaurativos, como comunicar limites e quando pedir ajuda.",tag:"Burnout"},
-  {cat:"Atendimento ao Cliente",title:"Script de WhatsApp",prompt:"Script de atendimento pelo WhatsApp para [TIPO DE NEGÓCIO]. Boas-vindas, perguntas de qualificação, apresentação da solução, como lidar com 'vou pensar' e encerramento cordial.",tag:"WhatsApp"},
-  {cat:"Atendimento ao Cliente",title:"Resposta a Reclamação",prompt:"Resposta profissional e empática para a reclamação: [DESCREVA]. Reconhecer o problema, solução concreta e prazo.",tag:"Suporte"},
+  {cat:"Atendimento ao Cliente",title:"Script de WhatsApp",prompt:"Script de atendimento pelo WhatsApp para [TIPO DE NEGÓCIO]. Boas-vindas, qualificação, apresentação da solução, como lidar com 'vou pensar' e encerramento cordial.",tag:"WhatsApp"},
+  {cat:"Atendimento ao Cliente",title:"Resposta a Reclamação",prompt:"Resposta profissional e empática para a reclamação: [DESCREVA]. Reconhecer o problema, solução concreta e prazo de resolução.",tag:"Suporte"},
   {cat:"Atendimento ao Cliente",title:"Mensagem de Pós-Venda",prompt:"Sequência de 3 mensagens de pós-venda para [PRODUTO/SERVIÇO]. Imediata: confirmação. Dia 3: dica de uso. Dia 7: feedback + upsell.",tag:"Pós-venda"},
-  {cat:"Atendimento ao Cliente",title:"FAQ Automatizado",prompt:"Respostas prontas para as 10 perguntas mais frequentes de [TIPO DE NEGÓCIO]. Claras, objetivas e com tom [FORMAL/DESCONTRAÍDO].",tag:"FAQ"},
-  {cat:"Atendimento ao Cliente",title:"Recuperar Cliente Inativo",prompt:"Mensagem para reativar cliente inativo há [X MESES]. Personalizar, mostrar novidade/especial e ter incentivo para retornar.",tag:"Retenção"},
-  {cat:"Atendimento ao Cliente",title:"Pesquisa de Satisfação",prompt:"Pesquisa de satisfação com 7 questões para [PRODUTO/SERVIÇO]. NPS, escala, múltipla escolha e aberta. O que melhorar e o que gostou.",tag:"NPS"},
-  {cat:"Atendimento ao Cliente",title:"Política de Cancelamento",prompt:"Política de cancelamento para [SERVIÇO]. Prazo sem custo, condições de reembolso, processo de solicitação e comunicação respeitosa ao cliente.",tag:"Políticas"},
-  {cat:"Atendimento ao Cliente",title:"Upsell Gentil",prompt:"Upsell natural de [PRODUTO PREMIUM] para cliente de [PRODUTO BÁSICO]. Relevante, baseado no histórico e apresentado como benefício.",tag:"Upsell"},
+  {cat:"Atendimento ao Cliente",title:"FAQ Automatizado",prompt:"Respostas prontas para as 10 perguntas mais frequentes de clientes de [TIPO DE NEGÓCIO]. Claras, objetivas e com tom [FORMAL/DESCONTRAÍDO].",tag:"FAQ"},
+  {cat:"Atendimento ao Cliente",title:"Recuperar Cliente Inativo",prompt:"Mensagem para reativar cliente inativo há [X MESES]. Personalizar, mostrar novidade e ter incentivo para retornar.",tag:"Retenção"},
+  {cat:"Atendimento ao Cliente",title:"Pesquisa de Satisfação",prompt:"Pesquisa de satisfação com 7 questões para [PRODUTO/SERVIÇO]. NPS, escala 1-5, múltipla escolha e aberta. O que melhorar e o que gostou.",tag:"NPS"},
+  {cat:"Atendimento ao Cliente",title:"Política de Cancelamento",prompt:"Política de cancelamento para [SERVIÇO]. Prazo sem custo, condições de reembolso, processo de solicitação e comunicação respeitosa.",tag:"Políticas"},
+  {cat:"Atendimento ao Cliente",title:"Upsell Gentil",prompt:"Upsell natural de [PRODUTO PREMIUM] para cliente de [PRODUTO BÁSICO]. Relevante, baseado no histórico e apresentado como benefício, não como venda.",tag:"Upsell"},
   {cat:"Atendimento ao Cliente",title:"Boas-Vindas ao Cliente",prompt:"Onboarding para novos clientes de [PRODUTO/SERVIÇO]. Email boas-vindas (dia 1), tutorial (dia 2), dica exclusiva (dia 5) e convite para suporte (dia 7).",tag:"Onboarding"},
   {cat:"Atendimento ao Cliente",title:"Lidar com Cliente Difícil",prompt:"Cliente sendo [AGRESSIVO/EXIGENTE] por [MOTIVO]. Responder mantendo calma, limites respeitosos, solução viável e imagem profissional.",tag:"Conflito"},
   {cat:"Estratégia e Análise",title:"Análise de Concorrentes",prompt:"Análise competitiva dos concorrentes de [MEU NEGÓCIO] no mercado de [NICHO]. Posicionamento, diferenciais, preço, pontos fracos e oportunidade a explorar.",tag:"Mercado"},
-  {cat:"Estratégia e Análise",title:"Estratégia de Lançamento",prompt:"Estratégia de lançamento para [PRODUTO/SERVIÇO]. Pré-lançamento (7 dias), lançamento e pós-lançamento (3 dias). Ações de marketing, conteúdo e antecipação.",tag:"Lançamento"},
+  {cat:"Estratégia e Análise",title:"Estratégia de Lançamento",prompt:"Estratégia de lançamento para [PRODUTO/SERVIÇO]. Pré-lançamento (7 dias), lançamento e pós-lançamento (3 dias). Ações de marketing, conteúdo e como criar antecipação.",tag:"Lançamento"},
   {cat:"Estratégia e Análise",title:"OKRs Trimestrais",prompt:"OKRs para o trimestre de [ÁREA]. 3 objetivos inspiradores e 3 resultados-chave mensuráveis para cada. Ambiciosos mas atingíveis.",tag:"OKRs"},
   {cat:"Estratégia e Análise",title:"Análise de Funil",prompt:"Analise meu funil para [PRODUTO]: [ETAPAS E MÉTRICAS]. Maiores vazamentos, causas, 3 hipóteses de melhoria e como testar cada uma.",tag:"Funil"},
   {cat:"Estratégia e Análise",title:"Decisão Estratégica",prompt:"Decidir entre [OPÇÃO A] e [OPÇÃO B]. Critérios mais importantes, prós/contras, riscos, alinhamento com objetivos e recomendação com base nos dados.",tag:"Decisão"},
@@ -670,237 +1227,227 @@ const DATA = [
   {cat:"Inteligência Artificial",title:"Criar GPT Personalizado",prompt:"Instruções para GPT personalizado para [FUNÇÃO]. Personalidade, tom de voz, o que deve e não deve fazer, como responder situações específicas.",tag:"GPT"},
   {cat:"Inteligência Artificial",title:"IA Ética",prompt:"Usar IA para [FINALIDADE]. Aspectos éticos: privacidade, vieses, transparência, impacto nos colaboradores e como implementar de forma responsável.",tag:"Ética"},
   {cat:"Inteligência Artificial",title:"Comparar Modelos de IA",prompt:"Compare [ChatGPT, Claude, Gemini, etc.] para [TAREFA]. Qualidade, velocidade, custo, integrações e qual recomendaria para meu caso.",tag:"Comparativo"},
-  {cat:"Inteligência Artificial",title:"Treinar Equipe em IA",prompt:"Plano de treinamento de 4 semanas para equipe de [X PESSOAS] usar IA. Temas por semana, exercícios práticos, ferramentas a dominar e como medir adoção.",tag:"Treinamento"},
+  {cat:"Inteligência Artificial",title:"Treinar Equipe em IA",prompt:"Plano de 4 semanas para equipe de [X PESSOAS] usar IA. Temas por semana, exercícios práticos, ferramentas a dominar e como medir adoção.",tag:"Treinamento"},
   {cat:"Inteligência Artificial",title:"Agente de IA",prompt:"Arquitetura de agente de IA para [FUNÇÃO]. Objetivo, dados necessários, ferramentas, tomada de decisão, tratamento de erros e métricas de sucesso.",tag:"Agentes"},
   {cat:"Inteligência Artificial",title:"ROI da IA",prompt:"Calcule ROI de IA em [PROCESSO]. Custos de implementação, tempo economizado, redução de erros, satisfação do cliente e receita adicional.",tag:"ROI"},
 
-  // ── OAB — TRABALHO CLT (Anti-alucinação) ──
-  {cat:"OAB — Trabalho CLT",title:"Responder Email de Advogado",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Antes de redigir a resposta, busque informações atualizadas nos sites:
-• https://www.oabsp.org.br
-• https://www.oab.org.br
-• https://www.planalto.gov.br (legislação)
+  // ── OAB — TRABALHO CLT ──
+  {cat:OAB,oab:true,title:"Responder Email de Advogado",tag:"Email",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO — leia antes de responder:
+• Consulte exclusivamente: oabsp.org.br e oab.org.br
+• Cite a fonte de cada informação: "Conforme oabsp.org.br..."
+• Se não encontrar a informação, escreva: "Não localizei nas fontes oficiais. Confirme em oabsp.org.br ou pelo (11) 3346-6300."
 
-Só use informações que encontrar nessas fontes. Cite a fonte de cada afirmação.
-Se não encontrar a informação, diga: "Não localizei essa informação nas fontes oficiais. Recomendo verificar diretamente no site oabsp.org.br ou ligar para (11) 3346-6300."
-
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
 Recebi o seguinte email de um advogado:
 [COLE O EMAIL AQUI]
 
-Redija uma resposta profissional, clara e cordial que:
+Redija uma resposta profissional e cordial que:
 ✓ Confirme o recebimento
-✓ Responda cada ponto levantado com base em fontes oficiais
+✓ Responda cada ponto com base em fontes oficiais
 ✓ Indique prazo quando necessário
-✓ Cite de onde veio cada informação
-✓ Mantenha tom institucional adequado`,tag:"Email",oab:true},
+✓ Cite as fontes consultadas
+✓ Mantenha tom institucional da OAB SP`},
 
-  {cat:"OAB — Trabalho CLT",title:"Responder WhatsApp de Advogado",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Antes de responder, verifique as informações em:
-• https://www.oabsp.org.br
-• https://www.oab.org.br
+  {cat:OAB,oab:true,title:"Responder WhatsApp de Advogado",tag:"WhatsApp",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Consulte: oabsp.org.br / oab.org.br
+• Não invente prazos, valores ou procedimentos
+• Se insegura, oriente a confirmar no portal oficial
 
-Não invente prazos, valores ou procedimentos. Se não tiver certeza, oriente a pessoa a confirmar no portal oficial.
+━━━━━━━━━━━━━━━━━━━━━━━━
 
----
-
-Um advogado me enviou pelo WhatsApp:
+Mensagem recebida pelo WhatsApp:
 [DESCREVA A MENSAGEM AQUI]
 
 Redija uma resposta direta e profissional que:
-✓ Resolva a dúvida ou solicitação com base em fonte oficial
-✓ Indique o próximo passo
-✓ Informe de onde veio a informação (ex: "Conforme o portal oabsp.org.br...")
-✓ Seja objetiva, sem excesso de formalidade`,tag:"WhatsApp",oab:true},
+✓ Resolve a dúvida com base em fonte oficial
+✓ Indica o próximo passo
+✓ Informa de onde veio a informação
+✓ É objetiva e sem excesso de formalidade`},
 
-  {cat:"OAB — Trabalho CLT",title:"Orientar Assistido — Tom Acolhedor",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Use apenas informações verificadas. Não invente direitos, prazos ou procedimentos.
-Consulte: https://www.oab.org.br/servicosOAB/assistidoOAB
-Se a dúvida for jurídica específica, oriente o assistido a falar com o advogado responsável pelo seu caso.
+  {cat:OAB,oab:true,title:"Orientar Assistido",tag:"Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Use apenas informações verificadas
+• Não invente direitos, prazos ou procedimentos
+• Para dúvidas jurídicas específicas, oriente a falar com o advogado do caso
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Um assistido me procurou com a seguinte situação:
+Situação relatada pelo assistido:
 [DESCREVA A SITUAÇÃO]
 
-Redija uma resposta clara, acolhedora e sem juridiquês que:
-✓ Explique a situação de forma simples
-✓ Informe o próximo passo concreto
-✓ Cite a fonte quando der uma informação oficial
-✓ Faça a pessoa sentir que está sendo bem assistida`,tag:"Assistido",oab:true},
+Redija uma resposta clara e acolhedora que:
+✓ Explica a situação em linguagem simples
+✓ Informa o próximo passo concreto
+✓ Cita a fonte quando der informação oficial
+✓ Transmite cuidado e atenção`},
 
-  {cat:"OAB — Trabalho CLT",title:"Orientar Inscrição na OAB SP",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-SOMENTE use informações do site oficial: https://www.oabsp.org.br/servicos/inscricoes
-Não invente documentos, valores ou prazos. Se não estiver explícito no site, diga que é necessário confirmar diretamente com a seccional.
+  {cat:OAB,oab:true,title:"Orientar Inscrição na OAB SP",tag:"Inscrição",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• SOMENTE use informações de: https://www.oabsp.org.br/servicos/inscricoes
+• Não invente documentos, valores ou prazos
+• Se não estiver explícito no site, oriente confirmar com a seccional
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Um advogado perguntou como fazer a inscrição na OAB SP.
+Advogado perguntou sobre inscrição na OAB SP.
 
-Redija uma orientação completa e baseada exclusivamente no site oabsp.org.br, incluindo:
+Oriente com base exclusivamente no site oficial:
 ✓ Tipo de inscrição (primária, transferência, suplementar)
-✓ Documentos necessários (conforme listado no site)
-✓ Como acessar o portal e qual caminho seguir
-✓ Prazo estimado
-✓ Contato da seccional para dúvidas
-✓ Cite: "Fonte: oabsp.org.br/servicos/inscricoes"`,tag:"Inscrição",oab:true},
+✓ Documentos necessários conforme o portal
+✓ Caminho no site para acessar
+✓ Prazo estimado (se informado no site)
+✓ Contato para dúvidas: (11) 3346-6300
+✓ Fonte: oabsp.org.br/servicos/inscricoes`},
 
-  {cat:"OAB — Trabalho CLT",title:"Explicar Regras da OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Base legal obrigatória — só use o que estiver nestes documentos oficiais:
-• Lei 8.906/94 (Estatuto da OAB) — https://www.planalto.gov.br/ccivil_03/leis/l8906.htm
-• Regulamento Geral da OAB — https://www.oab.org.br/content/pdf/legislacaopdf/regulamentogeral.pdf
-• Código de Ética e Disciplina — https://www.oab.org.br/content/pdf/legislacaopdf/codigodeetica.pdf
+  {cat:OAB,oab:true,title:"Explicar Regras da OAB",tag:"Regras OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+Base legal obrigatória — só use o que estiver nestes documentos:
+• Lei 8.906/94 (Estatuto da OAB): planalto.gov.br/ccivil_03/leis/l8906.htm
+• Regulamento Geral da OAB: oab.org.br
+• Código de Ética e Disciplina: oab.org.br
 
-Não interprete além do que está escrito. Se houver dúvida de interpretação, indique que é necessário consultar um advogado ou a própria OAB.
+Não interprete além do que está escrito. Se houver dúvida de interpretação, indique consultar a OAB.
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
 Dúvida sobre a seguinte regra ou norma da OAB:
 [DESCREVA A DÚVIDA]
 
-Explique de forma clara e objetiva:
+Explique de forma clara:
 ✓ O que diz a norma (cite o artigo exato)
 ✓ O que significa na prática
-✓ Fonte: [Lei/Artigo/Documento]`,tag:"Regras OAB",oab:true},
+✓ Fonte: [Lei/Artigo/Documento]`},
 
-  {cat:"OAB — Trabalho CLT",title:"Guia do Site OABSP",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Este guia deve descrever apenas o que está realmente disponível em https://www.oabsp.org.br
-Não invente telas, menus ou funcionalidades. Se não tiver certeza do caminho exato, diga: "Verificar a localização atual no menu do site, pois pode ter sofrido atualização."
+  {cat:OAB,oab:true,title:"Guia do Site OABSP",tag:"Site OABSP",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Descreva apenas o que realmente existe em oabsp.org.br
+• Não invente telas ou menus
+• Se não tiver certeza do caminho exato: "Verificar localização atual no menu do site"
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Um advogado tem dificuldade para realizar no site oabsp.org.br:
-[DESCREVA A TAREFA: ex. emitir certidão, atualizar cadastro, solicitar carteira, pagar anuidade]
+Tarefa no site oabsp.org.br:
+[DESCREVA: ex. emitir certidão, atualizar cadastro, solicitar carteira, pagar anuidade]
 
 Crie um passo a passo claro:
-✓ Onde acessar (URL direta se possível)
+✓ URL direta se possível
 ✓ O que clicar em cada etapa
 ✓ O que preencher
 ✓ O que esperar após o envio
-✓ Contato para suporte: (11) 3346-6300 ou suporte@oabsp.org.br
-✓ Fonte: oabsp.org.br`,tag:"Site OABSP",oab:true},
+✓ Suporte: (11) 3346-6300 ou suporte@oabsp.org.br`},
 
-  {cat:"OAB — Trabalho CLT",title:"Dúvida sobre Anuidade OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Valores, prazos e condições de anuidade mudam a cada ano. Não cite valores fixos sem confirmar.
-Fonte oficial para verificar: https://www.oabsp.org.br/servicos/anuidade
-Resolução do Conselho Federal que define anuidades: https://www.oab.org.br
+  {cat:OAB,oab:true,title:"Dúvida sobre Anuidade OAB",tag:"Anuidade",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Valores e prazos mudam anualmente — NÃO cite valores sem confirmar
+• Fonte oficial: oabsp.org.br/servicos/anuidade
+• Informe sempre que valores devem ser confirmados no portal
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
 Dúvida sobre anuidade da OAB SP:
-[DESCREVA: valor, parcelamento, isenção, atraso, negativação, etc.]
+[DESCREVA: valor, parcelamento, isenção, atraso, negativação...]
 
 Oriente com base nas fontes oficiais:
-✓ Como verificar a situação no portal oabsp.org.br
+✓ Como verificar a situação em oabsp.org.br
 ✓ Caminho para regularização
-✓ Contatos: (11) 3346-6300
-✓ Informe que valores específicos devem ser confirmados no portal, pois são atualizados anualmente
-✓ Cite a fonte de cada informação`,tag:"Anuidade",oab:true},
+✓ Contato: (11) 3346-6300
+✓ Informe que valores são atualizados anualmente`},
 
-  {cat:"OAB — Trabalho CLT",title:"Mensagem de Retorno ao Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Não invente andamentos processuais, prazos judiciais ou situações que não foram informadas.
-Use apenas o que foi descrito abaixo. Se precisar de informação adicional, oriente o assistido a buscar o advogado responsável pelo caso.
+  {cat:OAB,oab:true,title:"Retorno ao Assistido",tag:"Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Não invente andamentos, prazos ou situações não informadas
+• Use apenas o que está descrito abaixo
+• Se precisar de mais informação, oriente o assistido a falar com o advogado responsável
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Preciso retornar para um assistido que aguarda sobre:
-[ASSUNTO]
+Assunto: [DESCREVA]
+Andamento atual: [SITUAÇÃO REAL — o que aconteceu de fato]
 
-Andamento atual:
-[SITUAÇÃO ATUAL — descreva o que realmente aconteceu]
+Redija uma mensagem cordial e transparente:
+✓ Confirma o recebimento
+✓ Explica o status sem inventar
+✓ Informa o que está pendente
+✓ Informa o próximo passo previsto
+✓ Oferece canal de contato`},
 
-Redija uma mensagem cordial e transparente que:
-✓ Confirme o recebimento da demanda
-✓ Explique o status sem inventar informações
-✓ Diga o que ainda está pendente
-✓ Informe qual o próximo passo previsto
-✓ Ofereça canal de contato para dúvidas`,tag:"Assistido",oab:true},
+  {cat:OAB,oab:true,title:"Encaminhar Solicitação Internamente",tag:"Interno",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Encaminhe apenas o que foi informado
+• Não adicione interpretações, prazos ou procedimentos não confirmados
+• Se houver informação pendente, deixe claro no encaminhamento
 
-  {cat:"OAB — Trabalho CLT",title:"Encaminhar Solicitação Internamente",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Encaminhe apenas o que foi informado. Não adicione interpretações, prazos ou procedimentos que não foram confirmados.
-Informe ao colega se alguma informação está pendente de verificação.
+━━━━━━━━━━━━━━━━━━━━━━━━
 
----
-
-Preciso encaminhar para outro setor/colega a seguinte demanda:
+Demanda a encaminhar:
 [DESCREVA A DEMANDA]
 
-Redija um encaminhamento interno claro com:
+Redija o encaminhamento interno:
 ✓ Resumo objetivo da solicitação
 ✓ Dados relevantes fornecidos
 ✓ Grau de urgência
 ✓ O que precisa ser feito
-✓ O que ainda precisa ser verificado ou confirmado
-✓ Tom profissional e objetivo`,tag:"Interno",oab:true},
+✓ O que ainda precisa ser verificado`},
 
-  {cat:"OAB — Trabalho CLT",title:"Negar Pedido com Educação",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Ao explicar o motivo da negativa, cite apenas normas ou procedimentos que você tem certeza que existem.
-Se a negativa for baseada em uma norma específica da OAB, mencione qual é.
-Se não souber a fundamentação exata, diga: "O pedido não pode ser atendido conforme os procedimentos internos vigentes" — sem inventar artigos ou regras.
+  {cat:OAB,oab:true,title:"Negar Pedido com Educação",tag:"Comunicação",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Ao explicar o motivo, cite apenas normas que você tem certeza que existem
+• Se não souber a fundamentação exata: "O pedido não pode ser atendido conforme os procedimentos vigentes"
+• Não invente artigos ou regras
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Preciso negar o seguinte pedido:
-[DESCREVA O PEDIDO]
+Pedido a negar: [DESCREVA]
+Motivo da negativa: [MOTIVO REAL]
 
-Motivo da negativa:
-[DESCREVA O MOTIVO REAL]
+Redija uma comunicação respeitosa:
+✓ Informa a negativa claramente
+✓ Explica o motivo com fundamentação correta
+✓ Oferece alternativa quando possível
+✓ Preserva a boa relação institucional`},
 
-Redija uma comunicação respeitosa que:
-✓ Informe a negativa claramente
-✓ Explique o motivo com a fundamentação correta
-✓ Ofereça alternativa quando possível
-✓ Preserve a boa relação institucional`,tag:"Comunicação",oab:true},
+  {cat:OAB,oab:true,title:"Resposta a Protocolo Formal",tag:"Protocolo",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Responda apenas com base no que foi informado no protocolo
+• Se não souber a resposta: "Requer verificação junto ao setor responsável. Retornaremos em [PRAZO]."
+• Não invente procedimentos ou prazos
 
-  {cat:"OAB — Trabalho CLT",title:"Resposta a Protocolo Formal",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Responda apenas com base no que foi informado no protocolo abaixo.
-Não invente procedimentos, prazos ou respostas. Se não souber a resposta correta, informe: "Esta solicitação requer verificação junto ao setor responsável. Retornaremos em [PRAZO]."
-
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
 Protocolo / solicitação recebida:
-[DESCREVA O PROTOCOLO OU SOLICITAÇÃO]
+[DESCREVA O PROTOCOLO]
 
-Redija uma resposta formal que:
-✓ Faça referência ao número do protocolo
-✓ Responda objetivamente cada item solicitado
-✓ Informe prazo ou próximo passo
-✓ Use assinatura institucional adequada
-✓ Mantenha padrão formal da OAB SP`,tag:"Protocolo",oab:true},
+Redija uma resposta formal:
+✓ Referência ao número do protocolo
+✓ Resposta objetiva a cada item
+✓ Prazo ou próximo passo
+✓ Assinatura institucional adequada`},
 
-  {cat:"OAB — Trabalho CLT",title:"Orientar sobre Carteira da OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Use apenas informações do portal oficial: https://www.oabsp.org.br/servicos/carteiras
-Não invente prazos de emissão sem confirmar no site. Prazos podem variar e são atualizados pela seccional.
+  {cat:OAB,oab:true,title:"Orientar sobre Carteira da OAB",tag:"Carteira OAB",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Use apenas: oabsp.org.br/servicos/carteiras
+• Não invente prazos — podem variar e são atualizados pela seccional
+• Mencione sempre confirmar no portal para informações atuais
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Advogado com dúvida sobre a carteira da OAB:
-[DESCREVA: 2ª via, carteira digital, foto, vencimento, etc.]
+Dúvida sobre carteira da OAB:
+[DESCREVA: 2ª via, carteira digital, foto, vencimento...]
 
 Oriente com base em oabsp.org.br:
 ✓ Caminho no site para solicitar
 ✓ Documentos necessários (conforme portal)
 ✓ Como acompanhar o pedido
-✓ Contato: (11) 3346-6300
-✓ Mencione a opção de carteira digital pelo app OAB SP
-✓ Fonte: oabsp.org.br/servicos/carteiras`,tag:"Carteira OAB",oab:true},
+✓ Opção de carteira digital pelo app OAB SP
+✓ Contato: (11) 3346-6300`},
 
-  {cat:"OAB — Trabalho CLT",title:"Acolher Reclamação de Assistido",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
-Não faça promessas de prazo ou resultado que não foram confirmadas.
-Não invente soluções. Se o caso precisar ser investigado internamente antes de uma resposta definitiva, diga isso claramente com transparência e empatia.
+  {cat:OAB,oab:true,title:"Acolher Reclamação de Assistido",tag:"Reclamação",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Não faça promessas de prazo ou resultado não confirmadas
+• Não invente soluções — se precisar investigar, diga isso com transparência
+• Seja empática mas realista
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━
 
 Assistido insatisfeito com:
 [SITUAÇÃO / DEMORA / ATENDIMENTO]
 
-Redija uma resposta empática que:
-✓ Reconheça a insatisfação genuinamente
-✓ Não assuma culpas indevidas
-✓ Explique a situação com o que realmente aconteceu
-✓ Informe o próximo passo concreto e real
-✓ Ofereça canal direto de acompanhamento`,tag:"Reclamação",oab:true},
+Redija uma resposta empática:
+✓ Reconhece a insatisfação genuinamente
+✓ Não assume culpas indevidas
+✓ Explica com o que realmente aconteceu
+✓ Informa próximo passo concreto e real
+✓ Oferece canal direto de acompanhamento`},
 ];
 
 // ── State ──
@@ -908,94 +1455,84 @@ let curCat = 'all';
 let curSearch = '';
 let curIdx = null;
 
-// ── Sidebar build ──
+// ── Build sidebar ──
 function buildSidebar() {
-  const nav = document.getElementById('sbNav');
+  const el = document.getElementById('sbNav');
   const counts = {};
-  DATA.forEach(p => { counts[p.cat] = (counts[p.cat]||0)+1; });
+  DATA.forEach(p => counts[p.cat] = (counts[p.cat]||0)+1);
 
-  let html = '<div class="sb-label">Navegar</div>';
-  html += navItem('all','✨','Todos os Prompts', DATA.length, false, true);
-  html += '<div class="sb-label" style="margin-top:8px">Categorias</div>';
-  Object.keys(CATS).filter(c=>c!=='all').forEach(cat => {
-    html += navItem(cat, CATS[cat].icon, cat, counts[cat]||0, cat===OAB);
+  let h = '<div class="sb-nav-label">Todas</div>';
+  h += mkNavItem('all','✨','Todos os Prompts', DATA.length, false, true);
+  h += '<div class="sb-nav-label" style="margin-top:6px">Categorias</div>';
+  Object.keys(CATS).filter(c=>c!=='all').forEach(c => {
+    h += mkNavItem(c, CATS[c].icon, c, counts[c]||0, c===OAB);
   });
-  nav.innerHTML = html;
+  el.innerHTML = h;
 }
 
-function navItem(cat, icon, label, count, isOab, active=false) {
-  const cls = ['nav-item', isOab?'nav-oab':'', active?'active':''].filter(Boolean).join(' ');
-  const id = 'nav_'+encodeURIComponent(cat);
-  return `<div class="${cls}" id="${id}" onclick="selectCat(${JSON.stringify(cat)},this)">
-    <div class="nv-icon">${icon}</div>
-    <div class="nv-label">${label}</div>
-    <div class="nv-chip">${count}</div>
+function mkNavItem(cat, icon, label, count, isOab, active=false) {
+  const cls = ['nav-item', isOab?'oab-item':'', active?'active':''].filter(Boolean).join(' ');
+  return `<div class="${cls}" onclick='selectCat(${JSON.stringify(cat)},this)'>
+    <div class="ni-icon">${icon}</div>
+    <div class="ni-label">${label}</div>
+    <div class="ni-count">${count}</div>
   </div>`;
 }
 
 function selectCat(cat, el) {
   curCat = cat;
-  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
-  updateCatBar();
+  updateBar();
   render();
-  if(window.innerWidth<=800) toggleSb(false);
+  if(window.innerWidth<=820) closeSb();
 }
 
-function updateCatBar() {
+function updateBar() {
   const bar = document.getElementById('catBar');
-  const m = CATS[curCat]||CATS['all'];
+  const m = CATS[curCat]||CATS.all;
   document.getElementById('catIcon').textContent = m.icon;
-  document.getElementById('catTitle').textContent = curCat==='all'?'Todos os Prompts':curCat;
+  document.getElementById('catName').textContent = curCat==='all'?'Todos os Prompts':curCat;
   document.getElementById('catDesc').textContent = m.desc;
-  bar.className = 'cat-bar' + (curCat===OAB?' oab-bar':'');
-
-  // show anti-hallucination badge on OAB
-  const existing = bar.querySelector('.anti-badge');
-  if(existing) existing.remove();
-  if(curCat===OAB) {
-    const b = document.createElement('div');
-    b.className='anti-badge';
-    b.textContent='Anti-Alucinação · Fontes Reais';
-    bar.appendChild(b);
+  bar.className = 'cat-bar' + (curCat===OAB?' is-oab':'');
+  const old = bar.querySelector('.oab-shield');
+  if(old) old.remove();
+  if(curCat===OAB){
+    bar.insertAdjacentHTML('beforeend',`<div class="oab-shield"><div class="oab-shield-dot"></div>Anti-Alucinação Ativo</div>`);
   }
 }
 
-function onSearch() {
+function doSearch(){
   curSearch = document.getElementById('searchInput').value.toLowerCase();
   render();
 }
 
-function getFiltered() {
-  return DATA.filter(p => {
-    const mc = curCat==='all' || p.cat===curCat;
-    const ms = !curSearch ||
-      p.title.toLowerCase().includes(curSearch) ||
-      p.prompt.toLowerCase().includes(curSearch) ||
-      p.cat.toLowerCase().includes(curSearch) ||
-      p.tag.toLowerCase().includes(curSearch);
-    return mc && ms;
+function getFiltered(){
+  return DATA.filter(p=>{
+    const mc = curCat==='all'||p.cat===curCat;
+    const ms = !curSearch||[p.title,p.cat,p.tag,p.prompt].some(s=>s.toLowerCase().includes(curSearch));
+    return mc&&ms;
   });
 }
 
-function render() {
+function render(){
   const list = getFiltered();
-  const empty = document.getElementById('empty');
+  const empty = document.getElementById('emptyMsg');
   const grid = document.getElementById('grid');
-  document.getElementById('visibleCount').textContent = list.length;
+  document.getElementById('visibleN').textContent = list.length;
 
-  if(!list.length) { empty.classList.add('show'); grid.innerHTML=''; return; }
-  empty.classList.remove('show');
+  if(!list.length){empty.classList.add('on');grid.innerHTML='';return;}
+  empty.classList.remove('on');
 
-  grid.innerHTML = list.map((p,i) => {
+  grid.innerHTML = list.map((p,i)=>{
     const idx = DATA.indexOf(p);
-    const isOab = p.cat===OAB;
-    return `<div class="card${isOab?' oab-card':''}" onclick="openModal(${idx})" style="animation-delay:${(i%16)*.028}s">
-      ${isOab?'<div class="oab-verified">verificado</div>':''}
+    const isOab = !!p.oab;
+    return `<div class="card${isOab?' oab':''}" onclick="openModal(${idx})" style="animation-delay:${(i%18)*.025}s">
+      ${isOab?`<div class="verified-badge"><div class="verified-dot"></div>verificado</div>`:''}
       <div class="card-cat">${p.cat}</div>
       <div class="card-title">${p.title}</div>
-      <div class="card-preview">${p.prompt.replace(/\n/g,' ').substring(0,110)}…</div>
-      <div class="card-footer">
+      <div class="card-preview">${p.prompt.replace(/\n/g,' ').substring(0,115)}…</div>
+      <div class="card-foot">
         <span class="card-tag">${p.tag}</span>
         <button class="copy-btn" onclick="event.stopPropagation();quickCopy(this,${idx})">📋 Copiar</button>
       </div>
@@ -1003,158 +1540,131 @@ function render() {
   }).join('');
 }
 
-function quickCopy(btn,idx) {
+function quickCopy(btn,idx){
   navigator.clipboard.writeText(DATA[idx].prompt);
   btn.textContent='✓ Copiado!';btn.classList.add('ok');
   setTimeout(()=>{btn.innerHTML='📋 Copiar';btn.classList.remove('ok');},2000);
 }
 
 // ── Modal ──
-function openModal(idx) {
-  curIdx = idx;
-  const p = DATA[idx];
-  const isOab = p.cat===OAB;
-  const modal = document.getElementById('modal');
-  modal.className = isOab?'modal oab-modal':'modal';
-  document.getElementById('mCat').textContent = p.cat+' · '+p.tag;
-  document.getElementById('mTitle').textContent = p.title;
-  document.getElementById('mPrompt').textContent = p.prompt;
-  document.getElementById('ahPanel').style.display = isOab?'flex':'none';
+function openModal(idx){
+  curIdx=idx;
+  const p=DATA[idx];
+  const isOab=!!p.oab;
+  document.getElementById('modal').className='modal'+(isOab?' modal-oab':'');
+  document.getElementById('mCat').textContent=p.cat+' · '+p.tag;
+  document.getElementById('mTitle').textContent=p.title;
+  document.getElementById('mPrompt').textContent=p.prompt;
 
-  // reset OAB AI parts
-  document.getElementById('aiWrap').classList.remove('show');
-  document.getElementById('aiBox').innerHTML='';
-  document.getElementById('sourceStrip').classList.remove('show');
-  document.getElementById('sourceStrip').innerHTML='';
+  // OAB extras
+  document.getElementById('ahBox').className='ah-box'+(isOab?' on':'');
+  const btnAsk=document.getElementById('btnAsk');
+  btnAsk.className='btn btn-oab btn-ask'+(isOab?' on':'');
+  btnAsk.disabled=false;
+  btnAsk.textContent='🔍 Buscar & Responder com Fontes';
 
-  // ask button
-  const btnAsk = document.getElementById('btnAsk');
-  btnAsk.className = isOab?'btn-ask-oab show':'btn-ask-oab';
-  btnAsk.disabled = false;
-  btnAsk.innerHTML='🔍 Buscar & Responder com Fontes';
+  // reset
+  document.getElementById('aiSection').classList.remove('on');
+  document.getElementById('aiAnswer').innerHTML='';
+  document.getElementById('srcRow').className='sources-row';
+  document.getElementById('srcRow').innerHTML='';
 
-  document.getElementById('overlay').classList.add('open');
+  document.getElementById('overlay').classList.add('on');
   document.body.style.overflow='hidden';
 }
 
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
+function closeModal(){
+  document.getElementById('overlay').classList.remove('on');
   document.body.style.overflow='';
 }
 
-function overlayClick(e) { if(e.target===document.getElementById('overlay')) closeModal(); }
+function bgClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
 
-function copyPrompt() {
-  if(curIdx===null) return;
+function doCopy(){
+  if(curIdx===null)return;
   navigator.clipboard.writeText(DATA[curIdx].prompt);
-  const btn = document.getElementById('btnCopy');
-  btn.textContent='✓ Copiado!';
-  setTimeout(()=>btn.innerHTML='📋 Copiar Prompt',2000);
+  const b=document.getElementById('btnCopy');
+  b.textContent='✓ Copiado!';
+  setTimeout(()=>b.textContent='📋 Copiar Prompt',2000);
 }
 
-// ── OAB Anti-hallucination AI call ──
-async function askOAB() {
-  if(curIdx===null) return;
-  const p = DATA[curIdx];
-  const btnAsk = document.getElementById('btnAsk');
-  const aiWrap = document.getElementById('aiWrap');
-  const aiBox = document.getElementById('aiBox');
-  const srcStrip = document.getElementById('sourceStrip');
+// ── OAB AI call ──
+async function runOAB(){
+  if(curIdx===null)return;
+  const p=DATA[curIdx];
+  const btnAsk=document.getElementById('btnAsk');
+  const aiSection=document.getElementById('aiSection');
+  const aiAnswer=document.getElementById('aiAnswer');
+  const srcRow=document.getElementById('srcRow');
 
-  btnAsk.disabled = true;
-  btnAsk.innerHTML='<span class="dots"><span></span><span></span><span></span></span> Buscando fontes…';
-  aiWrap.classList.add('show');
-  aiBox.innerHTML='<div class="ai-loading"><span class="dots"><span></span><span></span><span></span></span> Consultando fontes oficiais: oabsp.org.br, oab.org.br e legislação…</div>';
-  srcStrip.classList.remove('show');
+  btnAsk.disabled=true;
+  btnAsk.innerHTML='<span class="dot-row"><span></span><span></span><span></span></span> Consultando fontes…';
+  aiSection.classList.add('on');
+  aiAnswer.innerHTML='<div class="ai-loading"><span class="dot-row"><span></span><span></span><span></span></span>Buscando em oabsp.org.br, oab.org.br e legislação federal…</div>';
 
-  const systemPrompt = `Você é um assistente especializado em OAB SP. Regras ABSOLUTAS:
-
+  const sys=`Você é assistente especializado em OAB SP. Regras absolutas:
 1. NUNCA invente informações. Se não tiver certeza, diga explicitamente.
-2. SEMPRE cite a fonte de cada informação que der. Formato: [Fonte: nome do site ou documento]
-3. Fontes oficiais obrigatórias: oabsp.org.br, oab.org.br, planalto.gov.br (legislação)
-4. Se não encontrar a informação nas fontes oficiais, diga: "Não localizei esta informação nas fontes oficiais. Recomendo verificar diretamente em oabsp.org.br ou ligar para (11) 3346-6300."
-5. No final da resposta, liste todas as fontes consultadas no formato: FONTES: [lista]
-6. Linguagem clara, profissional e acessível.
-7. Não faça afirmações sobre valores monetários ou prazos sem citar a fonte específica.`;
-
-  const userMsg = `Com base nas instruções do prompt abaixo, forneça uma resposta verificada e com fontes. O prompt é sobre: "${p.title}". 
-
-Contexto da categoria: ${p.cat}.
-Tag: ${p.tag}.
-
-Forneça uma resposta modelo que a Cassia pode usar como referência, sempre citando fontes.`;
+2. SEMPRE cite a fonte: [Fonte: nome do site ou documento]
+3. Fontes: oabsp.org.br, oab.org.br, planalto.gov.br
+4. Se não encontrar: "Não localizei nas fontes oficiais. Confirme em oabsp.org.br ou (11) 3346-6300."
+5. No final liste: FONTES CONSULTADAS: [lista]
+6. Linguagem clara e profissional.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
+      body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
         tools:[{type:'web_search_20250305',name:'web_search'}],
-        system: systemPrompt,
-        messages:[{role:'user',content:userMsg}]
+        system:sys,
+        messages:[{role:'user',content:`Responda sobre o prompt "${p.title}" da categoria "${p.cat}" (tag: ${p.tag}). Forneça orientação verificada com fontes citadas.`}]
       })
     });
+    const data=await res.json();
+    let txt='';
+    (data.content||[]).forEach(b=>{ if(b.type==='text') txt+=b.text; });
+    if(!txt&&data.error) txt=`⚠️ ${data.error.message}\n\nCopie o prompt e use diretamente em claude.ai`;
+    if(!txt) txt='Não foi possível obter resposta. Copie o prompt e use diretamente em uma IA.';
+    aiAnswer.textContent=txt;
 
-    const data = await res.json();
-
-    // Extract text from content blocks
-    let fullText = '';
-    if(data.content && Array.isArray(data.content)) {
-      data.content.forEach(block => {
-        if(block.type==='text') fullText += block.text;
-      });
+    // Sources
+    const srcs=[];
+    if(txt.toLowerCase().includes('oabsp')) srcs.push({l:'oabsp.org.br',u:'https://www.oabsp.org.br'});
+    if(txt.toLowerCase().includes('oab.org')) srcs.push({l:'oab.org.br',u:'https://www.oab.org.br'});
+    if(txt.toLowerCase().includes('planalto')) srcs.push({l:'planalto.gov.br',u:'https://www.planalto.gov.br'});
+    if(txt.toLowerCase().includes('lei 8.906')||txt.toLowerCase().includes('estatuto')) srcs.push({l:'Lei 8.906/94',u:'https://www.planalto.gov.br/ccivil_03/leis/l8906.htm'});
+    if(srcs.length){
+      srcRow.innerHTML='<span class="src-label">Fontes:</span>'+srcs.map(s=>`<span class="src-chip"><a href="${s.u}" target="_blank">${s.l} ↗</a></span>`).join('');
+      srcRow.classList.add('on');
     }
-
-    if(!fullText && data.error) {
-      fullText = `⚠️ Erro ao conectar com a IA: ${data.error.message}\n\nUtilize o prompt copiado e cole no Claude, ChatGPT ou outra IA de sua preferência.`;
-    }
-
-    if(!fullText) fullText = 'Não foi possível obter uma resposta. Por favor, copie o prompt e use diretamente em uma IA.';
-
-    aiBox.textContent = fullText;
-
-    // Extract sources and show strip
-    const sourceMatches = fullText.match(/(?:Fonte[s]?:|Source:|oabsp\.org\.br|oab\.org\.br|planalto\.gov\.br)[^\n]*/gi) || [];
-    const sources = [];
-    if(fullText.toLowerCase().includes('oabsp')) sources.push({label:'oabsp.org.br',url:'https://www.oabsp.org.br'});
-    if(fullText.toLowerCase().includes('oab.org')) sources.push({label:'oab.org.br',url:'https://www.oab.org.br'});
-    if(fullText.toLowerCase().includes('planalto')) sources.push({label:'planalto.gov.br',url:'https://www.planalto.gov.br'});
-    if(fullText.toLowerCase().includes('lei 8.906') || fullText.toLowerCase().includes('estatuto')) sources.push({label:'Lei 8.906/94 – Estatuto OAB',url:'https://www.planalto.gov.br/ccivil_03/leis/l8906.htm'});
-
-    if(sources.length) {
-      srcStrip.innerHTML = '<span style="font-size:10px;color:var(--oab);font-weight:500;letter-spacing:1px;text-transform:uppercase;">Fontes consultadas:</span>' +
-        sources.map(s=>`<span class="source-tag"><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a></span>`).join('');
-      srcStrip.classList.add('show');
-    }
-
-    btnAsk.innerHTML='✓ Resposta obtida';
-    btnAsk.style.background='#2E7D32';
-  } catch(err) {
-    aiBox.textContent = '⚠️ Não foi possível conectar com a IA agora.\n\nCopie o prompt e cole diretamente no Claude em claude.ai — as instruções anti-alucinação já estão incluídas no texto.';
+    btnAsk.textContent='✓ Resposta obtida';
+    btnAsk.style.background='var(--teal)';
+  } catch(e) {
+    aiAnswer.textContent='⚠️ Sem conexão com a IA agora.\n\nCopie o prompt (as instruções anti-alucinação já estão incluídas) e cole diretamente em claude.ai.';
     btnAsk.disabled=false;
-    btnAsk.innerHTML='🔄 Tentar novamente';
+    btnAsk.textContent='🔄 Tentar novamente';
   }
 }
 
-// ── Sidebar toggle ──
-function toggleSb(forceOpen) {
-  const sb=document.getElementById('sidebar');
-  const bk=document.getElementById('sbBack');
-  const open=sb.classList.contains('open');
-  if(forceOpen===false||open){sb.classList.remove('open');bk.classList.remove('open');}
-  else{sb.classList.add('open');bk.classList.add('open');}
+// ── Sidebar mobile ──
+function openSb(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sbBack').classList.add('open');
+}
+function closeSb(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbBack').classList.remove('open');
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 
 // ── Init ──
 buildSidebar();
-const n = DATA.length;
-document.getElementById('totalCount').textContent = n;
-document.getElementById('tc2').textContent = n;
-document.getElementById('visibleCount').textContent = n;
+document.getElementById('totalN').textContent=DATA.length;
+document.getElementById('visibleN').textContent=DATA.length;
+document.getElementById('tc2').textContent=DATA.length;
 render();
 </script>
 </body>
