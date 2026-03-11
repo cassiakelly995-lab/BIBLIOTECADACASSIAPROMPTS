@@ -45,6 +45,19 @@ body {
   display: flex;
 }
 
+/* Subtle dot-grid texture on bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(180,140,100,.13) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#main { position: relative; z-index: 1; }
+
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
@@ -473,10 +486,97 @@ body {
   50% { opacity:.5; transform: scale(.7); }
 }
 
+/* Feature strip below hero */
+.feature-strip {
+  padding: 0 44px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.feat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.feat-pill .fp-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 /* Content */
 #content {
   padding: 28px 44px 64px;
   flex: 1;
+}
+
+/* Tips row above grid */
+.tips-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tip-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.tip-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tip-body strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.tip-body p {
+  font-size: 11.5px;
+  color: var(--text3);
+  line-height: 1.55;
+}
+
+/* Section divider label */
+.section-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 /* Grid */
@@ -1041,13 +1141,22 @@ footer strong {
       <div class="hero-left">
         <div class="hero-eyebrow">✦ Coleção Exclusiva</div>
         <h1>Prompts prontos para<br>usar com <em>confiança</em></h1>
-        <p class="hero-sub">Navegue pelas categorias e copie o prompt ideal para o seu momento. Prompts OAB com 🛡️ busca em fontes reais.</p>
+        <p class="hero-sub">Navegue pelas categorias e copie o prompt ideal para o seu momento. Prompts OAB SP com 🛡️ anti-alucinação e fontes reais.</p>
       </div>
       <div class="hero-metrics">
         <div class="metric"><strong id="tc2">0</strong><span>Prompts</span></div>
-        <div class="metric"><strong>11</strong><span>Categ.</span></div>
+        <div class="metric"><strong>12</strong><span>Categ.</span></div>
       </div>
     </div>
+  </div>
+
+  <!-- Feature pills strip -->
+  <div class="feature-strip" id="featureStrip">
+    <div class="feat-pill"><span class="fp-dot" style="background:var(--rose)"></span>Copie com 1 clique</div>
+    <div class="feat-pill"><span class="fp-dot" style="background:var(--gold)"></span>Busca instantânea</div>
+    <div class="feat-pill"><span class="fp-dot" style="background:var(--teal)"></span>OAB SP · Anti-alucinação</div>
+    <div class="feat-pill"><span class="fp-dot" style="background:var(--oab)"></span>Fontes oficiais citadas</div>
+    <div class="feat-pill"><span class="fp-dot" style="background:#9B6DB5"></span>CLT · Trabalho do dia a dia</div>
   </div>
 
   <div class="cat-bar" id="catBar">
@@ -1063,6 +1172,26 @@ footer strong {
       <div style="font-size:2.5rem;margin-bottom:14px">🌸</div>
       <p style="font-size:15px;color:var(--text2)">Nenhum prompt encontrado.<br>Tente outra busca.</p>
     </div>
+    <!-- Tips row — shown only on "all" view -->
+    <div class="tips-row" id="tipsRow">
+      <div class="tip-card">
+        <div class="tip-icon">💡</div>
+        <div class="tip-body"><strong>Como usar</strong><p>Clique em qualquer card para ver o prompt completo e copiá-lo.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔍</div>
+        <div class="tip-body"><strong>Busca rápida</strong><p>Use a barra lateral para buscar por palavra-chave em todos os prompts.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">⚖️</div>
+        <div class="tip-body"><strong>OAB Anti-Alucinação</strong><p>Prompts CLT acionam busca em fontes reais antes de responder.</p></div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">✏️</div>
+        <div class="tip-body"><strong>Personalize</strong><p>Substitua os campos em [COLCHETES] com sua situação real.</p></div>
+      </div>
+    </div>
+    <div class="section-label" id="sectionLabel">Todos os prompts</div>
     <div class="grid" id="grid"></div>
   </div>
 </div>
@@ -1448,6 +1577,268 @@ Redija uma resposta empática:
 ✓ Explica com o que realmente aconteceu
 ✓ Informa próximo passo concreto e real
 ✓ Oferece canal direto de acompanhamento`},
+
+  // ── NOVOS PROMPTS OAB CLT ──
+  {cat:OAB,oab:true,title:"Explicar Benefícios CLT ao Empregado",tag:"CLT",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Base legal: Consolidação das Leis do Trabalho — planalto.gov.br/ccivil_03/decreto-lei/del5452.htm
+• Cite o artigo da CLT para cada benefício mencionado
+• Não invente valores ou percentuais sem citar a fonte
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Empregado da OAB SP perguntou sobre seus benefícios CLT:
+[DESCREVA A DÚVIDA: férias, 13º, FGTS, hora extra, etc.]
+
+Explique de forma clara e acessível:
+✓ O que diz a CLT sobre esse benefício (cite o artigo)
+✓ Como é calculado (fórmula ou percentual conforme lei)
+✓ Qual o prazo ou condição para ter direito
+✓ O que fazer se não for respeitado
+✓ Fonte: planalto.gov.br (CLT)`},
+
+  {cat:OAB,oab:true,title:"Calcular Rescisão CLT",tag:"Rescisão",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Use apenas os artigos da CLT e legislação vigente
+• Não invente verbas ou percentuais — cite a base legal de cada item
+• Informe que cálculos exatos devem ser conferidos pelo RH ou advogado trabalhista
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tipo de rescisão: [SEM JUSTA CAUSA / PEDIDO DE DEMISSÃO / JUSTA CAUSA / ACORDO]
+Tempo de serviço: [X ANOS e X MESES]
+
+Liste as verbas rescisórias que se aplicam com:
+✓ Nome de cada verba
+✓ Base de cálculo (conforme CLT)
+✓ Artigo da CLT que fundamenta
+✓ Prazo para pagamento
+✓ Aviso que os valores finais dependem do salário e histórico de férias`},
+
+  {cat:OAB,oab:true,title:"Orientar sobre Férias CLT",tag:"Férias",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: CLT Arts. 129 a 153 — planalto.gov.br
+• Não cite valores de adicional sem mencionar o artigo
+• Se houver dúvida sobre período aquisitivo específico, oriente consultar o RH
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre férias:
+[DESCREVA: período, fracionamento, venda, adicional, férias coletivas...]
+
+Oriente com base na CLT:
+✓ Regra aplicável com artigo citado
+✓ Como calcular o adicional de 1/3
+✓ Prazo para concessão
+✓ O que o empregado pode ou não pode fazer
+✓ Fonte: CLT, Arts. 129–153`},
+
+  {cat:OAB,oab:true,title:"Explicar 13º Salário",tag:"13º Salário",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Base: Lei 4.090/62 e Lei 4.749/68 — planalto.gov.br
+• Cite a lei ao mencionar prazos e percentuais
+• Não afirme datas específicas sem confirmar — podem variar por decreto anual
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre 13º salário:
+[DESCREVA: cálculo, parcelas, proporcional, desconto INSS/IR...]
+
+Explique com clareza:
+✓ Como é calculado (regra geral — Lei 4.090/62)
+✓ Quando é pago (1ª e 2ª parcela — conforme Lei 4.749/68)
+✓ Proporcionalidade para quem entrou ou saiu no ano
+✓ Descontos que incidem (INSS e IR conforme tabela vigente)
+✓ Fonte: Leis 4.090/62 e 4.749/68`},
+
+  {cat:OAB,oab:true,title:"Orientar sobre Banco de Horas",tag:"Jornada",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: CLT Art. 59 e Reforma Trabalhista (Lei 13.467/2017)
+• Distinção importante: banco de horas por acordo individual x coletivo — cite a diferença
+• Não invente percentuais de compensação além do previsto em lei
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre banco de horas:
+[DESCREVA: como funciona, prazo para compensar, o que acontece se não compensar...]
+
+Esclareça com base na CLT:
+✓ O que é e como funciona o banco de horas
+✓ Prazo máximo para compensação (Art. 59, CLT)
+✓ O que ocorre com horas não compensadas no prazo
+✓ Diferença entre acordo individual e convenção coletiva
+✓ Fonte: CLT Art. 59 / Lei 13.467/2017`},
+
+  {cat:OAB,oab:true,title:"Comunicar Advertência Formal",tag:"Disciplinar",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• A advertência não tem modelo único previsto em lei — é prática trabalhista consolidada
+• Informe isso claramente: advertência é instrumento de gestão, não ato legal tipificado
+• Não cite artigos inexistentes sobre advertência
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Situação que motivou a advertência:
+[DESCREVA O FATO]
+
+Rascunhe uma advertência formal que:
+✓ Descreve o fato de forma objetiva e sem julgamentos pessoais
+✓ Menciona a norma ou política interna violada (se houver)
+✓ Informa que reincidência poderá gerar medida mais grave
+✓ Solicita assinatura do empregado para ciência
+✓ Mantém tom profissional e respeitoso`},
+
+  {cat:OAB,oab:true,title:"Explicar FGTS ao Empregado",tag:"FGTS",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: Lei 8.036/90 — planalto.gov.br/ccivil_03/leis/l8036compilada.htm
+• Percentuais e condições de saque devem ser citados com base na lei
+• Informe que saldo exato deve ser consultado no app FGTS (Caixa)
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida do empregado sobre FGTS:
+[DESCREVA: depósito, multa, saque, portabilidade, como consultar...]
+
+Explique com base na Lei 8.036/90:
+✓ Como funciona o depósito (% e prazo — Art. 15)
+✓ Casos em que pode sacar (Art. 20)
+✓ Multa rescisória (quando aplicável — Art. 18)
+✓ Como consultar o saldo (app FGTS da Caixa)
+✓ Fonte: Lei 8.036/90`},
+
+  {cat:OAB,oab:true,title:"Orientar sobre Licença Maternidade/Paternidade",tag:"Licença",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: CLT Art. 392 (maternidade), CF Art. 7º, Lei 11.770/2008 (empresa cidadã)
+• Paternidade: CLT Art. 473, II e Lei 13.257/2016
+• Não invente prazos além do previsto — o prazo pode variar por convenção coletiva
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre licença:
+[MATERNIDADE / PATERNIDADE / ADOÇÃO]
+
+Oriente com base na legislação:
+✓ Prazo legal da licença (cite o artigo)
+✓ Como é pago durante a licença
+✓ Estabilidade no emprego (se aplicável)
+✓ Possibilidade de extensão (Programa Empresa Cidadã — Lei 11.770/2008)
+✓ O que fazer para solicitar
+✓ Fonte: CLT + CF + lei aplicável`},
+
+  {cat:OAB,oab:true,title:"Rascunhar Comunicado Interno",tag:"Comunicação",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Comunicado interno não tem forma legal rígida — é documento administrativo
+• Não invente exigências legais para comunicados internos que não existem
+• Se o comunicado tiver impacto em direitos trabalhistas, mencione a base legal aplicável
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Comunicado a ser redigido:
+[DESCREVA O ASSUNTO: mudança de horário, norma interna, convocação, aviso...]
+Destinatários: [SETOR / TODOS / NOME]
+Tom: [FORMAL / INFORMATIVO / URGENTE]
+
+Redija um comunicado claro que:
+✓ Identifica remetente, destinatário e data
+✓ Comunica o assunto de forma objetiva
+✓ Informa prazo ou ação esperada
+✓ Usa linguagem institucional adequada à OAB SP`},
+
+  {cat:OAB,oab:true,title:"Explicar Holerite / Contracheque",tag:"Salário",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: CLT Art. 464 e legislação previdenciária (Lei 8.212/91) para INSS
+• Tabela INSS e IR mudam anualmente — não cite alíquotas sem indicar o ano de referência
+• Oriente a confirmar alíquotas atuais no portal da Receita Federal e INSS
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Empregado com dúvida sobre o holerite:
+[DESCREVA: desconto INSS, IR, vale transporte, adiantamento, horas extras...]
+
+Explique de forma simples:
+✓ O que é cada rubrica do holerite
+✓ Base de cálculo de cada desconto (com fonte)
+✓ Como verificar se está correto
+✓ O que fazer se houver erro ou dúvida
+✓ Lembrete: alíquotas INSS/IR — confirmar tabela vigente em previdencia.gov.br`},
+
+  {cat:OAB,oab:true,title:"Reduzir Conflito entre Colegas",tag:"RH",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Mediação de conflito interpessoal não tem base legal única — é prática de gestão de pessoas
+• Não cite artigos de lei que não se aplicam ao contexto interpessoal
+• Se houver assédio moral (Lei 14.457/2022), mencione a lei correta
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Situação de conflito entre colegas:
+[DESCREVA O QUE ACONTECEU]
+
+Oriente como abordar a situação:
+✓ Como registrar o fato objetivamente
+✓ Como mediar uma conversa entre as partes
+✓ Quando acionar o RH ou gestão direta
+✓ Se houver indício de assédio moral, mencionar Lei 14.457/2022
+✓ Tom: cuidadoso, imparcial e focado em solução`},
+
+  {cat:OAB,oab:true,title:"Orientar sobre Vale Transporte",tag:"Benefício",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: Lei 7.418/85 e Decreto 95.247/87 — planalto.gov.br
+• Não invente % de desconto ou regras não previstas na lei
+• Regras adicionais podem estar em convenção coletiva — oriente verificar
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre vale transporte:
+[DESCREVA: desconto, recusa, modalidade, trabalho remoto...]
+
+Oriente com base na Lei 7.418/85:
+✓ A quem tem direito (Art. 1º)
+✓ Desconto máximo permitido (Art. 4º — 6% do salário)
+✓ O que acontece se o empregador não fornecer
+✓ Vale transporte em home office (orientação atual)
+✓ Fonte: Lei 7.418/85 / Decreto 95.247/87`},
+
+  {cat:OAB,oab:true,title:"Modelo de Atestado de Trabalho",tag:"Documento",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Declaração de vínculo empregatício é documento administrativo padrão — não tem modelo legal único
+• Não invente informações sobre o empregado que não foram fornecidas
+• O documento não pode conter informações falsas
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dados para o atestado:
+Nome: [NOME DO EMPREGADO]
+Cargo: [CARGO]
+Data de admissão: [DATA]
+Salário (se necessário informar): [VALOR ou "não informado"]
+Finalidade: [BANCO / LOCAÇÃO / OUTRO]
+
+Redija um atestado/declaração formal que:
+✓ Identifica o empregador (OAB SP)
+✓ Confirma o vínculo empregatício
+✓ Informa apenas os dados solicitados e confirmados
+✓ Inclui local, data e espaço para assinatura responsável`},
+
+  {cat:OAB,oab:true,title:"Orientar sobre Trabalho Remoto (Home Office)",tag:"Home Office",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: CLT Art. 75-A a 75-E (inseridos pela Lei 13.467/2017 e alterados pela Lei 14.442/2022)
+• Cite os artigos ao mencionar obrigações de cada parte
+• Regras específicas podem estar em contrato individual ou convenção coletiva
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre home office / teletrabalho:
+[DESCREVA: contrato, equipamentos, controle de jornada, despesas, retorno ao presencial...]
+
+Oriente com base na CLT:
+✓ O que a lei exige para formalizar o teletrabalho (Art. 75-B, 75-C)
+✓ Responsabilidade por equipamentos e infraestrutura (Art. 75-D)
+✓ Controle de jornada no home office
+✓ Direito de reversão ao presencial
+✓ Fonte: CLT Arts. 75-A a 75-E / Lei 14.442/2022`},
+
+  {cat:OAB,oab:true,title:"Responder Dúvida sobre Plano de Saúde",tag:"Benefício",prompt:`INSTRUÇÃO ANTI-ALUCINAÇÃO:
+• Fonte: Lei 9.656/98 (planos de saúde) e RN ANS vigentes — ans.gov.br
+• Não invente coberturas ou regras sem verificar a resolução normativa atual
+• Para detalhes do plano específico da OAB SP, oriente consultar o RH
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dúvida sobre plano de saúde:
+[DESCREVA: carência, cobertura, dependentes, demissão, coparticipação...]
+
+Oriente com base na Lei 9.656/98 e ANS:
+✓ Regra geral aplicável com fonte
+✓ O que verificar no contrato do plano
+✓ Como acionar a ANS em caso de problema: ans.gov.br ou 0800 701 9656
+✓ Para detalhes do plano da OAB SP: consultar RH
+✓ Fonte: Lei 9.656/98 / ans.gov.br`},
+
 ];
 
 // ── State ──
@@ -1519,7 +1910,16 @@ function render(){
   const list = getFiltered();
   const empty = document.getElementById('emptyMsg');
   const grid = document.getElementById('grid');
+  const tips = document.getElementById('tipsRow');
+  const label = document.getElementById('sectionLabel');
+  const featureStrip = document.getElementById('featureStrip');
   document.getElementById('visibleN').textContent = list.length;
+
+  // Show tips + feature strip only on "all" with no search
+  const isAll = curCat==='all' && !curSearch;
+  tips.style.display = isAll ? 'grid' : 'none';
+  featureStrip.style.display = isAll ? 'flex' : 'none';
+  label.textContent = isAll ? 'Todos os prompts' : (curSearch ? `Resultados para "${curSearch}"` : curCat);
 
   if(!list.length){empty.classList.add('on');grid.innerHTML='';return;}
   empty.classList.remove('on');
@@ -1665,6 +2065,9 @@ buildSidebar();
 document.getElementById('totalN').textContent=DATA.length;
 document.getElementById('visibleN').textContent=DATA.length;
 document.getElementById('tc2').textContent=DATA.length;
+// hide tips and feature strip until render decides
+document.getElementById('tipsRow').style.display='grid';
+document.getElementById('featureStrip').style.display='flex';
 render();
 </script>
 </body>
